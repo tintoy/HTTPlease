@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Net.Http;
 
-namespace HTTPlease
+namespace HTTPlease.Client
 {
 	/// <summary>
-	///		General-purpose extensions for <see cref="HttpClientBuilder"/>.
+	///		General-purpose extensions for <see cref="ClientBuilder"/>.
 	/// </summary>
 	public static class ClientFactoryExtensions
 	{
@@ -25,7 +25,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The new <see cref="HttpClient"/>.
 		/// </returns>
-		public static HttpClient CreateClient(this HttpClientBuilder clientBuilder, string baseUri)
+		public static HttpClient CreateClient(this ClientBuilder clientBuilder, string baseUri)
 		{
 			if (clientBuilder == null)
 				throw new ArgumentNullException(nameof(clientBuilder));
@@ -52,7 +52,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The client factory (enables inline use / method chaining).
 		/// </returns>
-		public static HttpClientBuilder WithMessageHandler<TMessageHandler>(this HttpClientBuilder clientFactory)
+		public static ClientBuilder WithMessageHandler<TMessageHandler>(this ClientBuilder clientFactory)
 			where TMessageHandler : DelegatingHandler, new()
 		{
 			if (clientFactory == null)

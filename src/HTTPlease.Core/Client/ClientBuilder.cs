@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 
-namespace HTTPlease
+namespace HTTPlease.Client
 {
 	using Utilities;
 
@@ -14,7 +14,7 @@ namespace HTTPlease
 	/// <remarks>
 	///		Be aware that, if you return singleton instances of message handlers from factory delegates, those handlers will be disposed if the factory encounters any exception while creating a client.
 	/// </remarks>
-	public sealed class HttpClientBuilder
+	public sealed class ClientBuilder
 	{
 		/// <summary>
 		///		The default factory for message-pipeline terminus handlers.
@@ -34,7 +34,7 @@ namespace HTTPlease
 		/// <summary>
 		///		Create a new HTTP client builder.
 		/// </summary>
-		public HttpClientBuilder()
+		public ClientBuilder()
 		{
 		}
 
@@ -118,12 +118,12 @@ namespace HTTPlease
 		///		The message-handler factory.
 		/// </param>
 		/// <returns>
-		///		The <see cref="HttpClientBuilder"/> (enables method-chaining).
+		///		The <see cref="ClientBuilder"/> (enables method-chaining).
 		/// </returns>
 		/// <remarks>
 		///		<typeparamref name="THandler"/> cannot be the <see cref="DelegatingHandler"/> base class.
 		/// </remarks>
-		public HttpClientBuilder AddHandler<THandler>(Func<THandler> handlerFactory)
+		public ClientBuilder AddHandler<THandler>(Func<THandler> handlerFactory)
 			where THandler : DelegatingHandler
 		{
 			if (handlerFactory == null)
@@ -165,12 +165,12 @@ namespace HTTPlease
 		///		Default is <c>false</c>.
 		/// </param>
 		/// <returns>
-		///		The <see cref="HttpClientBuilder"/> (enables method-chaining).
+		///		The <see cref="ClientBuilder"/> (enables method-chaining).
 		/// </returns>
 		/// <remarks>
 		///		<typeparamref name="THandler"/> and <typeparamref name="TBeforeHandler"/> cannot be the <see cref="DelegatingHandler"/> base class.
 		/// </remarks>
-		public HttpClientBuilder AddHandlerBefore<THandler, TBeforeHandler>(Func<THandler> handlerFactory, bool throwIfNotPresent = false)
+		public ClientBuilder AddHandlerBefore<THandler, TBeforeHandler>(Func<THandler> handlerFactory, bool throwIfNotPresent = false)
 			where THandler : DelegatingHandler
 			where TBeforeHandler : DelegatingHandler
 		{
@@ -239,12 +239,12 @@ namespace HTTPlease
 		///		Default is <c>false</c>.
 		/// </param>
 		/// <returns>
-		///		The <see cref="HttpClientBuilder"/> (enables method-chaining).
+		///		The <see cref="ClientBuilder"/> (enables method-chaining).
 		/// </returns>
 		/// <remarks>
 		///		<typeparamref name="THandler"/> and <typeparamref name="TAfterHandler"/> cannot be the <see cref="DelegatingHandler"/> base class.
 		/// </remarks>
-		public HttpClientBuilder AddHandlerAfter<THandler, TAfterHandler>(Func<THandler> handlerFactory, bool throwIfNotPresent = false)
+		public ClientBuilder AddHandlerAfter<THandler, TAfterHandler>(Func<THandler> handlerFactory, bool throwIfNotPresent = false)
 			where THandler : DelegatingHandler
 			where TAfterHandler : DelegatingHandler
 		{
