@@ -26,6 +26,11 @@ namespace HTTPlease.Templates
 		}
 
 		/// <summary>
+		///		Does the segment have a parameterised (non-constant) value?
+		/// </summary>
+		public virtual bool IsParameterized => true;
+
+		/// <summary>
 		///		Get the value of the segment (if any).
 		/// </summary>
 		/// <param name="evaluationContext">

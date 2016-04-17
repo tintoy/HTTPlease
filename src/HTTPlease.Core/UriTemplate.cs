@@ -135,5 +135,41 @@ namespace HTTPlease
 
 			return new Uri(uriBuilder.ToString(), UriKind.RelativeOrAbsolute);
 		}
+
+		/// <summary>
+		///		Does the specified URI represent a template?
+		/// </summary>
+		/// <param name="uri">
+		///		The URI.
+		/// </param>
+		/// <returns>
+		///		<c>true</c>, if any of the URI's components are parameterised (i.e. have non-constant values); otherwise, <c>false</c>.
+		/// </returns>
+		public static bool IsTemplate(Uri uri)
+		{
+			if (uri == null)
+				throw new ArgumentNullException(nameof(uri));
+
+			return IsTemplate(uri.ToString());
+		}
+
+		/// <summary>
+		///		Does the specified URI represent a template?
+		/// </summary>
+		/// <param name="uri">
+		///		The URI.
+		/// </param>
+		/// <returns>
+		///		<c>true</c>, if any of the URI's components are parameterised (i.e. have non-constant values); otherwise, <c>false</c>.
+		/// </returns>
+		public static bool IsTemplate(string uri)
+		{
+			if (uri == null)
+				throw new ArgumentNullException(nameof(uri));
+
+			IReadOnlyList<TemplateSegment> templateSegments = TemplateSegment.Parse(uri);
+
+			return templateSegments.Any(segment => segment.IsParameterized);
+		}
 	}
 }

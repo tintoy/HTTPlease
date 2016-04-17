@@ -4,11 +4,54 @@ using System.Text;
 
 namespace HTTPlease.Utilities
 {
+	using System.Diagnostics;
+
 	/// <summary>
 	///		Helper methods for working with <see cref="Uri"/>s.
 	/// </summary>
 	public static class UriHelper
 	{
+		/// <summary>
+		///		Parse the URI's query parameters.
+		/// </summary>
+		/// <param name="uri">
+		///		The URI.
+		/// </param>
+		/// <returns>
+		///		A <see cref="NameValueCollection"/> containing key / value pairs representing the query parameters.
+		/// </returns>
+		public static NameValueCollection ParseQueryParameters(this Uri uri)
+		{
+			if (uri == null)
+				throw new ArgumentNullException(nameof(uri));
+
+			NameValueCollection queryParameters = new NameValueCollection();
+			if (String.IsNullOrWhiteSpace(uri.Query))
+				return queryParameters;
+
+			Debug.Assert(uri.Query[0] == '?', "Query string does not start with '?'.");
+
+			string[] keyValuePairs = uri.Query.Substring(1).Split(
+				separator: new char[] { '&' },
+				options: StringSplitOptions.RemoveEmptyEntries
+			);
+
+			foreach (string keyValuePair in keyValuePairs)
+			{
+				string[] keyAndValue = keyValuePair.Split(
+					separator: new char[] { '=' },
+					count: 2
+				);
+
+				string key = keyAndValue[0];
+				string value = keyAndValue.Length == 2 ? keyAndValue[1] : null;
+
+				queryParameters[key] = value;
+			}
+
+			return queryParameters;
+		}
+
 		/// <summary>
 		///		Create a copy of URI with its <see cref="Uri.Query">query</see> component populated with the supplied parameters.
 		/// </summary>
@@ -66,10 +109,15 @@ namespace HTTPlease.Utilities
 				string parameterValue = parameters.Get(parameterIndex);
 
 				builder.Append(parameterName);
-				builder.Append('=');
-				builder.Append(
-					Uri.EscapeUriString(parameterValue)
-				);
+
+				// Support for /foo/bar?x=1&y&z=2
+				if (parameterValue != null)
+				{
+					builder.Append('=');
+					builder.Append(
+						Uri.EscapeUriString(parameterValue)
+					);
+				}
 			};
 
 			StringBuilder queryBuilder = new StringBuilder();
@@ -136,14 +184,12 @@ namespace HTTPlease.Utilities
 
 				return uriBuilder.Uri;
 			}
-			
+
 			// Irritatingly, you can't use UriBuilder with a relative path.
-			{
-				return new Uri(
-					AppendPaths(baseUri.ToString(), relativeUri.ToString()),
-					UriKind.Relative
-				);
-			}
+			return new Uri(
+				AppendPaths(baseUri.ToString(), relativeUri.ToString()),
+				UriKind.Relative
+			);
 		}
 
 		/// <summary>

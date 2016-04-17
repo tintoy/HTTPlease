@@ -3,16 +3,15 @@ using System;
 namespace HTTPlease.ValueProviders
 {
 	/// <summary>
-	///		Conversion operations for a value provider that targets an empty (<see cref="Unit"/>) context.
+	///		Conversion operations for a simple value provider.
 	/// </summary>
 	/// <typeparam name="TValue">
 	///		The type of value returned by the value provider.
 	/// </typeparam>
 	/// <remarks>
-	///		Since <see cref="Unit"/> is essentially equivalent to <c>void</c>, this conversion removes the requirement for the target context type to be a more-derived class.
-	///		This enables base requests to be defined without a context type, and then more-derived requests can be specialised for their specific context types.
+	///		This conversion enables base requests to be defined without a context type, and then more-derived requests can be specialised for their specific context types.
 	/// </remarks>
-	public struct UnitValueProviderConversion<TValue>
+	public struct SimpleValueProviderConversion<TValue>
 	{
 		/// <summary>
 		///		Create a new value-provider conversion.
@@ -20,7 +19,7 @@ namespace HTTPlease.ValueProviders
 		/// <param name="valueProvider">
 		///		The value provider being converted.
 		/// </param>
-		public UnitValueProviderConversion(IValueProvider<Unit, TValue> valueProvider)
+		public SimpleValueProviderConversion(ISimpleValueProvider<TValue> valueProvider)
 			: this()
 		{
 			if (valueProvider == null)
@@ -32,7 +31,7 @@ namespace HTTPlease.ValueProviders
 		/// <summary>
 		///		The value provider being converted.
 		/// </summary>
-		public IValueProvider<Unit, TValue> ValueProvider { get; }
+		public ISimpleValueProvider<TValue> ValueProvider { get; }
 
 		/// <summary>
 		///		Wrap the specified value provider in a value provider that utilises a specific context type.
@@ -46,10 +45,10 @@ namespace HTTPlease.ValueProviders
 		public IContextValueProvider<TContext, TValue> ContextTo<TContext>()
 		{
 			// Can't close over members of structs.
-			IValueProvider<Unit, TValue> valueProvider = ValueProvider;
+			ISimpleValueProvider<TValue> valueProvider = ValueProvider;
 
 			return ValueProvider<TContext>.FromSelector(
-				context => valueProvider.Get(Unit.Value)
+				context => valueProvider.Get()
 			);
 		}
 
@@ -62,23 +61,21 @@ namespace HTTPlease.ValueProviders
 		/// <remarks>
 		///		If the underlying value is <c>null</c> then the converted string value will be <c>null</c>, too.
 		/// </remarks>
-		public IContextValueProvider<Unit, string> ValueToString()
+		public ISimpleValueProvider<string> ValueToString()
 		{
 			// Special-case conversion to save on allocations.
 			if (typeof(TValue) == typeof(string))
 				return (IValueProvider<Unit, string>)ValueProvider;
 
 			// Can't close over members of structs.
-			IValueProvider<Unit, TValue> valueProvider = ValueProvider;
+			ISimpleValueProvider<TValue> valueProvider = ValueProvider;
 
-			return ValueProvider<Unit>.FromSelector(
-				context =>
-				{
-					TValue value = valueProvider.Get(Unit.Value);
+			return ValueProvider<Unit>.FromFunction(() =>
+			{
+				TValue value = valueProvider.Get();
 
-					return value != null ? value.ToString() : null;
-				}
-			);
+				return value != null ? value.ToString() : null;
+			});
 		}
 	}
 }

@@ -1,44 +1,46 @@
 ﻿{
-    "version": "1.0.0-alpha1",
-    "description": "Unit tests for HTTPlease.Core",
-    "authors": [ "tintoy" ],
-    "tags": [ "" ],
-    "projectUrl": "",
-    "licenseUrl": "",
+	"version": "1.0.0-alpha1",
+	"description": "Unit tests for HTTPlease.Core",
+	"authors": [ "tintoy" ],
+	"tags": [ "" ],
+	"projectUrl": "",
+	"licenseUrl": "",
 
-    "tooling": {
-        "defaultNamespace": "HTTPlease.Tests"
-    },
+	"tooling": {
+		"defaultNamespace": "HTTPlease.Tests"
+	},
 
-    "frameworks": {
-        "dnx461": {
-            "dependencies": { },
-            "frameworkAssemblies": {
-                "System.Runtime": "4.0.0.0"
-            }
-        },
-        "dnxcore50": {
-            "dependencies": {
-                "Microsoft.CSharp": "4.0.1-beta-23516",
-                "System.Collections": "4.0.11-beta-23516",
-                "System.Net.Http": "4.0.1-beta-23516",
-                "System.Linq": "4.0.1-beta-23516",
-                "System.Runtime": "4.0.21-beta-23516",
-                "System.Text.RegularExpressions": "4.0.11-beta-23516",
-                "System.Threading": "4.0.11-beta-23516"
-            }
-        }
-    },
+	"frameworks": {
+		"dnx461": {
+			"dependencies": { },
+			"frameworkAssemblies": {
+				"System.Collections": "4.0.0.0",
+				"System.Runtime": "4.0.0.0"
+			}
+		},
+		"dnxcore50": {
+			"dependencies": {
+				"Microsoft.CSharp": "4.0.1-beta-23516",
+				"System.Collections": "4.0.11-beta-23516",
+				"System.Collections.Specialized": "4.0.1-beta-23516",
+				"System.Linq": "4.0.1-beta-23516",
+				"System.Runtime": "4.0.21-beta-23516",
+				"System.Text.RegularExpressions": "4.0.11-beta-23516",
+				"System.Threading": "4.0.11-beta-23516"
+			}
+		}
+	},
 
-    "dependencies": {
-        "HTTPlease.Core": "1.0.0-alpha1",
-        "System.Collections.Concurrent": "4.0.11-beta-23516",
-        "System.Collections.Immutable": "1.1.37",
-        "xunit": "2.1.0",
-        "xunit.runner.dnx": "2.1.0-rc1-build204"
-    },
+	"dependencies": {
+		"HTTPlease.Core": "1.0.0-alpha1",
+		"System.Collections.Concurrent": "4.0.11-beta-23516",
+		"System.Collections.Immutable": "1.1.37",
+		"System.Net.Http": "4.0.1-beta-23516",
+		"xunit": "2.1.0",
+		"xunit.runner.dnx": "2.1.0-rc1-build204"
+	},
 
-    "commands": {
-        "test": "xunit.runner.dnx"
-    }
+	"commands": {
+		"test": "xunit.runner.dnx"
+	}
 }
