@@ -14,7 +14,7 @@ build_script:
 - cmd: >-
     dnvm use 1.0.0-rc1-update1 -r coreclr -arch x64
 
-    dnu restore
+    dnu restore --quiet
 
     dnu build .\src\HTTPlease.Core
 test_script:
