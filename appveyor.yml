@@ -12,7 +12,7 @@ install:
 cache: C:\Users\appveyor\.dnx\packages
 build_script:
 - cmd: >-
-    dnvm use 1.0.0-rc1-update1
+    dnvm use 1.0.0-rc1-update1 -r coreclr -arch x64
 
     dnu -p src\HTTPlease build
 test_script:
