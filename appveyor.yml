@@ -12,10 +12,10 @@ install:
 cache: C:\Users\appveyor\.dnx\packages
 build_script:
 - cmd: >-
-    dnvm use 1.0.0-rc1-update1 -r coreclr -arch x64
+    dnvm use 1.0.0-rc1-update1
 
-    dnu -p src\HTTPlease build
+    dnu build .\src\HTTPlease.Core
 test_script:
-- cmd: dnx -p test\HTTPlease.Tests test
+- cmd: dnx -p test\HTTPlease.Core.Tests test
 deploy_script:
-- cmd: dnu -p src\HTTPlease package
+- cmd: dnu package .\src\HTTPlease.Core
