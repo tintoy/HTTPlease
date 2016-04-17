@@ -5,6 +5,6 @@ branches:
 image: Visual Studio 2015
 cache: C:\Users\appveyor\.dnx\packages
 build:
-	verbosity: normal
+  verbosity: normal
 before_build:
 - cmd: dnu restore
