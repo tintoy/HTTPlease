@@ -10,8 +10,12 @@ install:
 
     dnvm install 1.0.0-rc1-update1 -r coreclr -arch x64
 cache: C:\Users\appveyor\.dnx\packages
-before_build:
-- cmd: dnu restore
-build:
-  project: HTTPlease.sln
-  verbosity: minimal
+build_script:
+- cmd: >-
+    dnvm use 1.0.0-rc1-update1
+
+    dnu -p src\HTTPlease build
+test_script:
+- cmd: dnx -p test\HTTPlease.Tests test
+deploy_script:
+- cmd: dnu -p src\HTTPlease package
