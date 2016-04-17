@@ -1,10 +1,25 @@
 ﻿{
 	"version": "1.0.0-alpha1",
-	"description": "HTTPlease Core",
-	"authors": [ "tintoy" ],
-	"tags": [ "" ],
-	"projectUrl": "",
-	"licenseUrl": "",
+	"title": "HTTPlease Core",
+	"summary": "HTTPlease Core",
+	"description": "Core functionality for HTTPlease Immutable HTTP templates",
+	"authors": [
+		"tintoy@tintoy.io"
+	],
+	"copyright": "Copyright © Adam Friedman 2016",
+	"owners": [
+		"tintoy@tintoy.io"
+	],
+	"tags": [
+		"HTTP",
+		"HTTPlease",
+		"WebApi",
+		"Client",
+		"Template",
+		"Immutable"
+	],
+	"projectUrl": "https://github.com/tintoy/HTTPlease",
+	"licenseUrl": "https://raw.githubusercontent.com/tintoy/HTTPlease/development/r1.0/LICENSE",
 
 	"tooling": {
 		"defaultNamespace": "HTTPlease"
