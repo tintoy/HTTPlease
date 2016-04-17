@@ -1,0 +1,6 @@
+[*.{cs, cshtml, ts, js, json}]
+indent_style = tab
+
+[travis.yml]
+indent_style = space
+indent_size = 2
