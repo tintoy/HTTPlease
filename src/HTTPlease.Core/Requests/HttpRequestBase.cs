@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
 
 namespace HTTPlease.Requests
@@ -15,10 +16,16 @@ namespace HTTPlease.Requests
 	public abstract class HttpRequestBase
 		: IHttpRequest
 	{
+		#region Instance data
+
 		/// <summary>
 		///		The request properties.
 		/// </summary>
 		readonly RequestProperties _properties;
+
+		#endregion // Instance data
+
+		#region Construction
 
 		/// <summary>
 		///		Create a new HTTP request.
@@ -37,6 +44,10 @@ namespace HTTPlease.Requests
 			EnsurePropertyType<bool>(nameof(IsUriTemplate));
 		}
 
+		#endregion // Construction
+
+		#region IHttpRequest
+
 		/// <summary>
 		///		The request URI.
 		/// </summary>
@@ -50,7 +61,28 @@ namespace HTTPlease.Requests
 		/// <summary>
 		///		All properties for the request.
 		/// </summary>
-		public IReadOnlyDictionary<string, object> Properties => _properties;
+		public ImmutableDictionary<string, object> Properties => _properties;
+
+		/// <summary>
+		///		Build and configure a new HTTP request message.
+		/// </summary>
+		/// <param name="httpMethod">
+		///		The HTTP request method to use.
+		/// </param>
+		/// <param name="body">
+		///		Optional <see cref="HttpContent"/> representing the request body.
+		/// </param>
+		/// <param name="baseUri">
+		///		An optional base URI to use if the request builder does not already have an absolute request URI.
+		/// </param>
+		/// <returns>
+		///		The configured <see cref="HttpRequestMessage"/>.
+		/// </returns>
+		public abstract HttpRequestMessage BuildRequestMessage(HttpMethod httpMethod, HttpContent body = null, Uri baseUri = null);
+
+		#endregion // IHttpRequest
+
+		#region Request properties
 
 		/// <summary>
 		///		Determine whether the specified property is defined for the request.
@@ -190,6 +222,8 @@ namespace HTTPlease.Requests
 
 			return requestProperties.ToImmutable();
 		}
+
+		#endregion // Request properties
 	}
 }
 

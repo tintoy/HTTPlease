@@ -22,7 +22,7 @@ namespace HTTPlease.ValueProviders
 		/// <returns>
 		///		The value provider.
 		/// </returns>
-		public static IContextValueProvider<TContext, TValue> FromSelector<TValue>(Func<TContext, TValue> selector)
+		public static IValueProvider<TContext, TValue> FromSelector<TValue>(Func<TContext, TValue> selector)
 		{
 			if (selector == null)
 				throw new ArgumentNullException(nameof(selector));
@@ -64,9 +64,6 @@ namespace HTTPlease.ValueProviders
 		/// </returns>
 		public static IValueProvider<TContext, TValue> FromConstantValue<TValue>(TValue value)
 		{
-			if (value == null)
-				throw new ArgumentNullException(nameof(value));
-
 			return new ConstantValueProvider<TValue>(value);
 		}
 
@@ -77,7 +74,7 @@ namespace HTTPlease.ValueProviders
 		///		The type of value returned by the provider.
 		/// </typeparam>
 		class SelectorValueProvider<TValue>
-			: IContextValueProvider<TContext, TValue>
+			: IValueProvider<TContext, TValue>
 		{
 			/// <summary>
 			///		The selector function that extracts a value from the context.
@@ -139,17 +136,6 @@ namespace HTTPlease.ValueProviders
 			}
 
 			/// <summary>
-			///		Obtain the provider's value.
-			/// </summary>
-			/// <returns>
-			///		The value.
-			/// </returns>
-			public TValue Get()
-			{
-				return _getValue();
-			}
-
-			/// <summary>
 			///		Extract the value from the specified context.
 			/// </summary>
 			/// <param name="source">	
@@ -190,17 +176,6 @@ namespace HTTPlease.ValueProviders
 			public ConstantValueProvider(TValue value)
 			{
 				_value = value;
-			}
-
-			/// <summary>
-			///		Obtain the provider's value.
-			/// </summary>
-			/// <returns>
-			///		The value.
-			/// </returns>
-			public TValue Get()
-			{
-				return _value;
 			}
 
 			/// <summary>

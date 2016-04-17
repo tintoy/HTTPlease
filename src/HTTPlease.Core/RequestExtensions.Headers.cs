@@ -1,64 +1,19 @@
 ﻿using System;
-using System.Text;
 
 namespace HTTPlease
 {
 	using ValueProviders;
 
 	/// <summary>
-	///		Extension methods for <see cref="IHttpRequest"/>.
+	///		<see cref="HttpRequest"/> / <see cref="IHttpRequest"/> extension methods for HTTP headers.
 	/// </summary>
-    public static class UntypedHttpRequestExtensions
+	public static partial class RequestExtensions
     {
-		#region Absolute URIs
-
 		/// <summary>
-		///		Ensure that the <see cref="IHttpRequest"/> has an <see cref="UriKind.Absolute">absolute</see> <see cref="Uri">URI</see>.
-		/// </summary>
-		/// <returns>
-		///		The request's absolute URI.
-		/// </returns>
-		/// <exception cref="InvalidOperationException">
-		///		The request has a <see cref="UriKind.Relative">relative</see> <see cref="Uri">URI</see>.
-		/// </exception>
-		public static bool HasAbsoluteUri(this IHttpRequest httpRequest)
-		{
-			if (httpRequest == null)
-				throw new ArgumentNullException(nameof(httpRequest));
-
-			return httpRequest.RequestUri.IsAbsoluteUri;
-		}
-
-		/// <summary>
-		///		Ensure that the <see cref="IHttpRequest"/> has an <see cref="UriKind.Absolute">absolute</see> <see cref="Uri">URI</see>.
-		/// </summary>
-		/// <returns>
-		///		The request's absolute URI.
-		/// </returns>
-		/// <exception cref="InvalidOperationException">
-		///		The request has a <see cref="UriKind.Relative">relative</see> <see cref="Uri">URI</see>.
-		/// </exception>
-		public static Uri EnsureAbsoluteUri(this IHttpRequest httpRequest)
-		{
-			if (httpRequest == null)
-				throw new ArgumentNullException(nameof(httpRequest));
-
-			Uri requestUri = httpRequest.RequestUri;
-			if (requestUri.IsAbsoluteUri)
-				return requestUri;
-
-			throw new InvalidOperationException("The HTTP request does not have an absolute URI.");
-		}
-
-		#endregion // Absolute URIs
-
-		#region Headers
-
-		/// <summary>
-		///		Create a copy of the request builder that adds a header to each request.
+		///		Create a copy of the request that adds a header to each request.
 		/// </summary>
 		/// <param name="request">
-		///		The HTTP request builder.
+		///		The HTTP request.
 		/// </param>
 		/// <param name="headerName">
 		///		The header name.
@@ -84,16 +39,16 @@ namespace HTTPlease
 				throw new ArgumentNullException(nameof(headerValue));
 
 			return request.WithHeaderFromProvider(headerName,
-				SimpleValueProvider.FromConstantValue(headerValue),
+				ValueProvider<object>.FromConstantValue(headerValue),
 				ensureQuoted
 			);
 		}
 
 		/// <summary>
-		///		Create a copy of the request builder that adds a header with its value obtained from the specified delegate.
+		///		Create a copy of the request that adds a header with its value obtained from the specified delegate.
 		/// </summary>
 		/// <param name="request">
-		///		The HTTP request builder.
+		///		The HTTP request.
 		/// </param>
 		/// <param name="headerName">
 		///		The header name.
@@ -119,16 +74,16 @@ namespace HTTPlease
 				throw new ArgumentNullException(nameof(getValue));
 
 			return request.WithHeaderFromProvider(headerName,
-				SimpleValueProvider.FromFunction(getValue).Convert().ValueToString(),
+				ValueProvider<object>.FromFunction(getValue).Convert().ValueToString(),
 				ensureQuoted
 			);
 		}
 
 		/// <summary>
-		///		Create a copy of the request builder that adds an "If-Match" header to each request.
+		///		Create a copy of the request that adds an "If-Match" header to each request.
 		/// </summary>
 		/// <param name="request">
-		///		The HTTP request builder.
+		///		The HTTP request.
 		/// </param>
 		/// <param name="headerValue">
 		///		The header value.
@@ -148,10 +103,10 @@ namespace HTTPlease
 		}
 
 		/// <summary>
-		///		Create a copy of the request builder that adds an "If-Match" header with its value obtained from the specified delegate.
+		///		Create a copy of the request that adds an "If-Match" header with its value obtained from the specified delegate.
 		/// </summary>
 		/// <param name="request">
-		///		The HTTP request builder.
+		///		The HTTP request.
 		/// </param>
 		/// <param name="getValue">
 		///		A delegate that returns the header value for each request.
@@ -171,10 +126,10 @@ namespace HTTPlease
 		}
 
 		/// <summary>
-		///		Create a copy of the request builder that adds an "If-None-Match" header to each request.
+		///		Create a copy of the request that adds an "If-None-Match" header to each request.
 		/// </summary>
 		/// <param name="request">
-		///		The HTTP request builder.
+		///		The HTTP request.
 		/// </param>
 		/// <param name="headerValue">
 		///		The header value.
@@ -194,10 +149,10 @@ namespace HTTPlease
 		}
 
 		/// <summary>
-		///		Create a copy of the request builder that adds an "If-None-Match" header with its value obtained from the specified delegate.
+		///		Create a copy of the request that adds an "If-None-Match" header with its value obtained from the specified delegate.
 		/// </summary>
 		/// <param name="request">
-		///		The HTTP request builder.
+		///		The HTTP request.
 		/// </param>
 		/// <param name="getValue">
 		///		A delegate that returns the header value for each request.
@@ -217,10 +172,10 @@ namespace HTTPlease
 		}
 
 		/// <summary>
-		///		Create a copy of the request builder that adds a header to each request.
+		///		Create a copy of the request that adds a header to each request.
 		/// </summary>
 		/// <param name="request">
-		///		The HTTP request builder.
+		///		The HTTP request.
 		/// </param>
 		/// <param name="headerName">
 		///		The header name.
@@ -234,7 +189,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
 		/// </returns>
-		public static HttpRequest WithHeaderFromProvider(this HttpRequest request, string headerName, ISimpleValueProvider<string> valueProvider, bool ensureQuoted = false)
+		public static HttpRequest WithHeaderFromProvider(this HttpRequest request, string headerName, IValueProvider<object, string> valueProvider, bool ensureQuoted = false)
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
@@ -245,11 +200,11 @@ namespace HTTPlease
 			if (valueProvider == null)
 				throw new ArgumentNullException(nameof(valueProvider));
 
-			return request.WithRequestAction(requestMessage =>
+			return request.WithRequestAction((requestMessage, context) =>
 			{
 				requestMessage.Headers.Remove(headerName);
 
-				string headerValue = valueProvider.Get();
+				string headerValue = valueProvider.Get(context);
 				if (headerValue == null)
 					return;
 
@@ -259,43 +214,5 @@ namespace HTTPlease
 				requestMessage.Headers.Add(headerName, headerValue);
 			});
 		}
-
-		#endregion // Headers
-
-		#region Helpers
-
-		/// <summary>
-		///		Ensure that the specified string is surrounted by quotes.
-		/// </summary>
-		/// <param name="str">
-		///		The string to examine.
-		/// </param>
-		/// <returns>
-		///		The string, with quotes prepended / appended as required.
-		/// </returns>
-		/// <remarks>
-		///		Some HTTP headers (such as If-Match) require their values to be quoted.
-		/// </remarks>
-		static string EnsureQuoted(string str)
-		{
-			if (str == null)
-				throw new ArgumentNullException(nameof(str));
-
-			if (str.Length == 0)
-				return "\"\"";
-
-			StringBuilder quotedStringBuilder = new StringBuilder(str);
-
-			if (quotedStringBuilder[0] != '\"')
-				quotedStringBuilder.Insert(0, '\"');
-
-			if (quotedStringBuilder[quotedStringBuilder.Length - 1] != '\"')
-				quotedStringBuilder.Append('\"');
-
-			return quotedStringBuilder.ToString();
-		}
-
-		#endregion // Helpers
 	}
 }
-

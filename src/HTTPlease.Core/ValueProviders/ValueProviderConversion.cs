@@ -42,7 +42,7 @@ namespace HTTPlease.ValueProviders
 		/// <returns>
 		///		The outer (converting) value provider.
 		/// </returns>
-		public IContextValueProvider<TDerivedContext, TValue> ContextTo<TDerivedContext>()
+		public IValueProvider<TDerivedContext, TValue> ContextTo<TDerivedContext>()
 			where TDerivedContext : TContext
 		{
 			// Can't close over members of structs.
@@ -62,7 +62,7 @@ namespace HTTPlease.ValueProviders
 		/// <remarks>
 		///		If the underlying value is <c>null</c> then the converted string value will be <c>null</c>, too.
 		/// </remarks>
-		public IContextValueProvider<TContext, string> ValueToString()
+		public IValueProvider<TContext, string> ValueToString()
 		{
 			// Special-case conversion to save on allocations.
 			if (typeof(TValue) == typeof(string))
