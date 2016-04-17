@@ -64,7 +64,7 @@ namespace HTTPlease
 		}
 
 		/// <summary>
-		///		Create a new HTTP request builder that is not attached to an <see cref="System.Net.Http.HttpClient"/>.
+		///		Create a new HTTP request.
 		/// </summary>
 		/// <param name="requestUri">
 		///		The request URI (can be relative or absolute).
@@ -83,7 +83,7 @@ namespace HTTPlease
 		}
 
 		/// <summary>
-		///		Create a new HTTP request builder that is not attached to an <see cref="System.Net.Http.HttpClient"/>.
+		///		Create a new HTTP request.
 		/// </summary>
 		/// <param name="requestUri">
 		///		The request URI (can be relative or absolute).
@@ -139,7 +139,7 @@ namespace HTTPlease
 		///		Optional <see cref="HttpContent"/> representing the request body.
 		/// </param>
 		/// <param name="baseUri">
-		///		An optional base URI to use if the request builder does not already have an absolute request URI.
+		///		An optional base URI to use if the request does not already have an absolute request URI.
 		/// </param>
 		/// <returns>
 		///		The configured <see cref="HttpRequestMessage"/>.
@@ -154,7 +154,7 @@ namespace HTTPlease
 			if (!requestUri.IsAbsoluteUri)
 			{
 				if (baseUri == null)
-					throw new InvalidOperationException("Cannot build a request message; the request builder does not have an absolute request URI, and no base URI was supplied.");
+					throw new InvalidOperationException("Cannot build a request message; the request does not have an absolute request URI, and no base URI was supplied.");
 
 				// Make relative to base URI.
 				requestUri = baseUri.AppendRelativeUri(requestUri);
@@ -181,7 +181,7 @@ namespace HTTPlease
 				requestUri = template.Populate(baseUri, templateParameterValues);
 			}
 
-			// Merge in any other query parameters defined directly on the request builder.
+			// Merge in any other query parameters defined directly on the request.
 			requestUri = MergeQueryParameters(requestUri);
 
 			HttpRequestMessage requestMessage = null;
@@ -239,7 +239,7 @@ namespace HTTPlease
 		///     Optional <see cref="HttpContent" /> representing the request body.
 		/// </param>
 		/// <param name="baseUri">
-		///     An optional base URI to use if the request builder does not already have an absolute request URI.
+		///     An optional base URI to use if the request does not already have an absolute request URI.
 		/// </param>
 		/// <returns>
 		///     The configured <see cref="HttpRequestMessage" />.
@@ -296,7 +296,7 @@ namespace HTTPlease
 		#region Helpers
 
 		/// <summary>
-		///		Merge the request builder's query parameters (if any) into the request URI.
+		///		Merge the request's query parameters (if any) into the request URI.
 		/// </summary>
 		/// <param name="requestUri">
 		///		The request URI.
