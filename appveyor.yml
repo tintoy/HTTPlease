@@ -16,7 +16,7 @@ build_script:
 
     dnu restore --quiet
 
-    dnu build .\src\HTTPlease.Core
+    dnu build .\src\HTTPlease.Core --quiet
 test_script:
 - cmd: dnx -p test\HTTPlease.Core.Tests test
 deploy_script:
