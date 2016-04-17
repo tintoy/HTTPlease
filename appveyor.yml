@@ -20,4 +20,4 @@ build_script:
 test_script:
 - cmd: dnx -p test\HTTPlease.Core.Tests test
 deploy_script:
-- cmd: dnu pack .\src\HTTPlease.Core
+- cmd: dnu pack .\src\HTTPlease.Core --quiet
