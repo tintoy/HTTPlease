@@ -25,14 +25,14 @@ namespace HTTPlease
 		/// <summary>
 		///		The base properties for <see cref="HttpRequest"/>s.
 		/// </summary>
-		static readonly RequestProperties BaseProperties = RequestProperties.Empty.AddRange(
+		static readonly RequestProperties BaseProperties =
 			new Dictionary<string, object>
 			{
 				[nameof(RequestActions)] = ImmutableList<RequestAction>.Empty,
 				[nameof(TemplateParameters)] = ImmutableDictionary<string, ISimpleValueProvider<string>>.Empty,
 				[nameof(QueryParameters)] = ImmutableDictionary<string, ISimpleValueProvider<string>>.Empty
 			}
-		);
+			.ToImmutableDictionary();
 
 		#endregion // Constants
 
