@@ -8,7 +8,7 @@ install:
 - cmd: >-
     set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
 
-    dnvm install 1.0.0-rc1-update1 -r coreclr -arch x64
+    dnvm install 1.0.0-rc1-update1 -r coreclr -arch x64 -nonative
 cache: C:\Users\appveyor\.dnx\packages
 build_script:
 - cmd: >-
