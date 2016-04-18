@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -64,6 +65,16 @@ namespace HTTPlease.Tests.Mocks
 				throw new ArgumentNullException(nameof(request));
 
 			return await _handlerImplementation(request);
+		}
+		
+		/// <summary>
+		/// 	Create an instance of the default mock message handler (responds to any request with <see cref="HttpStatusCode.OK"/>).
+		/// </summary>
+		public static MockMessageHandler Default()
+		{
+			return new MockMessageHandler(
+				request => request.CreateResponse(HttpStatusCode.OK)
+			);
 		}
 	}
 }
