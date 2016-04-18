@@ -45,8 +45,21 @@ namespace HTTPlease.Tests
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
-				
-			return new HttpResponseMessage(statusCode);
+			
+			HttpResponseMessage response = new HttpResponseMessage(statusCode);
+			try
+			{
+				response.RequestMessage = request;
+			}
+			catch
+			{
+				using (response)
+				{
+					throw;					
+				}
+			}
+			
+			return response;
 		}
 		
 		/// <summary>
