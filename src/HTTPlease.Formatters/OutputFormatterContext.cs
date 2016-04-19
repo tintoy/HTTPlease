@@ -70,7 +70,7 @@ namespace HTTPlease.Formatters
 			if (outputStream == null)
 				throw new ArgumentNullException(nameof(outputStream));
 
-			return FormatterStreamHelper.CreateTransientTextWriter(outputStream, Encoding);
+			return StreamHelper.CreateTransientTextWriter(outputStream, Encoding);
 		}
 	}
 }

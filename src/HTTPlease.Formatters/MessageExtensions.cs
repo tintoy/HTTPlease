@@ -9,7 +9,7 @@ namespace HTTPlease.Formatters
 	public static class MessageExtensions
     {
 		/// <summary>
-		///		Get the message's <see cref="IMediaTypeFormatters"/> (if any).
+		///		Get the message's <see cref="IFormatterCollection"/> (if any).
 		/// </summary>
 		/// <param name="message">
 		///		The HTTP request message.
@@ -17,7 +17,7 @@ namespace HTTPlease.Formatters
 		/// <returns>
 		///		The media-type formatters, or <c>null</c> if the message does not have any associated formatters.
 		/// </returns>
-		public static IMediaTypeFormatters GetMediaTypeFormatters(this HttpRequestMessage message)
+		public static IFormatterCollection GetMediaTypeFormatters(this HttpRequestMessage message)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
@@ -25,11 +25,11 @@ namespace HTTPlease.Formatters
 			object mediaTypeFormatters;
 			message.Properties.TryGetValue(MessageProperties.MediaTypeFormatters, out mediaTypeFormatters);
 
-			return (IMediaTypeFormatters)mediaTypeFormatters;
+			return (IFormatterCollection)mediaTypeFormatters;
 		}
 
 		/// <summary>
-		///		Set the message's <see cref="IMediaTypeFormatters"/>.
+		///		Set the message's <see cref="IFormatterCollection"/>.
 		/// </summary>
 		/// <param name="message">
 		///		The HTTP request message.
@@ -37,7 +37,7 @@ namespace HTTPlease.Formatters
 		/// <param name="mediaTypeFormatters">
 		///		The media-type formatters (if any).
 		/// </param>
-		public static void SetMediaTypeFormatters(this HttpRequestMessage message, IMediaTypeFormatters mediaTypeFormatters)
+		public static void SetMediaTypeFormatters(this HttpRequestMessage message, IFormatterCollection mediaTypeFormatters)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));

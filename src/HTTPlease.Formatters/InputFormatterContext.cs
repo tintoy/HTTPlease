@@ -61,7 +61,7 @@ namespace HTTPlease.Formatters
 			if (inputStream == null)
 				throw new ArgumentNullException(nameof(inputStream));
 
-			return FormatterStreamHelper.CreateTransientTextReader(inputStream, Encoding);
+			return StreamHelper.CreateTransientTextReader(inputStream, Encoding);
 		}
 	}
 }

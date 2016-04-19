@@ -20,12 +20,10 @@ namespace HTTPlease.Formatters.Json
 		/// <returns>
 		///		The media-type formatter collection (enables method-chaining).
 		/// </returns>
-		public static IMediaTypeFormatters AddJsonFormatter(this IMediaTypeFormatters formatters, JsonSerializerSettings serializerSettings = null)
+		public static IFormatterCollection AddJsonFormatter(this IFormatterCollection formatters, JsonSerializerSettings serializerSettings = null)
 		{
 			if (formatters == null)
 				throw new ArgumentNullException(nameof(formatters));
-
-			// TODO: Make this smarter - formatter collection should use type as a collection key (no duplicates).
 
 			formatters.Add(new JsonFormatter
 			{

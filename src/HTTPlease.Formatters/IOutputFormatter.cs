@@ -7,6 +7,7 @@ namespace HTTPlease.Formatters
 	///		Represents a facility for serialising data to one or more media types.
 	/// </summary>
     public interface IOutputFormatter
+		: IFormatter
     {
 		/// <summary>
 		///		Determine whether the formatter can serialise the specified data.

@@ -41,7 +41,7 @@ namespace HTTPlease.Formatters.Json
 		/// <returns>
 		///		<c>true</c>, if the formatter can deserialise the data; otherwise, <c>false</c>.
 		/// </returns>
-		public bool CanReadType(InputFormatterContext context)
+		public bool CanRead(InputFormatterContext context)
 		{
 			if (context == null)
 				throw new ArgumentNullException(nameof(context));

@@ -7,7 +7,7 @@ namespace HTTPlease.Formatters
 	/// <summary>
 	///		Helper methods for formatters working with streams.
 	/// </summary>
-	static class FormatterStreamHelper
+	static class StreamHelper
 	{
 		/// <summary>
 		///		The default buffer size for <see cref="TextReader"/>s / <see cref="TextWriter"/>s created by the helper.
