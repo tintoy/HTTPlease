@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -10,34 +10,33 @@ namespace HTTPlease.Formatters
     public interface IInputFormatter
 	{
 		/// <summary>
-		///		Determine whether the formatter can deserialise content of the specified type into the specified data type.
+		///		Content types supported by the formatter.
 		/// </summary>
-		/// <param name="dataType">
-		///		The CLR type that the formatter will deserialise.
-		/// </param>
-		/// <param name="contentType">
-		///		The content type.
+		ISet<string> SupportedContentTypes { get; }
+
+		/// <summary>
+		///		Determine whether the formatter can deserialise the specified data.
+		/// </summary>
+		/// <param name="context">
+		///		Contextual information about the data being deserialised.
 		/// </param>
 		/// <returns>
-		///		<c>true</c>, if the formatter can deserialise data into the specified target type; otherwise, <c>false</c>.
+		///		<c>true</c>, if the formatter can deserialise the data; otherwise, <c>false</c>.
 		/// </returns>
-		bool CanReadType(Type dataType, string contentType);
+		bool CanReadType(InputFormatterContext context);
 
 		/// <summary>
 		///		Asynchronously deserialise data from an input stream.
 		/// </summary>
-		/// <param name="dataType">
-		///		The CLR type to deserialise.
+		/// <param name="context">
+		///		Contextual information about the data being deserialised.
 		/// </param>
 		/// <param name="stream">
 		///		The input stream from which to read serialised data.
 		/// </param>
-		/// <param name="contentType">
-		///		The stream content type.
-		/// </param>
 		/// <returns>
 		///		The deserialised object.
 		/// </returns>
-		Task<object> ReadAsync(Stream stream, Type dataType, string contentType);
+		Task<object> ReadAsync(InputFormatterContext context, Stream stream);
 	}
 }

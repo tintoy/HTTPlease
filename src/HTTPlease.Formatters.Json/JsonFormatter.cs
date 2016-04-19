@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace HTTPlease.Formatters.Json
@@ -12,11 +12,6 @@ namespace HTTPlease.Formatters.Json
 	public class JsonFormatter
 		: IInputFormatter, IOutputFormatter
 	{
-		/// <summary>
-		///		The standard JSON content type supported by the formatter.
-		/// </summary>
-		public static readonly string JsonContentType = "application/json";
-
 		/// <summary>
 		///		Create a new <see cref="JsonFormatter"/>.
 		/// </summary>
@@ -30,81 +25,71 @@ namespace HTTPlease.Formatters.Json
 		public JsonSerializerSettings SerializerSettings { get; set; }
 
 		/// <summary>
-		///		Determine whether the formatter can deserialise content of the specified type into the specified data type.
+		///		Content types supported by the formatter.
 		/// </summary>
-		/// <param name="dataType">
-		///		The CLR type that the formatter will deserialise.
-		/// </param>
-		/// <param name="contentType">
-		///		The content type.
+		public ISet<string> SupportedContentTypes { get; } = new HashSet<string>
+		{
+			"application/json"
+		};
+
+		/// <summary>
+		///		Determine whether the formatter can deserialise the specified data.
+		/// </summary>
+		/// <param name="context">
+		///		Contextual information about the data being deserialised.
 		/// </param>
 		/// <returns>
-		///		<c>true</c>, if the formatter can deserialise data into the specified target type; otherwise, <c>false</c>.
+		///		<c>true</c>, if the formatter can deserialise the data; otherwise, <c>false</c>.
 		/// </returns>
-		public bool CanReadType(Type dataType, string contentType)
+		public bool CanReadType(InputFormatterContext context)
 		{
-			if (dataType == null)
-				throw new ArgumentNullException(nameof(dataType));
+			if (context == null)
+				throw new ArgumentNullException(nameof(context));
 
-			if (String.IsNullOrWhiteSpace(contentType))
-				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'contentType'.", nameof(contentType));
-
-			return contentType == JsonContentType;
+			return SupportedContentTypes.Contains(context.ContentType);
 		}
 
 		/// <summary>
-		///		Determine whether the formatter can serialise data from the specified type.
+		///		Determine whether the formatter can serialise the specified data.
 		/// </summary>
-		/// <param name="dataType">
-		///		The CLR type that the formatter will serialise.
-		/// </param>
-		/// <param name="contentType">
-		///		The content type to which the data will be serialised.
+		/// <param name="context">
+		///		Contextual information about the data being serialised.
 		/// </param>
 		/// <returns>
-		///		<c>true</c>, if the formatter can serialise data from the specified source type into the specified content type; otherwise, <c>false</c>.
+		///		<c>true</c>, if the formatter can serialise the data; otherwise, <c>false</c>.
 		/// </returns>
-		public bool CanWrite(Type dataType, string contentType)
+		public bool CanWrite(OutputFormatterContext context)
 		{
-			if (dataType == null)
-				throw new ArgumentNullException(nameof(dataType));
+			if (context == null)
+				throw new ArgumentNullException(nameof(context));
 
-			if (String.IsNullOrWhiteSpace(contentType))
-				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'contentType'.", nameof(contentType));
-
-			return contentType == JsonContentType;
+			return SupportedContentTypes.Contains(context.ContentType);
 		}
 
 		/// <summary>
 		///		Asynchronously deserialise data from an input stream.
 		/// </summary>
-		/// <param name="dataType">
-		///		The CLR type to deserialise.
+		/// <param name="context">
+		///		Contextual information about the data being deserialised.
 		/// </param>
 		/// <param name="stream">
 		///		The input stream from which to read serialised data.
 		/// </param>
-		/// <param name="contentType">
-		///		The stream content type.
-		/// </param>
 		/// <returns>
 		///		The deserialised object.
 		/// </returns>
-		public Task<object> ReadAsync(Stream stream, Type dataType, string contentType)
+		public Task<object> ReadAsync(InputFormatterContext context, Stream stream)
 		{
+			if (context == null)
+				throw new ArgumentNullException(nameof(context));
+
 			if (stream == null)
 				throw new ArgumentNullException(nameof(stream));
 
-			if (dataType == null)
-				throw new ArgumentNullException(nameof(dataType));
-
-			if (String.IsNullOrWhiteSpace(contentType))
-				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'contentType'.", nameof(contentType));
-
-			using (StreamReader reader = new StreamReader(stream, Encoding.UTF8, detectEncodingFromByteOrderMarks: false, bufferSize: 1024, leaveOpen: true))
+			using (TextReader reader = context.CreateReader(stream))
 			{
 				JsonSerializer serializer = JsonSerializer.Create(SerializerSettings);
-				object data = serializer.Deserialize(reader, dataType);
+				object data = serializer.Deserialize(reader, context.DataType);
 
 				return Task.FromResult(data);
 			}
@@ -113,39 +98,30 @@ namespace HTTPlease.Formatters.Json
 		/// <summary>
 		///		Asynchronously serialise data to an output stream.
 		/// </summary>
-		/// <param name="data">
-		///		The data to serialise.
-		/// </param>
-		/// <param name="dataType">
-		///		The CLR type to serialise.
+		/// <param name="context">
+		///		Contextual information about the data being deserialised.
 		/// </param>
 		/// <param name="stream">
 		///		The output stream to which the serialised data will be written.
 		/// </param>
-		/// <param name="contentType">
-		///		The stream content type.
-		/// </param>
 		/// <returns>
 		///		A <see cref="Task"/> representing the asynchronous operation.
 		/// </returns>
-		public Task WriteAsync(object data, Stream stream, Type dataType, string contentType)
+		public Task WriteAsync(OutputFormatterContext context, Stream stream)
 		{
+			if (context == null)
+				throw new ArgumentNullException(nameof(context));
+
 			if (stream == null)
 				throw new ArgumentNullException(nameof(stream));
 
-			if (dataType == null)
-				throw new ArgumentNullException(nameof(dataType));
+			if (!SupportedContentTypes.Contains(context.ContentType))
+				throw new NotSupportedException($"The {nameof(JsonFormatter)} cannot write content of type '{context.ContentType}'.");
 
-			if (String.IsNullOrWhiteSpace(contentType))
-				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'contentType'.", nameof(contentType));
-
-			if (contentType != JsonContentType)
-				throw new NotSupportedException($"The {nameof(JsonFormatter)} cannot write content of type '{contentType}'.");
-
-			using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8, bufferSize: 1024, leaveOpen: true))
+			using (TextWriter writer = context.CreateWriter(stream))
 			{
 				JsonSerializer serializer = JsonSerializer.Create(SerializerSettings);
-				serializer.Serialize(writer, data, dataType);
+				serializer.Serialize(writer, context.Data, context.DataType);
 			}
 
 			return Task.CompletedTask;
