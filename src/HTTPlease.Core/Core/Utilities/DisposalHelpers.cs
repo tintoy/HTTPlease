@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace HTTPlease.Utilities
+namespace HTTPlease.Core.Utilities
 {
 	/// <summary>
 	///		Helper methods for <see cref="IDisposable"/>.

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HTTPlease.Templates
+namespace HTTPlease.Core.Templates
 {
 	/// <summary>
 	///		A template segment that represents a literal query parameter (i.e. one that has a constant value).

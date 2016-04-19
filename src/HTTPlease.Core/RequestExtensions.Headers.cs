@@ -2,7 +2,7 @@
 
 namespace HTTPlease
 {
-	using ValueProviders;
+	using Core.ValueProviders;
 
 	/// <summary>
 	///		<see cref="HttpRequest"/> / <see cref="IHttpRequest"/> extension methods for HTTP headers.

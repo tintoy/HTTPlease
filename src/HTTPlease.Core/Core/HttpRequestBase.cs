@@ -4,7 +4,7 @@ using System.Collections.Immutable;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 
-namespace HTTPlease.Requests
+namespace HTTPlease.Core
 {
 	using Utilities;
 

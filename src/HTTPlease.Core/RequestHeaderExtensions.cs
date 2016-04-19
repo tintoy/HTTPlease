@@ -8,7 +8,7 @@ namespace HTTPlease.Utilities
 	/// <summary>
 	///		Extension method for <see cref="HttpRequestHeaders"/>
 	/// </summary>
-	public static class HttpRequestHeadersExtensions
+	public static class RequestHeaderExtensions
 	{
 		/// <summary>
 		///		Retrieve the value of an optional HTTP request header.

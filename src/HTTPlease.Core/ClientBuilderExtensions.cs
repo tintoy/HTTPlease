@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 
-namespace HTTPlease.Clients
+namespace HTTPlease
 {
 	/// <summary>
 	///		General-purpose extensions for <see cref="ClientBuilder"/>.

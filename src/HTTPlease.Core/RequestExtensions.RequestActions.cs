@@ -3,6 +3,8 @@ using System.Linq;
 
 namespace HTTPlease
 {
+	using Core;
+	
 	/// <summary>
 	///		<see cref="HttpRequest"/> / <see cref="IHttpRequest"/> extension methods for request-configuration actions.
 	/// </summary>

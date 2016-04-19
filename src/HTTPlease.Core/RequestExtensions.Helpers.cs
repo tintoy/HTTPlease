@@ -6,7 +6,7 @@ using System.Text;
 
 namespace HTTPlease
 {
-	using ValueProviders;
+	using Core.ValueProviders;
 
 	using RequestProperties = ImmutableDictionary<string, object>;
 

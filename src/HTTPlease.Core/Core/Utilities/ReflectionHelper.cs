@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Reflection;
 
-namespace HTTPlease.Utilities
+namespace HTTPlease.Core.Utilities
 {
 	/// <summary>
 	///		Helper methods for working with Reflection.

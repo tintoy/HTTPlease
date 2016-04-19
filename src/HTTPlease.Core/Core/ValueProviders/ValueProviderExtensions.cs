@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HTTPlease.ValueProviders
+namespace HTTPlease.Core.ValueProviders
 {
 	/// <summary>
 	///		Extension methods for <see cref="IValueProvider{TContext,TValue}"/>.

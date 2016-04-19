@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HTTPlease.Templates
+namespace HTTPlease.Core.Templates
 {
 	/// <summary>
 	///		Represents a literal URI segment (i.e. one that has a constant value).

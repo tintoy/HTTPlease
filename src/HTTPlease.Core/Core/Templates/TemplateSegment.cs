@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace HTTPlease.Templates
+namespace HTTPlease.Core.Templates
 {
 	/// <summary>
 	///		The base class for the segments that comprise a URI template.

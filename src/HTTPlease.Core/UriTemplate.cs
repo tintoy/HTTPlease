@@ -5,7 +5,7 @@ using System.Text;
 
 namespace HTTPlease
 {
-	using Templates;
+	using Core.Templates;
 
 	/// <summary>
 	///		Populates parameterised URI templates.

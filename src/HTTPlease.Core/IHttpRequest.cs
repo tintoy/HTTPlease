@@ -5,7 +5,8 @@ using System.Net.Http;
 
 namespace HTTPlease
 {
-	using ValueProviders;
+	using Core;
+	using Core.ValueProviders;
 
 	/// <summary>
 	///		Represents a template for building HTTP requests.

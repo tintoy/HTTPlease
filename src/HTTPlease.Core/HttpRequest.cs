@@ -8,9 +8,9 @@ using System.Net.Http;
 
 namespace HTTPlease
 {
-	using Requests;
-	using Utilities;
-	using ValueProviders;
+	using Core;
+	using Core.Utilities;
+	using Core.ValueProviders;
 
 	using RequestProperties	= ImmutableDictionary<string, object>;
 

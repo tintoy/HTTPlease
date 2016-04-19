@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HTTPlease.Templates
+namespace HTTPlease.Core.Templates
 {
 	/// <summary>
 	///		The base class for template segments that represent components of a URI's query.

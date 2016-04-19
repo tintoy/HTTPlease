@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace HTTPlease.Templates
+namespace HTTPlease.Core.Templates
 {
 	/// <summary>
 	///		The default evaluation context for a URI template.

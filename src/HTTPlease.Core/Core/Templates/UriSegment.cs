@@ -1,4 +1,4 @@
-﻿namespace HTTPlease.Templates
+﻿namespace HTTPlease.Core.Templates
 {
 	/// <summary>
 	///		The base class for URI template segments that represent segments of the URI.

@@ -2,7 +2,7 @@
 
 namespace HTTPlease
 {
-	using Utilities;
+	using Core.Utilities;
 
 	/// <summary>
 	///		<see cref="HttpRequest"/> / <see cref="IHttpRequest"/> extension methods for request URIs.

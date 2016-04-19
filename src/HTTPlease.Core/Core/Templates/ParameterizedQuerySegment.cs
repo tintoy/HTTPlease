@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HTTPlease.Templates
+namespace HTTPlease.Core.Templates
 {
 	/// <summary>
 	///		A template segment that represents a query parameter whose value comes from a template parameter.

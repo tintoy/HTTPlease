@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HTTPlease.Templates
+namespace HTTPlease.Core.Templates
 {
 	/// <summary>
 	///		A literal URI segment representing the root folder ("/").

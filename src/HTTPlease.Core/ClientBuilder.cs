@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+#if DNXCORE50
 using System.Reflection;
+#endif // DNXCORE50
 using System.Net.Http;
 
-namespace HTTPlease.Clients
+namespace HTTPlease
 {
-	using Utilities;
+	using Core.Utilities;
 
 	/// <summary>
 	///		Builds <see cref="HttpClient"/>s with pipelines of <see cref="DelegatingHandler">HTTP message handler</see>s.

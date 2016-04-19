@@ -4,7 +4,7 @@ using Xunit;
 
 namespace HTTPlease.Tests
 {
-	using Templates;
+	using Core.Templates;
 
 	/// <summary>
 	///		Unit-tests for URI templating functionality.

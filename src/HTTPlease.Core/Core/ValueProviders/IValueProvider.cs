@@ -1,4 +1,4 @@
-﻿namespace HTTPlease.ValueProviders
+﻿namespace HTTPlease.Core.ValueProviders
 {
 	/// <summary>
 	///		Represents the provider for a value from an instance of <typeparamref name="TContext"/>.

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HTTPlease.ValueProviders
+namespace HTTPlease.Core.ValueProviders
 {
 	/// <summary>
 	///		Factory methods for creating value providers.

@@ -1,6 +1,6 @@
 ﻿using System.Net.Http;
 
-namespace HTTPlease
+namespace HTTPlease.Core
 {
 	/// <summary>
 	///		Delegate that performs configuration of an outgoing HTTP request message.
