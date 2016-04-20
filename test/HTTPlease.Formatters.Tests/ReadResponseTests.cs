@@ -52,6 +52,45 @@ namespace HTTPlease.Formatters.Tests
 					.ReadAsAsync<TestBody>(new JsonFormatter());
 
 				Assert.NotNull(actualBody);
+				Assert.NotSame(expectedBody, actualBody);
+				Assert.Equal(expectedBody.StringProperty, actualBody.StringProperty);
+				Assert.Equal(expectedBody.IntProperty, actualBody.IntProperty);
+			}
+		}
+
+		/// <summary>
+		///		Verify that an <see cref="HttpRequest"/>'s response can be read from
+		/// </summary>
+		/// <returns>
+		///		A <see cref="Task"/> representing asynchronous test execution.
+		/// </returns>
+		[Fact]
+		public async Task Can_Read_Failure_Response_Json_Transformed()
+		{
+			TestBody expectedBody = new TestBody
+			{
+				StringProperty = "This is a test",
+				IntProperty = 123
+			};
+			MockMessageHandler mockHandler = CreateJsonMockMessageHandler(HttpStatusCode.BadRequest, expectedBody);
+
+			expectedBody.StringProperty = "This is a failure response";
+			expectedBody.IntProperty = 456;
+
+			using (HttpClient client = new HttpClient(mockHandler))
+			{
+				TestBody actualBody = await client
+					.GetAsync(DefaultRequest)
+					.ReadAsAsync(new JsonFormatter(), 
+						onFailureResponse: () => new TestBody
+						{
+							StringProperty = expectedBody.StringProperty,
+							IntProperty = expectedBody.IntProperty
+						}
+					);
+
+				Assert.NotNull(actualBody);
+				Assert.NotSame(expectedBody, actualBody);
 				Assert.Equal(expectedBody.StringProperty, actualBody.StringProperty);
 				Assert.Equal(expectedBody.IntProperty, actualBody.IntProperty);
 			}

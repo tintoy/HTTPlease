@@ -67,7 +67,7 @@ namespace HTTPlease.Formatters
 		/// <param name="formatter">
 		///		The <see cref="IInputFormatter"/> that will be used to read the response body.
 		/// </param>
-		/// <param name="failureResponse">
+		/// <param name="onFailureResponse">
 		///		A delegate that is called to get a <typeparamref name="TBody"/> in the event that the response status code is not valid.
 		/// </param>
 		/// <param name="successStatusCodes">
@@ -76,7 +76,7 @@ namespace HTTPlease.Formatters
 		/// <returns>
 		///		The deserialised body.
 		/// </returns>
-		public static Task<TBody> ReadAsAsync<TBody>(this Task<HttpResponseMessage> response, IInputFormatter formatter, Func<TBody> failureResponse, params HttpStatusCode[] successStatusCodes)
+		public static Task<TBody> ReadAsAsync<TBody>(this Task<HttpResponseMessage> response, IInputFormatter formatter, Func<TBody> onFailureResponse, params HttpStatusCode[] successStatusCodes)
 		{
 			if (response == null)
 				throw new ArgumentNullException(nameof(response));
@@ -84,10 +84,10 @@ namespace HTTPlease.Formatters
 			if (formatter == null)
 				throw new ArgumentNullException(nameof(formatter));
 
-			if (failureResponse == null)
-				throw new ArgumentNullException(nameof(failureResponse));
+			if (onFailureResponse == null)
+				throw new ArgumentNullException(nameof(onFailureResponse));
 
-			return response.ReadAsAsync(formatter, responseMessage => failureResponse(), successStatusCodes);
+			return response.ReadAsAsync(formatter, responseMessage => onFailureResponse(), successStatusCodes);
 		}
 
 		/// <summary>
@@ -102,7 +102,7 @@ namespace HTTPlease.Formatters
 		/// <param name="formatter">
 		///		The <see cref="IInputFormatter"/> that will be used to read the response body.
 		/// </param>
-		/// <param name="failureResponse">
+		/// <param name="onFailureResponse">
 		///		A delegate that is called to get a <typeparamref name="TBody"/> in the event that the response status code is not valid.
 		/// </param>
 		/// <param name="successStatusCodes">
@@ -111,18 +111,18 @@ namespace HTTPlease.Formatters
 		/// <returns>
 		///		The deserialised body.
 		/// </returns>
-		public static async Task<TBody> ReadAsAsync<TBody>(this Task<HttpResponseMessage> response, IInputFormatter formatter, Func<HttpResponseMessage, TBody> failureResponse, params HttpStatusCode[] successStatusCodes)
+		public static async Task<TBody> ReadAsAsync<TBody>(this Task<HttpResponseMessage> response, IInputFormatter formatter, Func<HttpResponseMessage, TBody> onFailureResponse, params HttpStatusCode[] successStatusCodes)
 		{
 			if (response == null)
 				throw new ArgumentNullException(nameof(response));
 
-			if (failureResponse == null)
-				throw new ArgumentNullException(nameof(failureResponse));
+			if (onFailureResponse == null)
+				throw new ArgumentNullException(nameof(onFailureResponse));
 
 			using (HttpResponseMessage responseMessage = await response)
 			{
 				if (!successStatusCodes.Contains(responseMessage.StatusCode) && !responseMessage.IsSuccessStatusCode)
-					return failureResponse(responseMessage);
+					return onFailureResponse(responseMessage);
 
 				if (!responseMessage.HasBody())
 					throw new InvalidOperationException("The response body is empty."); // TODO: Custom exception type.
