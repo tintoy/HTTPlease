@@ -26,20 +26,22 @@ namespace HTTPlease.Formatters
 		/// <param name="formatter">
 		///		The <see cref="IInputFormatter"/> that will be used to read the response body.
 		/// </param>
-		/// <param name="successStatusCodes">
-		///		Optional <see cref="HttpStatusCode"/>s that should be treated as representing a successful response.
+		/// <param name="expectedStatusCodes">
+		///		Optional <see cref="HttpStatusCode"/>s that are expected and should therefore not prevent the response from being deserialised.
+		/// 
+		///		If not specified, then the standard behaviour provided by <see cref="HttpResponseMessage.EnsureSuccessStatusCode"/> is used.
 		/// </param>
 		/// <returns>
 		///		The deserialised response body.
 		/// </returns>
-		public static async Task<TBody> ReadAsAsync<TBody>(this Task<HttpResponseMessage> response, IInputFormatter formatter, params HttpStatusCode[] successStatusCodes)
+		public static async Task<TBody> ReadAsAsync<TBody>(this Task<HttpResponseMessage> response, IInputFormatter formatter, params HttpStatusCode[] expectedStatusCodes)
 		{
 			if (response == null)
 				throw new ArgumentNullException(nameof(response));
 			
 			using (HttpResponseMessage responseMessage = await response)
 			{
-				if (!successStatusCodes.Contains(responseMessage.StatusCode))
+				if (!expectedStatusCodes.Contains(responseMessage.StatusCode))
 					responseMessage.EnsureSuccessStatusCode(); // Default behaviour.
 
 				if (!responseMessage.HasBody())

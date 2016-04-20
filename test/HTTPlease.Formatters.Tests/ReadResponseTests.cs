@@ -30,7 +30,7 @@ namespace HTTPlease.Formatters.Tests
 		}
 
 		/// <summary>
-		///		Verify that an <see cref="HttpRequest"/>'s response can be read from
+		///		Verify that the body of an <see cref="HttpRequest"/>'s response (with a status code that indicates success) can be read using the JSON formatter.
 		/// </summary>
 		/// <returns>
 		///		A <see cref="Task"/> representing asynchronous test execution.
@@ -59,13 +59,13 @@ namespace HTTPlease.Formatters.Tests
 		}
 
 		/// <summary>
-		///		Verify that an <see cref="HttpRequest"/>'s response can be read from
+		///		Verify that the body of an <see cref="HttpRequest"/>'s response (with a status code that has been declared as indicating success) can be read using the JSON formatter.
 		/// </summary>
 		/// <returns>
 		///		A <see cref="Task"/> representing asynchronous test execution.
 		/// </returns>
 		[Fact]
-		public async Task Can_Read_Failure_Response_Json_Transformed()
+		public async Task Can_Read_TreatAsSuccess_Response_Json()
 		{
 			TestBody expectedBody = new TestBody
 			{
@@ -74,8 +74,39 @@ namespace HTTPlease.Formatters.Tests
 			};
 			MockMessageHandler mockHandler = CreateJsonMockMessageHandler(HttpStatusCode.BadRequest, expectedBody);
 
-			expectedBody.StringProperty = "This is a failure response";
-			expectedBody.IntProperty = 456;
+			using (HttpClient client = new HttpClient(mockHandler))
+			{
+				TestBody actualBody = await client
+					.GetAsync(DefaultRequest)
+					.ReadAsAsync<TestBody>(new JsonFormatter(), HttpStatusCode.OK, HttpStatusCode.BadRequest);
+
+				Assert.NotNull(actualBody);
+				Assert.NotSame(expectedBody, actualBody);
+				Assert.Equal(expectedBody.StringProperty, actualBody.StringProperty);
+				Assert.Equal(expectedBody.IntProperty, actualBody.IntProperty);
+			}
+		}
+
+		/// <summary>
+		///		Verify that the body of an <see cref="HttpRequest"/>'s response (with a status code that indicates failure) can be transformed by the onFailureResponse handler into a valid response body.
+		/// </summary>
+		/// <returns>
+		///		A <see cref="Task"/> representing asynchronous test execution.
+		/// </returns>
+		[Fact]
+		public async Task Can_Read_Failure_Response_Json_Transformed()
+		{
+			MockMessageHandler mockHandler = CreateJsonMockMessageHandler(HttpStatusCode.BadRequest, new TestBody
+			{
+				StringProperty = "This is a test",
+				IntProperty = 123
+			});
+
+			TestBody expectedBody = new TestBody
+			{
+				StringProperty = "This is a failure response",
+				IntProperty = 456
+			};
 
 			using (HttpClient client = new HttpClient(mockHandler))
 			{
