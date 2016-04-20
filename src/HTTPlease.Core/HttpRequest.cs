@@ -25,7 +25,7 @@ namespace HTTPlease
 		/// <summary>
 		///		The <see cref="Object"/> used a context for all untyped HTTP requests.
 		/// </summary>
-		static readonly object DefaultContext = new object();
+		internal static readonly object DefaultContext = new object();
 
 		/// <summary>
 		///		The base properties for <see cref="HttpRequest"/>s.
@@ -34,6 +34,7 @@ namespace HTTPlease
 			new Dictionary<string, object>
 			{
 				[nameof(RequestActions)] = ImmutableList<RequestAction<object>>.Empty,
+				[nameof(ResponseActions)] = ImmutableList<ResponseAction<object>>.Empty,
 				[nameof(TemplateParameters)] = ImmutableDictionary<string, IValueProvider<object, string>>.Empty,
 				[nameof(QueryParameters)] = ImmutableDictionary<string, IValueProvider<object, string>>.Empty
 			}
@@ -114,6 +115,11 @@ namespace HTTPlease
 		///		Actions (if any) to perform on the outgoing request message.
 		/// </summary>
 		public ImmutableList<RequestAction<object>> RequestActions => GetProperty<ImmutableList<RequestAction<object>>>();
+
+		/// <summary>
+		///		Actions (if any) to perform on the incoming response message.
+		/// </summary>
+		public ImmutableList<ResponseAction<object>> ResponseActions => GetProperty<ImmutableList<ResponseAction<object>>>();
 
 		/// <summary>
 		///     The request's URI template parameters (if any).
@@ -257,6 +263,11 @@ namespace HTTPlease
 		///		Actions (if any) to perform on the outgoing request message.
 		/// </summary>
 		IReadOnlyList<RequestAction<object>> IHttpRequest<object>.RequestActions => RequestActions;
+
+		/// <summary>
+		///		Actions (if any) to perform on the outgoing request message.
+		/// </summary>
+		IReadOnlyList<ResponseAction<object>> IHttpRequest<object>.ResponseActions => ResponseActions;
 
 		/// <summary>
 		///     The request's URI template parameters (if any).

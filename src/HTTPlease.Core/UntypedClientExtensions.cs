@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace HTTPlease
 {
+	using System.Collections.Generic;
+	using Core;
+
 	/// <summary>
 	///		Invocation-related extension methods for <see cref="HttpClient"/>s that use an <see cref="HttpRequest"/>.
 	/// </summary>
@@ -35,10 +38,7 @@ namespace HTTPlease
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
-			using (HttpRequestMessage requestMessage = request.BuildRequestMessage(HttpMethod.Head, baseUri: httpClient.BaseAddress))
-			{
-				return await httpClient.SendAsync(requestMessage, cancellationToken);
-			}
+			return await httpClient.SendAsync(request, HttpMethod.Head, cancellationToken: cancellationToken);
 		}
 
 		/// <summary>
@@ -64,10 +64,7 @@ namespace HTTPlease
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
-			using (HttpRequestMessage requestMessage = request.BuildRequestMessage(HttpMethod.Get, baseUri: httpClient.BaseAddress))
-			{
-				return await httpClient.SendAsync(requestMessage, cancellationToken);
-			}
+			return await httpClient.SendAsync(request, HttpMethod.Get, cancellationToken: cancellationToken);
 		}
 
 		/// <summary>
@@ -96,10 +93,7 @@ namespace HTTPlease
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
-			using (HttpRequestMessage requestMessage = request.BuildRequestMessage(HttpMethod.Post, postBody, baseUri: httpClient.BaseAddress))
-			{
-				return await httpClient.SendAsync(requestMessage, cancellationToken);
-			}
+			return await httpClient.SendAsync(request, HttpMethod.Post, postBody, cancellationToken);
 		}
 
 		/// <summary>
@@ -131,10 +125,7 @@ namespace HTTPlease
 			if (putBody == null)
 				throw new ArgumentNullException(nameof(putBody));
 
-			using (HttpRequestMessage requestMessage = request.BuildRequestMessage(HttpMethod.Put, putBody, baseUri: httpClient.BaseAddress))
-			{
-				return await httpClient.SendAsync(requestMessage, cancellationToken);
-			}
+			return await httpClient.SendAsync(request, HttpMethod.Put, putBody, cancellationToken);
 		}
 
 		/// <summary>
@@ -163,10 +154,7 @@ namespace HTTPlease
 			if (patchBody == null)
 				throw new ArgumentNullException(nameof(patchBody));
 
-			using (HttpRequestMessage requestMessage = request.BuildRequestMessage(OtherHttpMethods.Patch, patchBody, baseUri: httpClient.BaseAddress))
-			{
-				return await httpClient.SendAsync(requestMessage, cancellationToken);
-			}
+			return await httpClient.SendAsync(request, OtherHttpMethods.Patch, patchBody, cancellationToken);
 		}
 
 		/// <summary>
@@ -189,10 +177,7 @@ namespace HTTPlease
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
-			using (HttpRequestMessage requestMessage = request.BuildRequestMessage(HttpMethod.Delete, baseUri: httpClient.BaseAddress))
-			{
-				return await httpClient.SendAsync(requestMessage, cancellationToken);
-			}
+			return await httpClient.SendAsync(request, HttpMethod.Delete, cancellationToken: cancellationToken);
 		}
 
 		/// <summary>
@@ -223,10 +208,61 @@ namespace HTTPlease
 
 			using (HttpRequestMessage requestMessage = request.BuildRequestMessage(method, body, baseUri: httpClient.BaseAddress))
 			{
-				return await httpClient.SendAsync(requestMessage, cancellationToken);
+				HttpResponseMessage responseMessage = await httpClient.SendAsync(requestMessage, cancellationToken);
+				try
+				{
+					request.ExecuteResponseActions(responseMessage);
+				}
+				catch
+				{
+					using (responseMessage)
+					{
+						throw;
+					}
+				}
+
+				return responseMessage;
 			}
 		}
 
 		#endregion // Invoke
+
+		#region Helpers
+
+		/// <summary>
+		///		Execute the request's configured response actions (if any) against the specified response message.
+		/// </summary>
+		/// <param name="request">
+		///		The <see cref="HttpRequest"/>.
+		/// </param>
+		/// <param name="responseMessage">
+		///		The HTTP response message.
+		/// </param>
+		static void ExecuteResponseActions(this HttpRequest request, HttpResponseMessage responseMessage)
+		{
+			if (request == null)
+				throw new ArgumentNullException(nameof(request));
+
+			if (responseMessage == null)
+				throw new ArgumentNullException(nameof(responseMessage));
+
+			List<Exception> responseActionExceptions = new List<Exception>();
+			foreach (ResponseAction<object> responseAction in request.ResponseActions)
+			{
+				try
+				{
+					responseAction(responseMessage, HttpRequest.DefaultContext);
+				}
+				catch (Exception eResponseAction)
+				{
+					responseActionExceptions.Add(eResponseAction);
+				}
+			}
+
+			if (responseActionExceptions.Count > 0)
+				throw new AggregateException("One or more errors occurred while processing the response message.", responseActionExceptions);
+		}
+
+		#endregion // Helpers
 	}
 }

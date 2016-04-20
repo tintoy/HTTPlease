@@ -70,6 +70,11 @@ namespace HTTPlease
 		IReadOnlyList<RequestAction<TContext>> RequestActions { get; }
 
 		/// <summary>
+		///		Actions (if any) to perform on the outgoing request message.
+		/// </summary>
+		IReadOnlyList<ResponseAction<TContext>> ResponseActions { get; }
+
+		/// <summary>
 		///     The request's URI template parameters (if any).
 		/// </summary>
 		IReadOnlyDictionary<string, IValueProvider<TContext, string>> TemplateParameters { get; }
