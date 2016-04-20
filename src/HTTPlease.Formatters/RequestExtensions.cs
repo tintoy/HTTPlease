@@ -28,13 +28,8 @@ namespace HTTPlease.Formatters
 			Type formatterType = formatter.GetType();
 
 			ImmutableDictionary<Type, IFormatter> formatters = request.GetFormatters();
-			if (formatters != null)
-			{
-				if (formatters.ContainsKey(formatterType))
-					throw new InvalidOperationException($"The request's formatter collection already contains a formatter of type '{formatterType.FullName}'.");	
-			}
-			else
-				formatters = ImmutableDictionary<Type, IFormatter>.Empty;
+			if (formatters.ContainsKey(formatterType))
+				throw new InvalidOperationException($"The request's formatter collection already contains a formatter of type '{formatterType.FullName}'.");
 
 			request.Clone(properties =>
 			{
@@ -88,16 +83,16 @@ namespace HTTPlease.Formatters
 		/// <returns>
 		///		An immutable dictionary of formatters, keyed by type.
 		/// </returns>
-		static ImmutableDictionary<Type, IFormatter> GetFormatters(this HttpRequest request)
+		public static ImmutableDictionary<Type, IFormatter> GetFormatters(this HttpRequest request)
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
 			object formatters;
-			if (!request.Properties.TryGetValue(MessageProperties.MediaTypeFormatters, out formatters))
-				return null;
+			if (request.Properties.TryGetValue(MessageProperties.MediaTypeFormatters, out formatters))
+				return (ImmutableDictionary<Type, IFormatter>)formatters;
 
-			return (ImmutableDictionary<Type, IFormatter>)formatters;
+			return ImmutableDictionary<Type, IFormatter>.Empty;
 		}
 	}
 }

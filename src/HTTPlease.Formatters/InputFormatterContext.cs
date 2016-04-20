@@ -1,10 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 
 namespace HTTPlease.Formatters
 {
-	using System.IO;
-
 	/// <summary>
 	///		Contextual information used by input formatters.
 	/// </summary>

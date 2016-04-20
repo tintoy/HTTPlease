@@ -17,7 +17,7 @@ namespace HTTPlease.Formatters
 		/// <returns>
 		///		The media-type formatters, or <c>null</c> if the message does not have any associated formatters.
 		/// </returns>
-		public static IFormatterCollection GetMediaTypeFormatters(this HttpRequestMessage message)
+		public static IFormatterCollection GetFormatters(this HttpRequestMessage message)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
@@ -37,7 +37,7 @@ namespace HTTPlease.Formatters
 		/// <param name="mediaTypeFormatters">
 		///		The media-type formatters (if any).
 		/// </param>
-		public static void SetMediaTypeFormatters(this HttpRequestMessage message, IFormatterCollection mediaTypeFormatters)
+		public static void SetFormatters(this HttpRequestMessage message, IFormatterCollection mediaTypeFormatters)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));

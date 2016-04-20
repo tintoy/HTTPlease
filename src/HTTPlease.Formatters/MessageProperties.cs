@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
-
-namespace HTTPlease.Formatters
+﻿namespace HTTPlease.Formatters
 {
 	/// <summary>
 	///		The names of well-known <see cref="HttpRequestMessage"/> / <see cref="HttpResponseMessage"/> properties.
