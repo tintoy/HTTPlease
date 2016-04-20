@@ -206,7 +206,7 @@ namespace HTTPlease
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
-			using (HttpRequestMessage requestMessage = request.BuildRequestMessage(method, body, baseUri: httpClient.BaseAddress))
+			using (HttpRequestMessage requestMessage = request.BuildRequestMessage(method, body, httpClient.BaseAddress))
 			{
 				HttpResponseMessage responseMessage = await httpClient.SendAsync(requestMessage, cancellationToken);
 				try

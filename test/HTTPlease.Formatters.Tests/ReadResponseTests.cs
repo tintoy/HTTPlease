@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -9,7 +10,6 @@ using MockMessageHandler = HTTPlease.Tests.Mocks.MockMessageHandler;
 
 namespace HTTPlease.Formatters.Tests
 {
-	using System.IO;
 	using Json;
 
 	/// <summary>
@@ -47,8 +47,8 @@ namespace HTTPlease.Formatters.Tests
 
 			using (HttpClient client = new HttpClient(mockHandler))
 			{
-				TestBody actualBody = await
-					client.GetAsync(DefaultRequest)
+				TestBody actualBody = await client
+					.GetAsync(DefaultRequest)
 					.ReadAsAsync<TestBody>(new JsonFormatter());
 
 				Assert.NotNull(actualBody);
