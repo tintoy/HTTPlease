@@ -1,0 +1,57 @@
+﻿{
+    "version": "1.0.0-alpha1",
+    "title": "HTTPlease Formatters",
+    "summary": "Media-type formatter (serialisation) support for HTTPlease",
+    "description": "Media-type formatter (serialisation) functionality for HTTPlease Immutable HTTP templates",
+    "authors": [
+        "tintoy@tintoy.io"
+    ],
+    "copyright": "Copyright © Adam Friedman 2016",
+    "owners": [
+        "tintoy@tintoy.io"
+    ],
+    "tags": [
+        "HTTP",
+        "HTTPlease",
+        "Formatters",
+        "Serialization",
+        "WebApi",
+        "Client",
+        "Template",
+        "Immutable"
+    ],
+    "projectUrl": "https://github.com/tintoy/HTTPlease",
+    "licenseUrl": "https://raw.githubusercontent.com/tintoy/HTTPlease/development/r1.0/LICENSE",
+
+    "tooling": {
+        "defaultNamespace": "HTTPlease.Formatters"
+    },
+
+    "frameworks": {
+        "dnx461": {
+            "dependencies": { },
+            "frameworkAssemblies": {
+                "System.Collections": "4.0.0.0",
+                "System.Runtime": "4.0.0.0"
+            }
+        },
+        "dnxcore50": {
+            "dependencies": {
+                "Microsoft.CSharp": "4.0.1-beta-23516",
+                "System.Collections": "4.0.11-beta-23516",
+                "System.Collections.Specialized": "4.0.1-beta-23516",
+                "System.Linq": "4.0.1-beta-23516",
+                "System.Runtime": "4.0.21-beta-23516",
+                "System.Text.RegularExpressions": "4.0.11-beta-23516",
+                "System.Threading": "4.0.11-beta-23516"
+            }
+        }
+    },
+
+    "dependencies": {
+        "HTTPlease.Core": "1.0.0-alpha1",
+        "System.Collections.Concurrent": "4.0.11-beta-23516",
+        "System.Collections.Immutable": "1.1.37",
+        "System.Net.Http": "4.0.1-beta-23516"
+    }
+}
