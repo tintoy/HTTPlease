@@ -9,13 +9,13 @@ namespace HTTPlease.Formatters
     public static class RequestExtensions
     {
 		/// <summary>
-		///		Create a copy of the <see cref="HttpRequest"/>, adding the specified media-type formatter.
+		///		Create a copy of the <see cref="HttpRequest"/>, adding the specified content formatter.
 		/// </summary>
 		/// <param name="request">
 		///		The <see cref="HttpRequest"/>.
 		/// </param>
 		/// <param name="formatter">
-		///		The media-type formatter to add.
+		///		The content formatter to add.
 		/// </param>
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
@@ -27,26 +27,33 @@ namespace HTTPlease.Formatters
 
 			Type formatterType = formatter.GetType();
 
-			ImmutableDictionary<Type, IFormatter> formatters = request.GetFormatters();
-			if (formatters.ContainsKey(formatterType))
-				throw new InvalidOperationException($"The request's formatter collection already contains a formatter of type '{formatterType.FullName}'.");
-
 			request.Clone(properties =>
 			{
-				properties[MessageProperties.MediaTypeFormatters] = formatters.Add(formatterType, formatter);
+				ImmutableDictionary<Type, IFormatter> formatters = request.GetFormatters();
+
+				// If this is the first formatter we're adding, then make sure that we'll populate the formatter collection for each outgoing request.
+				if (formatters.Count == 0)
+				{
+					properties[nameof(request.RequestActions)] = request.RequestActions.Add((requestMessage, context) =>
+					{
+						requestMessage.Properties[MessageProperties.MediaTypeFormatters] = new FormatterCollection(formatters.Values);
+					});
+				}
+
+				properties[MessageProperties.MediaTypeFormatters] = formatters.SetItem(formatterType, formatter);
 			});
 
 			return request;
 		}
 
 		/// <summary>
-		///		Create a copy of the <see cref="HttpRequest"/>, adding the specified media-type formatter.
+		///		Create a copy of the <see cref="HttpRequest"/>, adding the specified content formatter.
 		/// </summary>
 		/// <param name="request">
 		///		The <see cref="HttpRequest"/>.
 		/// </param>
 		/// <param name="formatterType">
-		///		The type of media-type formatter to remove.
+		///		The type of content formatter to remove.
 		/// </param>
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.

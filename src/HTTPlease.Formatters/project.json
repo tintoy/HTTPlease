@@ -1,8 +1,8 @@
 ﻿{
     "version": "1.0.0-alpha1",
     "title": "HTTPlease Formatters",
-    "summary": "Media-type formatter (serialisation) support for HTTPlease",
-    "description": "Media-type formatter (serialisation) functionality for HTTPlease Immutable HTTP templates",
+    "summary": "content formatter (serialisation) support for HTTPlease",
+    "description": "content formatter (serialisation) functionality for HTTPlease Immutable HTTP templates",
     "authors": [
         "tintoy@tintoy.io"
     ],

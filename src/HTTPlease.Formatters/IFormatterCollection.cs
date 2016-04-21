@@ -6,7 +6,7 @@ namespace HTTPlease.Formatters
 	using System.Text;
 
 	/// <summary>
-	///		Represents a collection of <see cref="IFormatter">media-type formatter</see>s.
+	///		Represents a collection of <see cref="IFormatter">content formatter</see>s.
 	/// </summary>
     public interface IFormatterCollection
 		: ICollection<IFormatter>

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace HTTPlease.Formatters
 {
 	/// <summary>
-	///		A collection of <see cref="IFormatter">media-type formatter</see>s.
+	///		A collection of <see cref="IFormatter">content formatter</see>s.
 	/// </summary>
 	public class FormatterCollection
 		: IFormatterCollection

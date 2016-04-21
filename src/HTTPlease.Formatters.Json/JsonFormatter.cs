@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace HTTPlease.Formatters.Json
 {
 	/// <summary>
-	///		Media-type formatter for JSON.
+	///		content formatter for JSON.
 	/// </summary>
 	public class JsonFormatter
 		: IInputFormatter, IOutputFormatter

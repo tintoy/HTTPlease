@@ -292,7 +292,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The cloned request.
 		/// </returns>
-		public HttpRequest Clone(Action<RequestProperties.Builder> modifications)
+		public HttpRequest Clone(Action<IDictionary<string, object>> modifications)
 		{
 			if (modifications == null)
 				throw new ArgumentNullException(nameof(modifications));

@@ -11,7 +11,7 @@
 		static string Prefix = "HTTPlease.";
 
 		/// <summary>
-		///		Media-type formatters.
+		///		content formatters.
 		/// </summary>
 		public static string MediaTypeFormatters = Prefix + "MediaTypeFormatters";
 	}

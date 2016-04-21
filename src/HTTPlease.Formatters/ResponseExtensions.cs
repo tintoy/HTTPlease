@@ -12,10 +12,13 @@ namespace HTTPlease.Formatters
 	/// <summary>
 	///		Extension methods for the <see cref="HttpResponseMessage"/>s returned asynchronously by invocation of <see cref="HttpRequest"/>s by <see cref="HttpClient"/>s.
 	/// </summary>
+	/// <remarks>
+	///		TODO: Refactor common code into a set of core methods that the more high-level extension methods can call.
+	/// </remarks>
 	public static class ResponseExtensions
     {
 		/// <summary>
-		///		Asynchronously read the response body as the specified type.
+		///		Asynchronously read the response body as the specified type using a specific content formatter.
 		/// </summary>
 		/// <typeparam name="TBody">
 		///		The CLR type into which the body content will be deserialised.
@@ -24,7 +27,7 @@ namespace HTTPlease.Formatters
 		///		The asynchronous response.
 		/// </param>
 		/// <param name="formatter">
-		///		The <see cref="IInputFormatter"/> that will be used to read the response body.
+		///		A <see cref="IInputFormatter"/> that will be used to read the response body.
 		/// </param>
 		/// <param name="expectedStatusCodes">
 		///		Optional <see cref="HttpStatusCode"/>s that are expected and should therefore not prevent the response from being deserialised.
@@ -38,7 +41,10 @@ namespace HTTPlease.Formatters
 		{
 			if (response == null)
 				throw new ArgumentNullException(nameof(response));
-			
+
+			if (formatter == null)
+				throw new ArgumentNullException(nameof(formatter));
+
 			using (HttpResponseMessage responseMessage = await response.ConfigureAwait(false))
 			{
 				if (!expectedStatusCodes.Contains(responseMessage.StatusCode))
@@ -51,6 +57,109 @@ namespace HTTPlease.Formatters
 				using (Stream responseStream = await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false))
 				{
 					object responseBody = await formatter.ReadAsync(readContext, responseStream).ConfigureAwait(false);
+
+					return (TBody)responseBody;
+				}
+			}
+		}
+
+		/// <summary>
+		///		Asynchronously read the response body as the specified type using a specific content formatter.
+		/// </summary>
+		/// <typeparam name="TBody">
+		///		The CLR type into which the body content will be deserialised.
+		/// </typeparam>
+		/// <param name="response">
+		///		The asynchronous response.
+		/// </param>
+		/// <param name="formatters">
+		///		The <see cref="IFormatterCollection"/> that will be used to select an appropriate content formatter for reading the response body.
+		/// </param>
+		/// <param name="expectedStatusCodes">
+		///		Optional <see cref="HttpStatusCode"/>s that are expected and should therefore not prevent the response from being deserialised.
+		/// 
+		///		If not specified, then the standard behaviour provided by <see cref="HttpResponseMessage.EnsureSuccessStatusCode"/> is used.
+		/// </param>
+		/// <returns>
+		///		The deserialised response body.
+		/// </returns>
+		public static async Task<TBody> ReadAsAsync<TBody>(this Task<HttpResponseMessage> response, IFormatterCollection formatters, params HttpStatusCode[] expectedStatusCodes)
+		{
+			if (response == null)
+				throw new ArgumentNullException(nameof(response));
+
+			if (formatters == null)
+				throw new ArgumentNullException(nameof(formatters));
+
+			using (HttpResponseMessage responseMessage = await response.ConfigureAwait(false))
+			{
+				if (!expectedStatusCodes.Contains(responseMessage.StatusCode))
+					responseMessage.EnsureSuccessStatusCode(); // Default behaviour.
+
+				if (!responseMessage.HasBody())
+					throw new InvalidOperationException("The response body is empty."); // TODO: Custom exception type.
+
+				InputFormatterContext readContext = responseMessage.Content.CreateInputFormatterContext<TBody>();
+				IInputFormatter readFormatter = formatters.FindInputFormatter(readContext);
+				if (readFormatter == null)
+					throw new InvalidOperationException($"None of the supplied formatters can read content of type '{readContext.ContentType}' into CLR type '{readContext.DataType.FullName}'."); // TODO: Consider custom exception type.
+
+				using (Stream responseStream = await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false))
+				{
+					object responseBody = await readFormatter.ReadAsync(readContext, responseStream).ConfigureAwait(false);
+
+					return (TBody)responseBody;
+				}
+			}
+		}
+
+		/// <summary>
+		///		Asynchronously read the response body as the specified type using a specific content formatter.
+		/// </summary>
+		/// <typeparam name="TBody">
+		///		The CLR type into which the body content will be deserialised.
+		/// </typeparam>
+		/// <param name="response">
+		///		The asynchronous response.
+		/// </param>
+		/// <param name="expectedStatusCodes">
+		///		Optional <see cref="HttpStatusCode"/>s that are expected and should therefore not prevent the response from being deserialised.
+		/// 
+		///		If not specified, then the standard behaviour provided by <see cref="HttpResponseMessage.EnsureSuccessStatusCode"/> is used.
+		/// </param>
+		/// <returns>
+		///		The deserialised response body.
+		/// </returns>
+		/// <exception cref="InvalidOperationException">
+		///		No content formatters were configured for the request that generated the response message.
+		///		
+		///		Consider using the overload of ReadAsAsync that takes a specific <see cref="IInputFormatter"/>.
+		/// </exception>
+		public static async Task<TBody> ReadAsAsync<TBody>(this Task<HttpResponseMessage> response, params HttpStatusCode[] expectedStatusCodes)
+		{
+			if (response == null)
+				throw new ArgumentNullException(nameof(response));
+
+			using (HttpResponseMessage responseMessage = await response.ConfigureAwait(false))
+			{
+				if (!expectedStatusCodes.Contains(responseMessage.StatusCode))
+					responseMessage.EnsureSuccessStatusCode(); // Default behaviour.
+
+				if (!responseMessage.HasBody())
+					throw new InvalidOperationException("The response body is empty."); // TODO: Custom exception type.
+
+				IFormatterCollection formatters = responseMessage.GetFormatters();
+				if (formatters == null)
+					throw new InvalidOperationException("No content formatters were configured for the request that generated the response message."); // TODO: Consider custom exception type.
+
+				InputFormatterContext readContext = responseMessage.Content.CreateInputFormatterContext<TBody>();
+				IInputFormatter readFormatter = formatters.FindInputFormatter(readContext);
+				if (readFormatter == null)
+					throw new InvalidOperationException($"None of the supplied formatters can read content of type '{readContext.ContentType}' into CLR type '{readContext.DataType.FullName}'."); // TODO: Consider custom exception type.
+
+				using (Stream responseStream = await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false))
+				{
+					object responseBody = await readFormatter.ReadAsync(readContext, responseStream).ConfigureAwait(false);
 
 					return (TBody)responseBody;
 				}

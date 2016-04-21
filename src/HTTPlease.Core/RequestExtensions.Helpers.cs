@@ -24,7 +24,7 @@ namespace HTTPlease
 		/// <param name="requestUri">
 		///		The request URI.
 		/// </param>
-		static void SetRequestUri(this RequestProperties.Builder requestProperties, Uri requestUri)
+		static void SetRequestUri(this IDictionary<string, object> requestProperties, Uri requestUri)
 		{
 			if (requestProperties == null)
 				throw new ArgumentNullException(nameof(requestProperties));

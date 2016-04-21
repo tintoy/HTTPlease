@@ -4,21 +4,21 @@ using System;
 namespace HTTPlease.Formatters.Json
 {
 	/// <summary>
-	///		Extension methods for media-type formatters.
+	///		Extension methods for content formatters.
 	/// </summary>
     public static class FormatterExtensions
     {
 		/// <summary>
-		///		Add the JSON media-type formatter.
+		///		Add the JSON content formatter.
 		/// </summary>
 		/// <param name="formatters">
-		///		The media-type formatter collection.
+		///		The content formatter collection.
 		/// </param>
 		/// <param name="serializerSettings">
 		///		Optional settings for the JSON serialiser.
 		/// </param>
 		/// <returns>
-		///		The media-type formatter collection (enables method-chaining).
+		///		The content formatter collection (enables method-chaining).
 		/// </returns>
 		public static IFormatterCollection AddJsonFormatter(this IFormatterCollection formatters, JsonSerializerSettings serializerSettings = null)
 		{

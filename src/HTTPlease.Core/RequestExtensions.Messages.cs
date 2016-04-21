@@ -5,6 +5,6 @@
 	/// </summary>
 	public static partial class RequestExtensions
     {
-		// TODO: Implement abstraction for media-type formatters then add BuildRequestMessage extension method for HttpRequest that adds body content.
+		// TODO: Implement abstraction for content formatters then add BuildRequestMessage extension method for HttpRequest that adds body content.
 	}
 }

@@ -3,7 +3,7 @@
 namespace HTTPlease.Formatters
 {
 	/// <summary>
-	///		Represents a media-type formatter.
+	///		Represents a content formatter.
 	/// </summary>
     public interface IFormatter
     {

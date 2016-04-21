@@ -2,8 +2,8 @@
 {
     "version": "1.0.0-alpha1",
     "title": "HTTPlease JSON Formatter",
-    "summary": "JSON media-type formatter (serialisation) support for HTTPlease",
-    "description": "JSON media-type formatter (serialisation) functionality for HTTPlease Immutable HTTP templates",
+    "summary": "JSON content formatter (serialisation) support for HTTPlease",
+    "description": "JSON content formatter (serialisation) functionality for HTTPlease Immutable HTTP templates",
     "authors": [
         "tintoy@tintoy.io"
     ],
