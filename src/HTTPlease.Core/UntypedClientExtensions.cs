@@ -38,7 +38,7 @@ namespace HTTPlease
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
-			return await httpClient.SendAsync(request, HttpMethod.Head, cancellationToken: cancellationToken);
+			return await httpClient.SendAsync(request, HttpMethod.Head, cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
 		/// <summary>
@@ -64,7 +64,7 @@ namespace HTTPlease
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
-			return await httpClient.SendAsync(request, HttpMethod.Get, cancellationToken: cancellationToken);
+			return await httpClient.SendAsync(request, HttpMethod.Get, cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
 		/// <summary>
@@ -93,7 +93,7 @@ namespace HTTPlease
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
-			return await httpClient.SendAsync(request, HttpMethod.Post, postBody, cancellationToken);
+			return await httpClient.SendAsync(request, HttpMethod.Post, postBody, cancellationToken).ConfigureAwait(false);
 		}
 
 		/// <summary>
@@ -125,7 +125,7 @@ namespace HTTPlease
 			if (putBody == null)
 				throw new ArgumentNullException(nameof(putBody));
 
-			return await httpClient.SendAsync(request, HttpMethod.Put, putBody, cancellationToken);
+			return await httpClient.SendAsync(request, HttpMethod.Put, putBody, cancellationToken).ConfigureAwait(false);
 		}
 
 		/// <summary>
@@ -154,7 +154,7 @@ namespace HTTPlease
 			if (patchBody == null)
 				throw new ArgumentNullException(nameof(patchBody));
 
-			return await httpClient.SendAsync(request, OtherHttpMethods.Patch, patchBody, cancellationToken);
+			return await httpClient.SendAsync(request, OtherHttpMethods.Patch, patchBody, cancellationToken).ConfigureAwait(false);
 		}
 
 		/// <summary>
@@ -177,7 +177,7 @@ namespace HTTPlease
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
-			return await httpClient.SendAsync(request, HttpMethod.Delete, cancellationToken: cancellationToken);
+			return await httpClient.SendAsync(request, HttpMethod.Delete, cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
 		/// <summary>
@@ -208,7 +208,7 @@ namespace HTTPlease
 
 			using (HttpRequestMessage requestMessage = request.BuildRequestMessage(method, body, httpClient.BaseAddress))
 			{
-				HttpResponseMessage responseMessage = await httpClient.SendAsync(requestMessage, cancellationToken);
+				HttpResponseMessage responseMessage = await httpClient.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
 				try
 				{
 					request.ExecuteResponseActions(responseMessage);

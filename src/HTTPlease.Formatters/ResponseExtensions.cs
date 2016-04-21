@@ -39,7 +39,7 @@ namespace HTTPlease.Formatters
 			if (response == null)
 				throw new ArgumentNullException(nameof(response));
 			
-			using (HttpResponseMessage responseMessage = await response)
+			using (HttpResponseMessage responseMessage = await response.ConfigureAwait(false))
 			{
 				if (!expectedStatusCodes.Contains(responseMessage.StatusCode))
 					responseMessage.EnsureSuccessStatusCode(); // Default behaviour.
@@ -48,9 +48,9 @@ namespace HTTPlease.Formatters
 					throw new InvalidOperationException("The response body is empty."); // TODO: Custom exception type.
 
 				InputFormatterContext readContext = responseMessage.Content.CreateInputFormatterContext<TBody>();
-				using (Stream responseStream = await responseMessage.Content.ReadAsStreamAsync())
+				using (Stream responseStream = await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false))
 				{
-					object responseBody = await formatter.ReadAsync(readContext, responseStream);
+					object responseBody = await formatter.ReadAsync(readContext, responseStream).ConfigureAwait(false);
 
 					return (TBody)responseBody;
 				}
@@ -121,7 +121,7 @@ namespace HTTPlease.Formatters
 			if (onFailureResponse == null)
 				throw new ArgumentNullException(nameof(onFailureResponse));
 
-			using (HttpResponseMessage responseMessage = await response)
+			using (HttpResponseMessage responseMessage = await response.ConfigureAwait(false))
 			{
 				if (!successStatusCodes.Contains(responseMessage.StatusCode) && !responseMessage.IsSuccessStatusCode)
 					return onFailureResponse(responseMessage);
@@ -130,9 +130,9 @@ namespace HTTPlease.Formatters
 					throw new InvalidOperationException("The response body is empty."); // TODO: Custom exception type.
 
 				InputFormatterContext readContext = responseMessage.Content.CreateInputFormatterContext<TBody>();
-				using (Stream responseStream = await responseMessage.Content.ReadAsStreamAsync())
+				using (Stream responseStream = await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false))
 				{
-					object responseBody = await formatter.ReadAsync(readContext, responseStream);
+					object responseBody = await formatter.ReadAsync(readContext, responseStream).ConfigureAwait(false);
 
 					return (TBody)responseBody;
 				}
