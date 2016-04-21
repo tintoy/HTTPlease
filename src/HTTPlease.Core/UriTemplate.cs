@@ -128,7 +128,7 @@ namespace HTTPlease
 
 				uriBuilder.AppendFormat(
 					"{0}={1}",
-					segment.QueryParameterName,
+					Uri.EscapeDataString(segment.QueryParameterName),
 					Uri.EscapeDataString(queryParameterValue)
 				);
 			}
