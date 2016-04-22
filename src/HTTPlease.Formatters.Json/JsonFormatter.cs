@@ -27,7 +27,7 @@ namespace HTTPlease.Formatters.Json
 		/// <summary>
 		///		Content types supported by the formatter.
 		/// </summary>
-		public ISet<string> SupportedContentTypes { get; } = new HashSet<string>
+		public ISet<string> SupportedMediaTypes { get; } = new HashSet<string>
 		{
 			"application/json"
 		};
@@ -46,7 +46,7 @@ namespace HTTPlease.Formatters.Json
 			if (context == null)
 				throw new ArgumentNullException(nameof(context));
 
-			return SupportedContentTypes.Contains(context.ContentType);
+			return SupportedMediaTypes.Contains(context.MediaType);
 		}
 
 		/// <summary>
@@ -63,7 +63,7 @@ namespace HTTPlease.Formatters.Json
 			if (context == null)
 				throw new ArgumentNullException(nameof(context));
 
-			return SupportedContentTypes.Contains(context.ContentType);
+			return SupportedMediaTypes.Contains(context.MediaType);
 		}
 
 		/// <summary>
@@ -115,8 +115,8 @@ namespace HTTPlease.Formatters.Json
 			if (stream == null)
 				throw new ArgumentNullException(nameof(stream));
 
-			if (!SupportedContentTypes.Contains(context.ContentType))
-				throw new NotSupportedException($"The {nameof(JsonFormatter)} cannot write content of type '{context.ContentType}'.");
+			if (!SupportedMediaTypes.Contains(context.MediaType))
+				throw new NotSupportedException($"The {nameof(JsonFormatter)} cannot write content of type '{context.MediaType}'.");
 
 			using (TextWriter writer = context.CreateWriter(stream))
 			{

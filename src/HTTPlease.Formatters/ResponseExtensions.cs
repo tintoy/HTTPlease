@@ -470,7 +470,7 @@ namespace HTTPlease.Formatters
 			InputFormatterContext readContext = responseMessage.Content.CreateInputFormatterContext<TBody>();
 			IInputFormatter readFormatter = formatters.FindInputFormatter(readContext);
 			if (readFormatter == null)
-				throw new InvalidOperationException($"None of the supplied formatters can read content of type '{readContext.ContentType}' into CLR type '{readContext.DataType.FullName}'.");
+				throw new InvalidOperationException($"None of the supplied formatters can read content of type '{readContext.MediaType}' into CLR type '{readContext.DataType.FullName}'.");
 
 			return await responseMessage.ReadContentAsAsync<TBody>(readFormatter, readContext).ConfigureAwait(false);
 		}

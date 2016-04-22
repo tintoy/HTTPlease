@@ -99,7 +99,7 @@ namespace HTTPlease.Formatters
 
 			return new InputFormatterContext(
 				dataType: typeof(TBody),
-				contentType: contentTypeHeader.MediaType,
+				mediaType: contentTypeHeader.MediaType,
 				encoding: encoding
 			);
 		}

@@ -19,17 +19,17 @@ namespace HTTPlease.Formatters
 		/// <param name="dataType">
 		///		The CLR type whose data will be serialised.
 		/// </param>
-		/// <param name="contentType">
-		///		The content type being serialised.
+		/// <param name="mediaType">
+		///		The media type that the formatter should produced.
 		/// </param>
 		/// <param name="encoding">
-		///		The content encoding.
+		///		The content encoding that the formatter should use.
 		/// </param>
-		public OutputFormatterContext(object data, Type dataType, string contentType, Encoding encoding)
+		public OutputFormatterContext(object data, Type dataType, string mediaType, Encoding encoding)
 		{
 			Data = data;
 			DataType = dataType;
-			ContentType = contentType;
+			MediaType = mediaType;
 			Encoding = encoding;
 		}
 
@@ -46,7 +46,7 @@ namespace HTTPlease.Formatters
 		/// <summary>
 		///		The content type being serialised.
 		/// </summary>
-		public string ContentType { get; }
+		public string MediaType { get; }
 
 		/// <summary>
 		///		The content encoding.

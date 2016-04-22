@@ -10,6 +10,6 @@ namespace HTTPlease.Formatters
 		/// <summary>
 		///		Content types supported by the formatter.
 		/// </summary>
-		ISet<string> SupportedContentTypes { get; }
+		ISet<string> SupportedMediaTypes { get; }
 	}
 }
