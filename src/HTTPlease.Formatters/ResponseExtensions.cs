@@ -193,14 +193,132 @@ namespace HTTPlease.Formatters
 				if (!successStatusCodes.Contains(responseMessage.StatusCode) && !responseMessage.IsSuccessStatusCode)
 					return onFailureResponse(responseMessage);
 
-				responseMessage.EnsureHasBody();
-
-				return await responseMessage.ReadContentAsAsync<TBody>().ConfigureAwait(false);
+				return await responseMessage.ReadContentAsAsync<TBody>(formatter).ConfigureAwait(false);
 			}
 		}
 
 		/// <summary>
-		///		Asynchronously read the response body as the specified type.
+		///		Asynchronously read the response body as the specified type, selecting the most appropriate formatter.
+		/// </summary>
+		/// <typeparam name="TBody">
+		///		The CLR type into which the body content will be deserialised.
+		/// </typeparam>
+		/// <param name="response">
+		///		The asynchronous response.
+		/// </param>
+		/// <param name="onFailureResponse">
+		///		A delegate that is called to get a <typeparamref name="TBody"/> in the event that the response status code is not valid.
+		/// </param>
+		/// <param name="successStatusCodes">
+		///		Optional <see cref="HttpStatusCode"/>s that should be treated as representing a successful response.
+		/// </param>
+		/// <returns>
+		///		The deserialised body.
+		/// </returns>
+		public static Task<TBody> ReadAsAsync<TBody>(this Task<HttpResponseMessage> response, Func<TBody> onFailureResponse, params HttpStatusCode[] successStatusCodes)
+		{
+			if (response == null)
+				throw new ArgumentNullException(nameof(response));
+
+			if (onFailureResponse == null)
+				throw new ArgumentNullException(nameof(onFailureResponse));
+
+			return response.ReadAsAsync(responseMessage => onFailureResponse(), successStatusCodes);
+		}
+
+		/// <summary>
+		///		Asynchronously read the response body as the specified type, selecting the most appropriate formatter.
+		/// </summary>
+		/// <typeparam name="TBody">
+		///		The CLR type into which the body content will be deserialised.
+		/// </typeparam>
+		/// <param name="response">
+		///		The asynchronous response.
+		/// </param>
+		/// <param name="onFailureResponse">
+		///		A delegate that is called to get a <typeparamref name="TBody"/> in the event that the response status code is not valid.
+		/// </param>
+		/// <param name="successStatusCodes">
+		///		Optional <see cref="HttpStatusCode"/>s that should be treated as representing a successful response.
+		/// </param>
+		/// <returns>
+		///		The deserialised body.
+		/// </returns>
+		public static async Task<TBody> ReadAsAsync<TBody>(this Task<HttpResponseMessage> response, Func<HttpResponseMessage, TBody> onFailureResponse, params HttpStatusCode[] successStatusCodes)
+		{
+			if (response == null)
+				throw new ArgumentNullException(nameof(response));
+
+			if (onFailureResponse == null)
+				throw new ArgumentNullException(nameof(onFailureResponse));
+
+			using (HttpResponseMessage responseMessage = await response.ConfigureAwait(false))
+			{
+				if (!successStatusCodes.Contains(responseMessage.StatusCode) && !responseMessage.IsSuccessStatusCode)
+					return onFailureResponse(responseMessage);
+				
+				return await
+					responseMessage.EnsureHasBody()
+						.ReadContentAsAsync<TBody>()
+						.ConfigureAwait(false);
+			}
+		}
+
+		/// <summary>
+		///		Asynchronously read the response body as the specified type using the most appropriate formatter.
+		/// </summary>
+		/// <typeparam name="TBody">
+		///		The CLR type into which the body content will be deserialised.
+		/// </typeparam>
+		/// <typeparam name="TError">
+		///		The CLR type that will be returned in the event that the response status code is unexpected or does not represent success.
+		/// </typeparam>
+		/// <param name="response">
+		///		The asynchronous response.
+		/// </param>
+		/// <param name="onFailureResponse">
+		///		A delegate that is called to get a <typeparamref name="TError"/> in the event that the response status code is unexpected or does not represent success.
+		/// </param>
+		/// <param name="successStatusCodes">
+		///		Optional <see cref="HttpStatusCode"/>s that should be treated as representing a successful response.
+		/// </param>
+		/// <returns>
+		///		The deserialised body.
+		/// </returns>
+		/// <exception cref="HttpRequestException{TError}">
+		///		The response status code was unexpected or did not represent success.
+		/// </exception>
+		/// <exception cref="InvalidOperationException">
+		///		No formatters were configured for the request, or an appropriate formatter could not be found in the request's list of formatters.
+		/// </exception>
+		public static async Task<TBody> ReadAsAsync<TBody, TError>(this Task<HttpResponseMessage> response, Func<HttpResponseMessage, TError> onFailureResponse, params HttpStatusCode[] successStatusCodes)
+		{
+			if (response == null)
+				throw new ArgumentNullException(nameof(response));
+
+			if (onFailureResponse == null)
+				throw new ArgumentNullException(nameof(onFailureResponse));
+
+			using (HttpResponseMessage responseMessage = await response.ConfigureAwait(false))
+			{
+				if (!successStatusCodes.Contains(responseMessage.StatusCode) && !responseMessage.IsSuccessStatusCode)
+				{
+					TError error = onFailureResponse(responseMessage);
+					if (error == null)
+						throw new InvalidOperationException("The failure response handler returned null.");
+
+					throw new HttpRequestException<TError>(responseMessage.StatusCode, error);
+				}
+
+				return await
+					responseMessage.EnsureHasBody()
+						.ReadContentAsAsync<TBody>()
+						.ConfigureAwait(false);
+			}
+		}
+
+		/// <summary>
+		///		Asynchronously read the response body as the specified type using the specified formatter.
 		/// </summary>
 		/// <typeparam name="TBody">
 		///		The CLR type into which the body content will be deserialised.
@@ -247,7 +365,7 @@ namespace HTTPlease.Formatters
 
 				return await
 					responseMessage.EnsureHasBody()
-						.ReadContentAsAsync<TBody>()
+						.ReadContentAsAsync<TBody>(formatter)
 						.ConfigureAwait(false);
 			}
 		}
@@ -358,7 +476,37 @@ namespace HTTPlease.Formatters
 		}
 
 		/// <summary>
-		///		Deserialise the response message's body content into the specified CLR data type using the most appropriate formatter.
+		///		Deserialise the response message's body content into the specified CLR data type using the specified formatter.
+		/// </summary>
+		/// <typeparam name="TBody">
+		///		The CLR data type into which the body content will be deserialised.
+		/// </typeparam>
+		/// <param name="responseMessage">
+		///		The response message.
+		/// </param>
+		/// <param name="formatter">
+		///		The content formatter that will be used to deserialise the body content.
+		/// </param>
+		/// <returns>
+		///		The deserialised message body.
+		/// </returns>
+		public static Task<TBody> ReadContentAsAsync<TBody>(this HttpResponseMessage responseMessage, IInputFormatter formatter)
+		{
+			if (responseMessage == null)
+				throw new ArgumentNullException(nameof(responseMessage));
+
+			if (formatter == null)
+				throw new ArgumentNullException(nameof(formatter));
+
+			responseMessage.EnsureHasBody();
+
+			InputFormatterContext formatterContext = responseMessage.Content.CreateInputFormatterContext<TBody>();
+
+			return responseMessage.ReadContentAsAsync<TBody>(formatter, formatterContext);
+		}
+
+		/// <summary>
+		///		Deserialise the response message's body content into the specified CLR data type using the specified formatter.
 		/// </summary>
 		/// <typeparam name="TBody">
 		///		The CLR data type into which the body content will be deserialised.
