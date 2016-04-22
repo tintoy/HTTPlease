@@ -1,4 +1,6 @@
-﻿namespace HTTPlease.Formatters
+﻿using System.Net.Http;
+
+namespace HTTPlease
 {
 	/// <summary>
 	///		The names of well-known <see cref="HttpRequestMessage"/> / <see cref="HttpResponseMessage"/> properties.
@@ -11,8 +13,13 @@
 		static string Prefix = "HTTPlease.";
 
 		/// <summary>
-		///		content formatters.
+		///		The <see cref="IHttpRequest"/> that created the message.
 		/// </summary>
-		public static string MediaTypeFormatters = Prefix + "MediaTypeFormatters";
+		public static string Request = Prefix + "Request";
+
+		/// <summary>
+		///		The message's collection of content formatters.
+		/// </summary>
+		public static string ContentFormatters = Prefix + "ContentFormatters";
 	}
 }

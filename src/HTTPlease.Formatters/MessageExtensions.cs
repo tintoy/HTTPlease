@@ -23,7 +23,7 @@ namespace HTTPlease.Formatters
 				throw new ArgumentNullException(nameof(message));
 
 			object contentFormatters;
-			message.Properties.TryGetValue(MessageProperties.MediaTypeFormatters, out contentFormatters);
+			message.Properties.TryGetValue(MessageProperties.ContentFormatters, out contentFormatters);
 
 			return (IFormatterCollection)contentFormatters;
 		}
@@ -50,7 +50,7 @@ namespace HTTPlease.Formatters
 				throw new InvalidOperationException("This operation is only valid on a response message produced by invoking an HttpRequest (the response message does not have an associated request message).");
 
 			object contentFormatters;
-			message.RequestMessage.Properties.TryGetValue(MessageProperties.MediaTypeFormatters, out contentFormatters);
+			message.RequestMessage.Properties.TryGetValue(MessageProperties.ContentFormatters, out contentFormatters);
 
 			return (IFormatterCollection)contentFormatters;
 		}
@@ -69,7 +69,7 @@ namespace HTTPlease.Formatters
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
 
-			message.Properties[MessageProperties.MediaTypeFormatters] = contentFormatters;
+			message.Properties[MessageProperties.ContentFormatters] = contentFormatters;
 		}
 	}
 }

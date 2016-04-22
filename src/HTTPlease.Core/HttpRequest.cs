@@ -194,6 +194,8 @@ namespace HTTPlease
 			try
 			{
 				requestMessage = new HttpRequestMessage(httpMethod, requestUri);
+				SetStandardMessageProperties(requestMessage);
+
 				if (body != null)
 					requestMessage.Content = body;
 
@@ -362,6 +364,20 @@ namespace HTTPlease
 					templateParameter => templateParameter.Key,
 					templateParameter => templateParameter.Value
 				);
+		}
+
+		/// <summary>
+		///		Configure standard properties for the specified <see cref="HttpRequestMessage"/>.
+		/// </summary>
+		/// <param name="requestMessage">
+		///		The <see cref="HttpRequestMessage"/>.
+		/// </param>
+		void SetStandardMessageProperties(HttpRequestMessage requestMessage)
+		{
+			if (requestMessage == null)
+				throw new ArgumentNullException(nameof(requestMessage));
+
+			requestMessage.Properties[MessageProperties.Request] = this;
 		}
 
 		#endregion // Helpers

@@ -27,23 +27,21 @@ namespace HTTPlease.Formatters
 
 			Type formatterType = formatter.GetType();
 
-			request.Clone(properties =>
+			return request.Clone(properties =>
 			{
 				ImmutableDictionary<Type, IFormatter> formatters = request.GetFormatters();
 
 				// If this is the first formatter we're adding, then make sure that we'll populate the formatter collection for each outgoing request.
 				if (formatters.Count == 0)
 				{
-					properties[nameof(request.RequestActions)] = request.RequestActions.Add((requestMessage, context) =>
+					properties[nameof(request.RequestActions)] = request.RequestActions.Add((httpRequest, requestMessage, context) =>
 					{
-						requestMessage.Properties[MessageProperties.MediaTypeFormatters] = new FormatterCollection(formatters.Values);
+						requestMessage.Properties[MessageProperties.ContentFormatters] = new FormatterCollection(formatters.Values);
 					});
 				}
 
-				properties[MessageProperties.MediaTypeFormatters] = formatters.SetItem(formatterType, formatter);
+				properties[MessageProperties.ContentFormatters] = formatters.SetItem(formatterType, formatter);
 			});
-
-			return request;
 		}
 
 		/// <summary>
@@ -73,12 +71,10 @@ namespace HTTPlease.Formatters
 			if (!formatters.ContainsKey(formatterType))
 				return request;
 			
-			request.Clone(properties =>
+			return request.Clone(properties =>
 			{
-				properties[MessageProperties.MediaTypeFormatters] = formatters.Remove(formatterType);
+				properties[MessageProperties.ContentFormatters] = formatters.Remove(formatterType);
 			});
-
-			return request;
 		}
 
 		/// <summary>
@@ -96,7 +92,7 @@ namespace HTTPlease.Formatters
 				throw new ArgumentNullException(nameof(request));
 
 			object formatters;
-			if (request.Properties.TryGetValue(MessageProperties.MediaTypeFormatters, out formatters))
+			if (request.Properties.TryGetValue(MessageProperties.ContentFormatters, out formatters))
 				return (ImmutableDictionary<Type, IFormatter>)formatters;
 
 			return ImmutableDictionary<Type, IFormatter>.Empty;
