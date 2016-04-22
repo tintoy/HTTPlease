@@ -34,7 +34,7 @@ namespace HTTPlease.Formatters
 				// If this is the first formatter we're adding, then make sure that we'll populate the formatter collection for each outgoing request.
 				if (formatters.Count == 0)
 				{
-					properties[nameof(request.RequestActions)] = request.RequestActions.Add((httpRequest, requestMessage, context) =>
+					properties[nameof(request.RequestActions)] = request.RequestActions.Add((requestMessage, context) =>
 					{
 						requestMessage.Properties[MessageProperties.ContentFormatters] = new FormatterCollection(formatters.Values);
 					});
