@@ -44,15 +44,12 @@ namespace HTTPlease.Formatters
 				if (!expectedStatusCodes.Contains(responseMessage.StatusCode))
 					responseMessage.EnsureSuccessStatusCode(); // Default behaviour.
 
-				if (!responseMessage.HasBody())
-					throw new InvalidOperationException("The response body is empty."); // TODO: Custom exception type.
-
-				return await responseMessage.Content.ReadAsAsync<TBody>(formatter).ConfigureAwait(false);
+				return await responseMessage.ReadContentAsAsync<TBody>(formatter).ConfigureAwait(false);
 			}
 		}
 
 		/// <summary>
-		///		Asynchronously read the response body as the specified type using a specific content formatter.
+		///		Asynchronously read the response body as the specified type, selecting the most appropriate content formatter.
 		/// </summary>
 		/// <typeparam name="TBody">
 		///		The CLR type into which the body content will be deserialised.
@@ -257,10 +254,7 @@ namespace HTTPlease.Formatters
 				if (!successStatusCodes.Contains(responseMessage.StatusCode) && !responseMessage.IsSuccessStatusCode)
 					return onFailureResponse(responseMessage);
 				
-				return await
-					responseMessage.EnsureHasBody()
-						.ReadContentAsAsync<TBody>()
-						.ConfigureAwait(false);
+				return await responseMessage.ReadContentAsAsync<TBody>().ConfigureAwait(false);
 			}
 		}
 
@@ -310,10 +304,7 @@ namespace HTTPlease.Formatters
 					throw new HttpRequestException<TError>(responseMessage.StatusCode, error);
 				}
 
-				return await
-					responseMessage.EnsureHasBody()
-						.ReadContentAsAsync<TBody>()
-						.ConfigureAwait(false);
+				return await responseMessage.ReadContentAsAsync<TBody>().ConfigureAwait(false);
 			}
 		}
 
@@ -363,10 +354,7 @@ namespace HTTPlease.Formatters
 					throw new HttpRequestException<TError>(responseMessage.StatusCode, error);
 				}
 
-				return await
-					responseMessage.EnsureHasBody()
-						.ReadContentAsAsync<TBody>(formatter)
-						.ConfigureAwait(false);
+				return await responseMessage.ReadContentAsAsync<TBody>(formatter).ConfigureAwait(false);
 			}
 		}
 
