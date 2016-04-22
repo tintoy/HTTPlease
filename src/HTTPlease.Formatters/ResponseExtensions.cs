@@ -200,6 +200,59 @@ namespace HTTPlease.Formatters
 		}
 
 		/// <summary>
+		///		Asynchronously read the response body as the specified type.
+		/// </summary>
+		/// <typeparam name="TBody">
+		///		The CLR type into which the body content will be deserialised.
+		/// </typeparam>
+		/// <typeparam name="TError">
+		///		The CLR type that will be returned in the event that the response status code is unexpected or does not represent success.
+		/// </typeparam>
+		/// <param name="response">
+		///		The asynchronous response.
+		/// </param>
+		/// <param name="formatter">
+		///		The <see cref="IInputFormatter"/> that will be used to read the response body.
+		/// </param>
+		/// <param name="onFailureResponse">
+		///		A delegate that is called to get a <typeparamref name="TError"/> in the event that the response status code is unexpected or does not represent success.
+		/// </param>
+		/// <param name="successStatusCodes">
+		///		Optional <see cref="HttpStatusCode"/>s that should be treated as representing a successful response.
+		/// </param>
+		/// <returns>
+		///		The deserialised body.
+		/// </returns>
+		/// <exception cref="HttpRequestException{TError}">
+		///		The response status code was unexpected or did not represent success.
+		/// </exception>
+		public static async Task<TBody> ReadAsAsync<TBody, TError>(this Task<HttpResponseMessage> response, IInputFormatter formatter, Func<HttpResponseMessage, TError> onFailureResponse, params HttpStatusCode[] successStatusCodes)
+		{
+			if (response == null)
+				throw new ArgumentNullException(nameof(response));
+
+			if (onFailureResponse == null)
+				throw new ArgumentNullException(nameof(onFailureResponse));
+
+			using (HttpResponseMessage responseMessage = await response.ConfigureAwait(false))
+			{
+				if (!successStatusCodes.Contains(responseMessage.StatusCode) && !responseMessage.IsSuccessStatusCode)
+				{
+					TError error = onFailureResponse(responseMessage);
+					if (error == null)
+						throw new InvalidOperationException("The failure response handler returned null.");
+
+					throw new HttpRequestException<TError>(responseMessage.StatusCode, error);
+				}
+
+				return await
+					responseMessage.EnsureHasBody()
+						.ReadContentAsAsync<TBody>()
+						.ConfigureAwait(false);
+			}
+		}
+
+		/// <summary>
 		///		Determine if the response has body content.
 		/// </summary>
 		/// <param name="responseMessage">
