@@ -12,20 +12,12 @@ namespace HTTPlease
 	using Core.Utilities;
 	using Core.ValueProviders;
 
-	using RequestProperties	= ImmutableDictionary<string, object>;
+	using RequestProperties = ImmutableDictionary<string, object>;
 
-	/// <summary>
-	///		A template for an HTTP request.
-	/// </summary>
-	public sealed class HttpRequest
-		: HttpRequestBase, IHttpRequest<object>
+	public class HttpRequest<TContext>
+		: HttpRequestBase, IHttpRequest<TContext>
 	{
 		#region Constants
-
-		/// <summary>
-		///		The <see cref="Object"/> used a context for all untyped HTTP requests.
-		/// </summary>
-		internal static readonly object DefaultContext = new object();
 
 		/// <summary>
 		///		The base properties for <see cref="HttpRequest"/>s.
@@ -33,10 +25,10 @@ namespace HTTPlease
 		static readonly RequestProperties BaseProperties =
 			new Dictionary<string, object>
 			{
-				[nameof(RequestActions)] = ImmutableList<RequestAction<object>>.Empty,
-				[nameof(ResponseActions)] = ImmutableList<ResponseAction<object>>.Empty,
-				[nameof(TemplateParameters)] = ImmutableDictionary<string, IValueProvider<object, string>>.Empty,
-				[nameof(QueryParameters)] = ImmutableDictionary<string, IValueProvider<object, string>>.Empty
+				[nameof(RequestActions)] = ImmutableList<RequestAction<TContext>>.Empty,
+				[nameof(ResponseActions)] = ImmutableList<ResponseAction<TContext>>.Empty,
+				[nameof(TemplateParameters)] = ImmutableDictionary<string, IValueProvider<TContext, string>>.Empty,
+				[nameof(QueryParameters)] = ImmutableDictionary<string, IValueProvider<TContext, string>>.Empty
 			}
 			.ToImmutableDictionary();
 
@@ -73,7 +65,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
 		/// </returns>
-		public static HttpRequest Create(string requestUri)
+		public static HttpRequest<TContext> Create(string requestUri)
 		{
 			if (String.IsNullOrWhiteSpace(requestUri))
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'requestUri'.", nameof(requestUri));
@@ -92,7 +84,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
 		/// </returns>
-		public static HttpRequest Create(Uri requestUri)
+		public static HttpRequest<TContext> Create(Uri requestUri)
 		{
 			if (requestUri == null)
 				throw new ArgumentNullException(nameof(requestUri));
@@ -102,7 +94,7 @@ namespace HTTPlease
 			properties[nameof(RequestUri)] = requestUri;
 			properties[nameof(IsUriTemplate)] = UriTemplate.IsTemplate(requestUri);
 
-			return new HttpRequest(
+			return new HttpRequest<TContext>(
 				properties.ToImmutable()
 			);
 		}
@@ -114,43 +106,46 @@ namespace HTTPlease
 		/// <summary>
 		///		Actions (if any) to perform on the outgoing request message.
 		/// </summary>
-		public ImmutableList<RequestAction<object>> RequestActions => GetProperty<ImmutableList<RequestAction<object>>>();
+		public ImmutableList<RequestAction<TContext>> RequestActions => GetProperty<ImmutableList<RequestAction<TContext>>>();
 
 		/// <summary>
 		///		Actions (if any) to perform on the incoming response message.
 		/// </summary>
-		public ImmutableList<ResponseAction<object>> ResponseActions => GetProperty<ImmutableList<ResponseAction<object>>>();
+		public ImmutableList<ResponseAction<TContext>> ResponseActions => GetProperty<ImmutableList<ResponseAction<TContext>>>();
 
 		/// <summary>
 		///     The request's URI template parameters (if any).
 		/// </summary>
-		public ImmutableDictionary<string, IValueProvider<object, string>> TemplateParameters => GetProperty<ImmutableDictionary<string, IValueProvider<object, string>>>();
+		public ImmutableDictionary<string, IValueProvider<TContext, string>> TemplateParameters => GetProperty<ImmutableDictionary<string, IValueProvider<TContext, string>>>();
 
 		/// <summary>
 		///     The request's query parameters (if any).
 		/// </summary>
-		public ImmutableDictionary<string, IValueProvider<object, string>> QueryParameters => GetProperty<ImmutableDictionary<string, IValueProvider<object, string>>>();
+		public ImmutableDictionary<string, IValueProvider<TContext, string>> QueryParameters => GetProperty<ImmutableDictionary<string, IValueProvider<TContext, string>>>();
 
 		#endregion // Properties
 
 		#region Invocation
 
 		/// <summary>
-		///		Build and configure a new HTTP request message.
+		///     Build and configure a new HTTP request message.
 		/// </summary>
 		/// <param name="httpMethod">
-		///		The HTTP request method to use.
+		///     The HTTP request method to use.
+		/// </param>
+		/// <param name="context">
+		///		The object used as a context for resolving deferred template values.
 		/// </param>
 		/// <param name="body">
-		///		Optional <see cref="HttpContent"/> representing the request body.
+		///     Optional <see cref="HttpContent" /> representing the request body.
 		/// </param>
 		/// <param name="baseUri">
-		///		An optional base URI to use if the request does not already have an absolute request URI.
+		///     An optional base URI to use if the request does not already have an absolute request URI.
 		/// </param>
 		/// <returns>
-		///		The configured <see cref="HttpRequestMessage"/>.
+		///     The configured <see cref="HttpRequestMessage" />.
 		/// </returns>
-		public HttpRequestMessage BuildRequestMessage(HttpMethod httpMethod, HttpContent body = null, Uri baseUri = null)
+		public HttpRequestMessage BuildRequestMessage(HttpMethod httpMethod, TContext context, HttpContent body, Uri baseUri)
 		{
 			if (httpMethod == null)
 				throw new ArgumentNullException(nameof(httpMethod));
@@ -182,13 +177,13 @@ namespace HTTPlease
 					requestUri.GetComponents(UriComponents.PathAndQuery, UriFormat.Unescaped)
 				);
 
-				IDictionary<string, string> templateParameterValues = GetTemplateParameterValues();
+				IDictionary<string, string> templateParameterValues = GetTemplateParameterValues(context);
 
 				requestUri = template.Populate(baseUri, templateParameterValues);
 			}
 
 			// Merge in any other query parameters defined directly on the request.
-			requestUri = MergeQueryParameters(requestUri);
+			requestUri = MergeQueryParameters(requestUri, context);
 
 			HttpRequestMessage requestMessage = null;
 			try
@@ -200,14 +195,14 @@ namespace HTTPlease
 					requestMessage.Content = body;
 
 				List<Exception> configurationActionExceptions = new List<Exception>();
-				foreach (RequestAction<object> requestAction in RequestActions)
+				foreach (RequestAction<TContext> requestAction in RequestActions)
 				{
 					if (requestAction == null)
 						continue;
 
 					try
 					{
-						requestAction(requestMessage, DefaultContext);
+						requestAction(requestMessage, context);
 					}
 					catch (Exception eConfigurationAction)
 					{
@@ -234,54 +229,31 @@ namespace HTTPlease
 			return requestMessage;
 		}
 
-		/// <summary>
-		///     Build and configure a new HTTP request message.
-		/// </summary>
-		/// <param name="httpMethod">
-		///     The HTTP request method to use.
-		/// </param>
-		/// <param name="context">
-		///		The object used as a context for resolving deferred template values.
-		/// </param>
-		/// <param name="body">
-		///     Optional <see cref="HttpContent" /> representing the request body.
-		/// </param>
-		/// <param name="baseUri">
-		///     An optional base URI to use if the request does not already have an absolute request URI.
-		/// </param>
-		/// <returns>
-		///     The configured <see cref="HttpRequestMessage" />.
-		/// </returns>
-		HttpRequestMessage IHttpRequest<object>.BuildRequestMessage(HttpMethod httpMethod, object context, HttpContent body, Uri baseUri)
-		{
-			return BuildRequestMessage(httpMethod, body, baseUri);
-		}
-
 		#endregion // Invocation
 
-		#region IHttpRequestProperties<object>
+		#region IHttpRequest
 
 		/// <summary>
 		///		Actions (if any) to perform on the outgoing request message.
 		/// </summary>
-		IReadOnlyList<RequestAction<object>> IHttpRequestProperties<object>.RequestActions => RequestActions;
+		IReadOnlyList<RequestAction<TContext>> IHttpRequestProperties<TContext>.RequestActions => RequestActions;
 
 		/// <summary>
 		///		Actions (if any) to perform on the outgoing request message.
 		/// </summary>
-		IReadOnlyList<ResponseAction<object>> IHttpRequestProperties<object>.ResponseActions => ResponseActions;
+		IReadOnlyList<ResponseAction<TContext>> IHttpRequestProperties<TContext>.ResponseActions => ResponseActions;
 
 		/// <summary>
 		///     The request's URI template parameters (if any).
 		/// </summary>
-		IReadOnlyDictionary<string, IValueProvider<object, string>> IHttpRequestProperties<object>.TemplateParameters => TemplateParameters;
+		IReadOnlyDictionary<string, IValueProvider<TContext, string>> IHttpRequestProperties<TContext>.TemplateParameters => TemplateParameters;
 
 		/// <summary>
 		///     The request's query parameters (if any).
 		/// </summary>
-		IReadOnlyDictionary<string, IValueProvider<object, string>> IHttpRequestProperties<object>.QueryParameters => QueryParameters;
+		IReadOnlyDictionary<string, IValueProvider<TContext, string>> IHttpRequestProperties<TContext>.QueryParameters => QueryParameters;
 
-		#endregion // IHttpRequestProperties<object>
+		#endregion // IHttpRequest
 
 		#region Cloning
 
@@ -294,14 +266,14 @@ namespace HTTPlease
 		/// <returns>
 		///		The cloned request.
 		/// </returns>
-		public new HttpRequest Clone(Action<IDictionary<string, object>> modifications)
+		public new HttpRequest<TContext> Clone(Action<IDictionary<string, object>> modifications)
 		{
 			if (modifications == null)
 				throw new ArgumentNullException(nameof(modifications));
 
-			return (HttpRequest)base.Clone(modifications);
+			return (HttpRequest<TContext>)base.Clone(modifications);
 		}
-		
+
 		/// <summary>
 		///		Create a new instance of the HTTP request using the specified properties.
 		/// </summary>
@@ -313,7 +285,7 @@ namespace HTTPlease
 		/// </returns>
 		protected override HttpRequestBase CreateInstance(ImmutableDictionary<string, object> requestProperties)
 		{
-			return new HttpRequest(requestProperties);
+			return new HttpRequest<TContext>(requestProperties);
 		}
 
 		#endregion // Cloning
@@ -326,10 +298,13 @@ namespace HTTPlease
 		/// <param name="requestUri">
 		///		The request URI.
 		/// </param>
+		/// <param name="context">
+		///		The <typeparamref name="TContext"/> from which parameter values will be resolved.
+		/// </param>
 		/// <returns>
 		///		The request URI with query parameters merged into it.
 		/// </returns>
-		Uri MergeQueryParameters(Uri requestUri)
+		Uri MergeQueryParameters(Uri requestUri, TContext context)
 		{
 			if (requestUri == null)
 				throw new ArgumentNullException(nameof(requestUri));
@@ -338,9 +313,9 @@ namespace HTTPlease
 				return requestUri;
 
 			NameValueCollection queryParameters = requestUri.ParseQueryParameters();
-			foreach (KeyValuePair<string, IValueProvider<object, string>> queryParameter in QueryParameters)
+			foreach (KeyValuePair<string, IValueProvider<TContext, string>> queryParameter in QueryParameters)
 			{
-				string queryParameterValue = queryParameter.Value.Get(DefaultContext);
+				string queryParameterValue = queryParameter.Value.Get(context);
 				if (queryParameterValue != null)
 					queryParameters[queryParameter.Key] = queryParameterValue;
 				else
@@ -353,10 +328,13 @@ namespace HTTPlease
 		/// <summary>
 		///		Get a dictionary mapping template parameters (if any) to their current values.
 		/// </summary>
+		/// <param name="context">
+		///		The <typeparamref name="TContext"/> from which parameter values will be resolved.
+		/// </param>
 		/// <returns>
 		///		A dictionary of key / value pairs (any parameters whose value-getters return null will be omitted).
 		/// </returns>
-		IDictionary<string, string> GetTemplateParameterValues()
+		IDictionary<string, string> GetTemplateParameterValues(TContext context)
 		{
 			return
 				TemplateParameters.Select(templateParameter =>
@@ -366,7 +344,7 @@ namespace HTTPlease
 					return new
 					{
 						templateParameter.Key,
-						Value = templateParameter.Value.Get(DefaultContext)
+						Value = templateParameter.Value.Get(context)
 					};
 				})
 				.Where(
@@ -395,4 +373,3 @@ namespace HTTPlease
 		#endregion // Helpers
 	}
 }
-

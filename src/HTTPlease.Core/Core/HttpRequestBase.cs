@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Net.Http;
 using System.Runtime.CompilerServices;
 
 namespace HTTPlease.Core
@@ -14,7 +13,7 @@ namespace HTTPlease.Core
 	///		The base class for HTTP request templates.
 	/// </summary>
 	public abstract class HttpRequestBase
-		: IHttpRequest
+		: IHttpRequestProperties
 	{
 		#region Instance data
 
@@ -62,23 +61,6 @@ namespace HTTPlease.Core
 		///		All properties for the request.
 		/// </summary>
 		public ImmutableDictionary<string, object> Properties => _properties;
-
-		/// <summary>
-		///		Build and configure a new HTTP request message.
-		/// </summary>
-		/// <param name="httpMethod">
-		///		The HTTP request method to use.
-		/// </param>
-		/// <param name="body">
-		///		Optional <see cref="HttpContent"/> representing the request body.
-		/// </param>
-		/// <param name="baseUri">
-		///		An optional base URI to use if the request builder does not already have an absolute request URI.
-		/// </param>
-		/// <returns>
-		///		The configured <see cref="HttpRequestMessage"/>.
-		/// </returns>
-		public abstract HttpRequestMessage BuildRequestMessage(HttpMethod httpMethod, HttpContent body = null, Uri baseUri = null);
 
 		#endregion // IHttpRequest
 
@@ -224,6 +206,40 @@ namespace HTTPlease.Core
 		}
 
 		#endregion // Request properties
+
+		#region Cloning
+
+		/// <summary>
+		///		Clone the request.
+		/// </summary>
+		/// <param name="modifications">
+		///		A delegate that performs modifications to the request properties.
+		/// </param>
+		/// <returns>
+		///		The cloned request.
+		/// </returns>
+		public virtual HttpRequestBase Clone(Action<IDictionary<string, object>> modifications)
+		{
+			if (modifications == null)
+				throw new ArgumentNullException(nameof(modifications));
+
+			return CreateInstance(
+				CloneProperties(modifications)
+			);
+		}
+
+		/// <summary>
+		///		Create a new instance of the HTTP request using the specified properties.
+		/// </summary>
+		/// <param name="requestProperties">
+		///		The request properties.
+		/// </param>
+		/// <returns>
+		///		The new HTTP request instance.
+		/// </returns>
+		protected abstract HttpRequestBase CreateInstance(ImmutableDictionary<string, object> requestProperties);
+
+		#endregion // Cloning
 	}
 }
 
