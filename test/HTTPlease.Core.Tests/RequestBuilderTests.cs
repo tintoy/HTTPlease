@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 using Xunit;
 
 namespace HTTPlease.Tests
 {
+	using Mocks;
+
 	/// <summary>
 	///		Unit-tests for <see cref="HttpRequest"/>.
 	/// </summary>

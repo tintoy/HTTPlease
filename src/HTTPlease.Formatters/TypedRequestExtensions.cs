@@ -13,6 +13,9 @@ namespace HTTPlease.Formatters
 		/// <summary>
 		///		Build an HTTP request message, selecting an appropriate content formatter to serialise its body content.
 		/// </summary>
+		/// <typeparam name="TContext">
+		///		The type of object used as a context for resolving deferred parameters.
+		/// </typeparam>
 		/// <param name="request">
 		///		The <see cref="HttpRequest"/>.
 		/// </param>
@@ -45,6 +48,9 @@ namespace HTTPlease.Formatters
 		/// <summary>
 		///		Build an HTTP request message, selecting an appropriate content formatter to serialise its body content.
 		/// </summary>
+		/// <typeparam name="TContext">
+		///		The type of object used as a context for resolving deferred parameters.
+		/// </typeparam>
 		/// <param name="request">
 		///		The <see cref="HttpRequest"/>.
 		/// </param>
@@ -93,6 +99,9 @@ namespace HTTPlease.Formatters
 		/// <summary>
 		///		Create a copy of the <see cref="HttpRequest"/>, adding the specified content formatter.
 		/// </summary>
+		/// <typeparam name="TContext">
+		///		The type of object used as a context for resolving deferred parameters.
+		/// </typeparam>
 		/// <param name="request">
 		///		The <see cref="HttpRequest"/>.
 		/// </param>
@@ -129,6 +138,9 @@ namespace HTTPlease.Formatters
 		/// <summary>
 		///		Create a copy of the <see cref="HttpRequest"/>, adding the specified content formatter.
 		/// </summary>
+		/// <typeparam name="TContext">
+		///		The type of object used as a context for resolving deferred parameters.
+		/// </typeparam>
 		/// <param name="request">
 		///		The <see cref="HttpRequest"/>.
 		/// </param>
@@ -152,7 +164,7 @@ namespace HTTPlease.Formatters
 
 			if (!formatters.ContainsKey(formatterType))
 				return request;
-			
+
 			return request.Clone(properties =>
 			{
 				properties[MessageProperties.ContentFormatters] = formatters.Remove(formatterType);
@@ -162,6 +174,9 @@ namespace HTTPlease.Formatters
 		/// <summary>
 		///		Get the collection formatters used by the <see cref="HttpRequest"/>.
 		/// </summary>
+		/// <typeparam name="TContext">
+		///		The type of object used as a context for resolving deferred parameters.
+		/// </typeparam>
 		/// <param name="request">
 		///		The <see cref="HttpRequest"/>.
 		/// </param>
@@ -183,6 +198,9 @@ namespace HTTPlease.Formatters
 		/// <summary>
 		///		Create an <see cref="IFormatterCollection"/> from the request's registered formatters.
 		/// </summary>
+		/// <typeparam name="TContext">
+		///		The type of object used as a context for resolving deferred parameters.
+		/// </typeparam>
 		/// <param name="request">
 		///		The <see cref="HttpRequest"/>.
 		/// </param>

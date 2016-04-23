@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -78,6 +79,7 @@ namespace HTTPlease.Formatters
 
 			Formatter = formatter;
 			FormatterContext = formatterContext;
+			Headers.ContentType = new MediaTypeHeaderValue(MediaType);
 		}
 
 		/// <summary>
@@ -115,7 +117,7 @@ namespace HTTPlease.Formatters
 		/// </summary>
 		/// <param name="length">
 		///     The length (in bytes) of the content.
-		/// 
+		///
 		///		Always -1, since <see cref="FormattedObjectContent"/> length is not known before serialisation.
 		/// </param>
 		/// <returns>
@@ -132,19 +134,21 @@ namespace HTTPlease.Formatters
 		/// <summary>
 		///     Serialize the HTTP content to a stream as an asynchronous operation.
 		/// </summary>
-		/// <returns>
-		///     Returns <see cref="T:System.Threading.Tasks.Task" />.The task object representing the asynchronous operation.
-		/// </returns>
 		/// <param name="stream">
 		///     The target stream.
 		/// </param>
 		/// <param name="context">
-		///     Information about the transport (channel binding token, for example). This parameter may be null.
+		///     Information about the transport (channel binding token, for example).
+		///
+		///		Can be null.
 		/// </param>
+		/// <returns>
+		///     Returns <see cref="Task" />.The task object representing the asynchronous operation.
+		/// </returns>
 		protected override async Task SerializeToStreamAsync(Stream stream, TransportContext context)
 		{
-			if (context == null)
-				throw new ArgumentNullException(nameof(context));
+			if (stream == null)
+				throw new ArgumentNullException(nameof(stream));
 
 			await Formatter.WriteAsync(FormatterContext, stream);
 		}

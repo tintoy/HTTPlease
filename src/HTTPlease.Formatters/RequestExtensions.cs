@@ -103,20 +103,23 @@ namespace HTTPlease.Formatters
 
 			Type formatterType = formatter.GetType();
 
+			ImmutableDictionary<Type, IFormatter> formatters = request.GetFormatters();
+			bool isFirstFormatter = formatters.Count == 0;
+
+			formatters = formatters.SetItem(formatterType, formatter);
+
 			return request.Clone(properties =>
 			{
-				ImmutableDictionary<Type, IFormatter> formatters = request.GetFormatters();
+				properties[MessageProperties.ContentFormatters] = formatters;
 
 				// If this is the first formatter we're adding, then make sure that we'll populate the formatter collection for each outgoing request.
-				if (formatters.Count == 0)
+				if (isFirstFormatter)
 				{
 					properties[nameof(request.RequestActions)] = request.RequestActions.Add((requestMessage, context) =>
 					{
 						requestMessage.Properties[MessageProperties.ContentFormatters] = new FormatterCollection(formatters.Values);
 					});
 				}
-
-				properties[MessageProperties.ContentFormatters] = formatters.SetItem(formatterType, formatter);
 			});
 		}
 
@@ -146,7 +149,7 @@ namespace HTTPlease.Formatters
 
 			if (!formatters.ContainsKey(formatterType))
 				return request;
-			
+
 			return request.Clone(properties =>
 			{
 				properties[MessageProperties.ContentFormatters] = formatters.Remove(formatterType);

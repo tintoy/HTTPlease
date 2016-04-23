@@ -25,10 +25,10 @@ namespace HTTPlease.Tests
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
-				
+
 			return request.CreateResponse(HttpStatusCode.OK);
 		}
-		
+
 		/// <summary>
 		/// 	Create a <see cref="HttpResponseMessage">response message</see>.
 		/// </summary>
@@ -45,7 +45,7 @@ namespace HTTPlease.Tests
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
-			
+
 			HttpResponseMessage response = new HttpResponseMessage(statusCode);
 			try
 			{
@@ -55,13 +55,13 @@ namespace HTTPlease.Tests
 			{
 				using (response)
 				{
-					throw;					
+					throw;
 				}
 			}
-			
+
 			return response;
 		}
-		
+
 		/// <summary>
 		/// 	Create a <see cref="HttpResponseMessage">response message</see>.
 		/// </summary>
@@ -81,14 +81,14 @@ namespace HTTPlease.Tests
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
-				
+
 			HttpResponseMessage response = request.CreateResponse(statusCode);
 			if (responseBody == null)
 				return response;
-			
+
 			try
 			{
-				response.Content = new StringContent(responseBody); 
+				response.Content = new StringContent(responseBody);
 			}
 			catch
 			{
@@ -97,7 +97,7 @@ namespace HTTPlease.Tests
 					throw;
 				}
 			}
-			
+
 			return response;
 		}
 	}

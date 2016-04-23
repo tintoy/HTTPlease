@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http.Headers;
 
 namespace HTTPlease
 {
@@ -30,7 +31,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The new <see cref="HttpRequest{TContext}"/>.
 		/// </returns>
-		public static HttpRequest<TContext> WithHeader<TContext>(this HttpRequest<TContext> request, string headerName, string headerValue, bool ensureQuoted = false)
+		public static HttpRequest<TContext> WithHeader<TContext, TValue>(this HttpRequest<TContext> request, string headerName, TValue headerValue, bool ensureQuoted = false)
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
@@ -42,7 +43,7 @@ namespace HTTPlease
 				throw new ArgumentNullException(nameof(headerValue));
 
 			return request.WithHeaderFromProvider(headerName,
-				ValueProvider<TContext>.FromConstantValue(headerValue),
+				ValueProvider<TContext>.FromConstantValue(headerValue).Convert().ValueToString(),
 				ensureQuoted
 			);
 		}
@@ -71,7 +72,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The new <see cref="HttpRequest{TContext}"/>.
 		/// </returns>
-		public static HttpRequest<TContext> WithHeader<TContext>(this HttpRequest<TContext> request, string headerName, Func<object> getValue, bool ensureQuoted = false)
+		public static HttpRequest<TContext> WithHeader<TContext, TValue>(this HttpRequest<TContext> request, string headerName, Func<TValue> getValue, bool ensureQuoted = false)
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
@@ -112,7 +113,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The new <see cref="HttpRequest{TContext}"/>.
 		/// </returns>
-		public static HttpRequest<TContext> WithHeader<TContext>(this HttpRequest<TContext> request, string headerName, Func<TContext, object> getValue, bool ensureQuoted = false)
+		public static HttpRequest<TContext> WithHeader<TContext, TValue>(this HttpRequest<TContext> request, string headerName, Func<TContext, TValue> getValue, bool ensureQuoted = false)
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
@@ -127,6 +128,79 @@ namespace HTTPlease
 				ValueProvider<TContext>.FromSelector(getValue).Convert().ValueToString(),
 				ensureQuoted
 			);
+		}
+
+		/// <summary>
+		///		Create a copy of the request, but with the specified media type added to the "Accept" header.
+		/// </summary>
+		/// <typeparam name="TContext">
+		///		The type of object used as a context for resolving deferred parameters.
+		/// </typeparam>
+		/// <param name="request">
+		///		The HTTP request.
+		/// </param>
+		/// <param name="headerName">
+		///		The header name.
+		/// </param>
+		/// <param name="getValue">
+		///		A delegate that returns the header value for each request.
+		/// </param>
+		/// <param name="ensureQuoted">
+		///		Ensure that the header value is quoted?
+		/// </param>
+		/// <returns>
+		///		The new <see cref="HttpRequest"/>.
+		/// </returns>
+		public static HttpRequest<TContext> AcceptMediaType<TContext>(this HttpRequest<TContext> request, string mediaType, double? quality = null)
+		{
+			if (request == null)
+				throw new ArgumentNullException(nameof(request));
+
+			if (String.IsNullOrWhiteSpace(mediaType))
+				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'mediaType'.", nameof(mediaType));
+
+			MediaTypeWithQualityHeaderValue mediaTypeHeader =
+				quality.HasValue ?
+					new MediaTypeWithQualityHeaderValue(mediaType, quality.Value)
+					:
+					new MediaTypeWithQualityHeaderValue(mediaType);
+
+			return request.WithRequestAction(requestMessage =>
+			{
+				requestMessage.Headers.Accept.Add(mediaTypeHeader);
+			});
+		}
+
+		/// <summary>
+		///		Create a copy of the request, but with no media types in the "Accept" header.
+		/// </summary>
+		/// <typeparam name="TContext">
+		///		The type of object used as a context for resolving deferred parameters.
+		/// </typeparam>
+		/// <param name="request">
+		///		The HTTP request.
+		/// </param>
+		/// <param name="headerName">
+		///		The header name.
+		/// </param>
+		/// <param name="getValue">
+		///		A delegate that returns the header value for each request.
+		/// </param>
+		/// <param name="ensureQuoted">
+		///		Ensure that the header value is quoted?
+		/// </param>
+		/// <returns>
+		///		The new <see cref="HttpRequest"/>.
+		/// </returns>
+		public static HttpRequest<TContext> AcceptNoMediaTypes<TContext>(this HttpRequest<TContext> request)
+		{
+			if (request == null)
+				throw new ArgumentNullException(nameof(request));
+
+			return request.WithRequestAction(requestMessage =>
+			{
+				requestMessage.Headers.Accept.Clear();
+			});
 		}
 
 		/// <summary>

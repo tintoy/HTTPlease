@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net.Http.Headers;
+using System.Text;
 
 namespace HTTPlease
 {
@@ -68,7 +70,7 @@ namespace HTTPlease
 				throw new ArgumentNullException(nameof(request));
 
 			if (String.IsNullOrWhiteSpace(headerName))
-				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'name'.", nameof(headerName));
+				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'headerName'.", nameof(headerName));
 
 			if (getValue == null)
 				throw new ArgumentNullException(nameof(getValue));
@@ -77,6 +79,73 @@ namespace HTTPlease
 				ValueProvider<object>.FromFunction(getValue).Convert().ValueToString(),
 				ensureQuoted
 			);
+		}
+
+		/// <summary>
+		///		Create a copy of the request, but with the specified media type added to the "Accept" header.
+		/// </summary>
+		/// <param name="request">
+		///		The HTTP request.
+		/// </param>
+		/// <param name="headerName">
+		///		The header name.
+		/// </param>
+		/// <param name="getValue">
+		///		A delegate that returns the header value for each request.
+		/// </param>
+		/// <param name="ensureQuoted">
+		///		Ensure that the header value is quoted?
+		/// </param>
+		/// <returns>
+		///		The new <see cref="HttpRequest"/>.
+		/// </returns>
+		public static HttpRequest AcceptMediaType(this HttpRequest request, string mediaType, double? quality = null)
+		{
+			if (request == null)
+				throw new ArgumentNullException(nameof(request));
+
+			if (String.IsNullOrWhiteSpace(mediaType))
+				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'mediaType'.", nameof(mediaType));
+
+			MediaTypeWithQualityHeaderValue mediaTypeHeader =
+				quality.HasValue ?
+					new MediaTypeWithQualityHeaderValue(mediaType, quality.Value)
+					:
+					new MediaTypeWithQualityHeaderValue(mediaType);
+
+			return request.WithRequestAction(requestMessage =>
+			{
+				requestMessage.Headers.Accept.Add(mediaTypeHeader);
+			});
+		}
+
+		/// <summary>
+		///		Create a copy of the request, but with no media types in the "Accept" header.
+		/// </summary>
+		/// <param name="request">
+		///		The HTTP request.
+		/// </param>
+		/// <param name="headerName">
+		///		The header name.
+		/// </param>
+		/// <param name="getValue">
+		///		A delegate that returns the header value for each request.
+		/// </param>
+		/// <param name="ensureQuoted">
+		///		Ensure that the header value is quoted?
+		/// </param>
+		/// <returns>
+		///		The new <see cref="HttpRequest"/>.
+		/// </returns>
+		public static HttpRequest AcceptNoMediaTypes(this HttpRequest request)
+		{
+			if (request == null)
+				throw new ArgumentNullException(nameof(request));
+
+			return request.WithRequestAction(requestMessage =>
+			{
+				requestMessage.Headers.Accept.Clear();
+			});
 		}
 
 		/// <summary>

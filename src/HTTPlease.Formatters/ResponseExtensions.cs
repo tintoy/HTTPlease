@@ -253,7 +253,7 @@ namespace HTTPlease.Formatters
 			{
 				if (!successStatusCodes.Contains(responseMessage.StatusCode) && !responseMessage.IsSuccessStatusCode)
 					return onFailureResponse(responseMessage);
-				
+
 				return await responseMessage.ReadContentAsAsync<TBody>().ConfigureAwait(false);
 			}
 		}
@@ -421,7 +421,7 @@ namespace HTTPlease.Formatters
 			responseMessage.EnsureHasBody();
 
 			IFormatterCollection formatters = responseMessage.GetFormatters();
-			if (formatters == null)
+			if (formatters == null || formatters.Count == 0)
 				throw new InvalidOperationException("No content formatters were configured for the request that generated the response message."); // TODO: Consider custom exception type.
 
 			return await responseMessage.ReadContentAsAsync<TBody>(formatters).ConfigureAwait(false);
