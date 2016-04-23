@@ -17,12 +17,12 @@ namespace HTTPlease
 		/// <typeparam name="TContext">
 		///		The type of object used by the request when resolving deferred template parameters.
 		/// </typeparam>
-		/// <param name="request">
-		///		The HTTP request.
-		/// </param>
 		/// <typeparam name="TParameter">
 		///		The parameter data-type.
 		/// </typeparam>
+		/// <param name="request">
+		///		The HTTP request.
+		/// </param>
 		/// <param name="name">
 		///		The parameter name.
 		/// </param>
@@ -32,7 +32,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The new <see cref="HttpRequest{TContext}"/>.
 		/// </returns>
-		public static HttpRequest<TContext> WithQueryParameter<TContext>(this HttpRequest<TContext> request, string name, object value)
+		public static HttpRequest<TContext> WithQueryParameter<TContext, TValue>(this HttpRequest<TContext> request, string name, TValue value)
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
@@ -127,6 +127,9 @@ namespace HTTPlease
 		/// <typeparam name="TContext">
 		///		The type of object used by the request when resolving deferred template parameters.
 		/// </typeparam>
+		/// <typeparam name="TParameters">
+		///		The type of object whose properties will form the parameters.
+		/// </typeparam>
 		/// <param name="request">
 		///		The HTTP request.
 		/// </param>
@@ -136,7 +139,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The new <see cref="HttpRequest{TContext}"/>.
 		/// </returns>
-		public static HttpRequest<TContext> WithQueryParametersFrom<TContext>(HttpRequest<TContext> request, object parameters)
+		public static HttpRequest<TContext> WithQueryParametersFrom<TContext, TParameters>(HttpRequest<TContext> request, TParameters parameters)
 		{
 			if (parameters == null)
 				throw new ArgumentNullException(nameof(parameters));
@@ -145,7 +148,7 @@ namespace HTTPlease
 				throw new ArgumentNullException(nameof(parameters));
 
 			return request.WithQueryParametersFromProviders(
-				CreateDeferredParameters<TContext>(parameters)
+				CreateDeferredParameters<TContext, TParameters>(parameters)
 			);
 		}
 

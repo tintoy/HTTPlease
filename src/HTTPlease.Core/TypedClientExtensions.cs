@@ -9,9 +9,9 @@ namespace HTTPlease
 	using Core;
 
 	/// <summary>
-	///		Invocation-related extension methods for <see cref="HttpClient"/>s that use an <see cref="HttpRequest"/>.
+	///		Invocation-related extension methods for <see cref="HttpClient{TContext}"/>s that use an <see cref="HttpRequest"/>.
 	/// </summary>
-	public static class UntypedClientExtensions
+	public static class TypedClientExtensions
     {
 		#region Invoke
 
@@ -19,10 +19,13 @@ namespace HTTPlease
 		///		Asynchronously execute a request as an HTTP HEAD.
 		/// </summary>
 		/// <param name="httpClient">
-		///		The <see cref="HttpClient"/> used to execute the request.
+		///		The <see cref="HttpClient{TContext}"/> used to execute the request.
 		/// </param>
 		/// <param name="request">
 		///		The HTTP request.
+		/// </param>
+		/// <param name="context">
+		///		The <typeparamref name="TContext"/> instance used as a context for resolving deferred parameters.
 		/// </param>
 		/// <param name="cancellationToken">
 		///		An optional cancellation token that can be used to cancel the asynchronous operation.
@@ -30,7 +33,7 @@ namespace HTTPlease
 		/// <returns>
 		///		An <see cref="HttpResponseMessage"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> HeadAsync(this HttpClient httpClient, HttpRequest request, CancellationToken cancellationToken = default(CancellationToken))
+		public static async Task<HttpResponseMessage> HeadAsync<TContext>(this HttpClient httpClient, HttpRequest<TContext> request, TContext context, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if (httpClient == null)
 				throw new ArgumentNullException(nameof(httpClient));
@@ -38,17 +41,20 @@ namespace HTTPlease
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
-			return await httpClient.SendAsync(request, HttpMethod.Head, cancellationToken: cancellationToken).ConfigureAwait(false);
+			return await httpClient.SendAsync(request, HttpMethod.Head, context, cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
 		/// <summary>
 		///		Asynchronously execute a request as an HTTP GET.
 		/// </summary>
 		/// <param name="httpClient">
-		///		The <see cref="HttpClient"/> used to execute the request.
+		///		The <see cref="HttpClient{TContext}"/> used to execute the request.
 		/// </param>
 		/// <param name="request">
 		///		The HTTP request.
+		/// </param>
+		/// <param name="context">
+		///		The <typeparamref name="TContext"/> instance used as a context for resolving deferred parameters.
 		/// </param>
 		/// <param name="cancellationToken">
 		///		An optional cancellation token that can be used to cancel the asynchronous operation.
@@ -56,7 +62,7 @@ namespace HTTPlease
 		/// <returns>
 		///		An <see cref="HttpResponseMessage"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> GetAsync(this HttpClient httpClient, HttpRequest request, CancellationToken cancellationToken = default(CancellationToken))
+		public static async Task<HttpResponseMessage> GetAsync<TContext>(this HttpClient httpClient, HttpRequest<TContext> request, TContext context, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if (httpClient == null)
 				throw new ArgumentNullException(nameof(httpClient));
@@ -64,17 +70,20 @@ namespace HTTPlease
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
-			return await httpClient.SendAsync(request, HttpMethod.Get, cancellationToken: cancellationToken).ConfigureAwait(false);
+			return await httpClient.SendAsync(request, HttpMethod.Get, context, cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
 		/// <summary>
 		///		Asynchronously execute a request as an HTTP POST.
 		/// </summary>
 		/// <param name="httpClient">
-		///		The <see cref="HttpClient"/> used to execute the request.
+		///		The <see cref="HttpClient{TContext}"/> used to execute the request.
 		/// </param>
 		/// <param name="request">
 		///		The HTTP request.
+		/// </param>
+		/// <param name="context">
+		///		The <typeparamref name="TContext"/> instance used as a context for resolving deferred parameters.
 		/// </param>
 		/// <param name="postBody">
 		///		Optional <see cref="HttpContent"/> representing the request body.
@@ -85,7 +94,7 @@ namespace HTTPlease
 		/// <returns>
 		///		An <see cref="HttpResponseMessage"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> PostAsync(this HttpClient httpClient, HttpRequest request, HttpContent postBody = null, CancellationToken cancellationToken = default(CancellationToken))
+		public static async Task<HttpResponseMessage> PostAsync<TContext>(this HttpClient httpClient, HttpRequest<TContext> request, TContext context, HttpContent postBody = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if (httpClient == null)
 				throw new ArgumentNullException(nameof(httpClient));
@@ -93,17 +102,20 @@ namespace HTTPlease
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
-			return await httpClient.SendAsync(request, HttpMethod.Post, postBody, cancellationToken).ConfigureAwait(false);
+			return await httpClient.SendAsync(request, HttpMethod.Post, context, postBody, cancellationToken).ConfigureAwait(false);
 		}
 
 		/// <summary>
 		///		Asynchronously execute a request as an HTTP PUT.
 		/// </summary>
 		/// <param name="httpClient">
-		///		The <see cref="HttpClient"/> used to execute the request.
+		///		The <see cref="HttpClient{TContext}"/> used to execute the request.
 		/// </param>
 		/// <param name="request">
 		///		The HTTP request.
+		/// </param>
+		/// <param name="context">
+		///		The <typeparamref name="TContext"/> instance used as a context for resolving deferred parameters.
 		/// </param>
 		/// <param name="putBody">
 		///		<see cref="HttpContent"/> representing the request body.
@@ -114,7 +126,7 @@ namespace HTTPlease
 		/// <returns>
 		///		An <see cref="HttpResponseMessage"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> PutAsync(this HttpClient httpClient, HttpRequest request, HttpContent putBody, CancellationToken cancellationToken = default(CancellationToken))
+		public static async Task<HttpResponseMessage> PutAsync<TContext>(this HttpClient httpClient, HttpRequest<TContext> request, TContext context, HttpContent putBody, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if (httpClient == null)
 				throw new ArgumentNullException(nameof(httpClient));
@@ -125,17 +137,20 @@ namespace HTTPlease
 			if (putBody == null)
 				throw new ArgumentNullException(nameof(putBody));
 
-			return await httpClient.SendAsync(request, HttpMethod.Put, putBody, cancellationToken).ConfigureAwait(false);
+			return await httpClient.SendAsync(request, HttpMethod.Put, context, putBody, cancellationToken).ConfigureAwait(false);
 		}
 
 		/// <summary>
 		///		Asynchronously execute a request as an HTTP PATCH.
 		/// </summary>
 		/// <param name="httpClient">
-		///		The <see cref="HttpClient"/> used to execute the request.
+		///		The <see cref="HttpClient{TContext}"/> used to execute the request.
 		/// </param>
 		/// <param name="request">
 		///		The HTTP request.
+		/// </param>
+		/// <param name="context">
+		///		The <typeparamref name="TContext"/> instance used as a context for resolving deferred parameters.
 		/// </param>
 		/// <param name="patchBody">
 		///		<see cref="HttpContent"/> representing the request body.
@@ -146,7 +161,7 @@ namespace HTTPlease
 		/// <returns>
 		///		An <see cref="HttpResponseMessage"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> PatchAsync(this HttpClient httpClient, HttpRequest request, HttpContent patchBody, CancellationToken cancellationToken = default(CancellationToken))
+		public static async Task<HttpResponseMessage> PatchAsync<TContext>(this HttpClient httpClient, HttpRequest<TContext> request, TContext context, HttpContent patchBody, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
@@ -154,17 +169,20 @@ namespace HTTPlease
 			if (patchBody == null)
 				throw new ArgumentNullException(nameof(patchBody));
 
-			return await httpClient.SendAsync(request, OtherHttpMethods.Patch, patchBody, cancellationToken).ConfigureAwait(false);
+			return await httpClient.SendAsync(request, OtherHttpMethods.Patch, context, patchBody, cancellationToken).ConfigureAwait(false);
 		}
 
 		/// <summary>
 		///		Asynchronously execute a request as an HTTP DELETE.
 		/// </summary>
 		/// <param name="httpClient">
-		///		The <see cref="HttpClient"/> used to execute the request.
+		///		The <see cref="HttpClient{TContext}"/> used to execute the request.
 		/// </param>
 		/// <param name="request">
 		///		The HTTP request.
+		/// </param>
+		/// <param name="context">
+		///		The <typeparamref name="TContext"/> instance used as a context for resolving deferred parameters.
 		/// </param>
 		/// <param name="cancellationToken">
 		///		An optional cancellation token that can be used to cancel the asynchronous operation.
@@ -172,25 +190,28 @@ namespace HTTPlease
 		/// <returns>
 		///		An <see cref="HttpResponseMessage"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> DeleteAsync(this HttpClient httpClient, HttpRequest request, CancellationToken cancellationToken = default(CancellationToken))
+		public static async Task<HttpResponseMessage> DeleteAsync<TContext>(this HttpClient httpClient, HttpRequest<TContext> request, TContext context, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
-			return await httpClient.SendAsync(request, HttpMethod.Delete, cancellationToken: cancellationToken).ConfigureAwait(false);
+			return await httpClient.SendAsync(request, HttpMethod.Delete, context, cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
 		/// <summary>
 		///		Asynchronously execute the request using the specified HTTP method.
 		/// </summary>
 		/// <param name="httpClient">
-		///		The <see cref="HttpClient"/> used to execute the request.
+		///		The <see cref="HttpClient{TContext}"/> used to execute the request.
 		/// </param>
 		/// <param name="request">
 		///		The HTTP request.
 		/// </param>
 		/// <param name="method">
 		///		An <see cref="HttpMethod"/> representing the method to use.
+		/// </param>
+		/// <param name="context">
+		///		The <typeparamref name="TContext"/> instance used as a context for resolving deferred parameters.
 		/// </param>
 		/// <param name="body">
 		///		Optional <see cref="HttpContent"/> representing the request body (if any).
@@ -201,17 +222,17 @@ namespace HTTPlease
 		/// <returns>
 		///		An <see cref="HttpResponseMessage"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> SendAsync(this HttpClient httpClient, HttpRequest request, HttpMethod method, HttpContent body = null, CancellationToken cancellationToken = default(CancellationToken))
+		public static async Task<HttpResponseMessage> SendAsync<TContext>(this HttpClient httpClient, HttpRequest<TContext> request, HttpMethod method, TContext context, HttpContent body = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
-			using (HttpRequestMessage requestMessage = request.BuildRequestMessage(method, body, httpClient.BaseAddress))
+			using (HttpRequestMessage requestMessage = request.BuildRequestMessage(method, context, body, httpClient.BaseAddress))
 			{
 				HttpResponseMessage responseMessage = await httpClient.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
 				try
 				{
-					request.ExecuteResponseActions(responseMessage);
+					request.ExecuteResponseActions(responseMessage, context);
 				}
 				catch
 				{
@@ -238,7 +259,7 @@ namespace HTTPlease
 		/// <param name="responseMessage">
 		///		The HTTP response message.
 		/// </param>
-		static void ExecuteResponseActions(this HttpRequest request, HttpResponseMessage responseMessage)
+		static void ExecuteResponseActions<TContext>(this HttpRequest<TContext> request, HttpResponseMessage responseMessage, TContext context)
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
@@ -247,11 +268,11 @@ namespace HTTPlease
 				throw new ArgumentNullException(nameof(responseMessage));
 
 			List<Exception> responseActionExceptions = new List<Exception>();
-			foreach (ResponseAction<object> responseAction in request.ResponseActions)
+			foreach (ResponseAction<TContext> responseAction in request.ResponseActions)
 			{
 				try
 				{
-					responseAction(responseMessage, HttpRequest.DefaultContext);
+					responseAction(responseMessage, context);
 				}
 				catch (Exception eResponseAction)
 				{

@@ -70,19 +70,22 @@ namespace HTTPlease
 		/// <typeparam name="TContext">
 		///		The type of object used by the request when resolving deferred template parameters.
 		/// </typeparam>
+		/// <typeparam name="TParameters">
+		///		The type of object whose properties will form the parameters.
+		/// </typeparam>
 		/// <param name="parameters">
 		///		The object whose properties will form the parameters.
 		/// </param>
 		/// <returns>
 		///		A sequence of key / value pairs representing the parameters.
 		/// </returns>
-		static IEnumerable<KeyValuePair<string, IValueProvider<TContext, string>>> CreateDeferredParameters<TContext>(object parameters)
+		static IEnumerable<KeyValuePair<string, IValueProvider<TContext, string>>> CreateDeferredParameters<TContext, TParameters>(TParameters parameters)
 		{
 			if (parameters == null)
 				throw new ArgumentNullException(nameof(parameters));
 
 			// Yes yes yes, reflection might be "slow", but it's still blazingly fast compared to making a request over the network.
-			foreach (PropertyInfo property in parameters.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
+			foreach (PropertyInfo property in typeof(TParameters).GetProperties(BindingFlags.Instance | BindingFlags.Public))
 			{
 				// Ignore write-only properties.
 				if (!property.CanRead)

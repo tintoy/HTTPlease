@@ -14,12 +14,15 @@ namespace HTTPlease
 		/// <summary>
 		///		Create a copy of the request builder with the specified request URI template parameter.
 		/// </summary>
-		/// <param name="request">
-		///		The HTTP request.
-		/// </param>
+		/// <typeparam name="TContext">
+		///		The type of object used as a context for resolving deferred parameters.
+		/// </typeparam>
 		/// <typeparam name="TParameter">
 		///		The parameter data-type.
 		/// </typeparam>
+		/// <param name="request">
+		///		The HTTP request.
+		/// </param>
 		/// <param name="name">
 		///		The parameter name.
 		/// </param>
@@ -29,7 +32,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The new <see cref="HttpRequest{TContext}"/>.
 		/// </returns>
-		public static HttpRequest<TContext> WithTemplateParameter<TContext>(this HttpRequest<TContext> request, string name, object value)
+		public static HttpRequest<TContext> WithTemplateParameter<TContext, TValue>(this HttpRequest<TContext> request, string name, TValue value)
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
@@ -45,22 +48,25 @@ namespace HTTPlease
 		/// <summary>
 		///		Create a copy of the request builder with the specified request URI template parameter.
 		/// </summary>
-		/// <param name="request">
-		///		The HTTP request.
-		/// </param>
+		/// <typeparam name="TContext">
+		///		The type of object used as a context for resolving deferred parameters.
+		/// </typeparam>
 		/// <typeparam name="TParameter">
 		///		The parameter data-type.
 		/// </typeparam>
+		/// <param name="request">
+		///		The HTTP request.
+		/// </param>
 		/// <param name="name">
 		///		The parameter name.
 		/// </param>
 		/// <param name="getValue">
-		///		Delegate that returns the parameter value (cannot be <c>null</c>).
+		///		Delegate that returns the parameter value.
 		/// </param>
 		/// <returns>
 		///		The new <see cref="HttpRequest{TContext}"/>.
 		/// </returns>
-		public static HttpRequest<TContext> WithTemplateParameter<TContext>(this HttpRequest<TContext> request, string name, Func<TContext> getValue)
+		public static HttpRequest<TContext> WithTemplateParameter<TContext, TParameter>(this HttpRequest<TContext> request, string name, Func<TParameter> getValue)
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
@@ -79,12 +85,52 @@ namespace HTTPlease
 		/// <summary>
 		///		Create a copy of the request builder with the specified request URI template parameter.
 		/// </summary>
-		/// <param name="request">
-		///		The HTTP request.
-		/// </param>
+		/// <typeparam name="TContext">
+		///		The type of object used as a context for resolving deferred parameters.
+		/// </typeparam>
 		/// <typeparam name="TParameter">
 		///		The parameter data-type.
 		/// </typeparam>
+		/// <param name="request">
+		///		The HTTP request.
+		/// </param>
+		/// <param name="name">
+		///		The parameter name.
+		/// </param>
+		/// <param name="getValue">
+		///		Delegate that returns the parameter value.
+		/// </param>
+		/// <returns>
+		///		The new <see cref="HttpRequest{TContext}"/>.
+		/// </returns>
+		public static HttpRequest<TContext> WithTemplateParameter<TContext, TParameter>(this HttpRequest<TContext> request, string name, Func<TContext, TParameter> getValue)
+		{
+			if (request == null)
+				throw new ArgumentNullException(nameof(request));
+
+			if (String.IsNullOrWhiteSpace(name))
+				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'name'.", nameof(name));
+
+			if (getValue == null)
+				throw new ArgumentNullException(nameof(getValue));
+
+			return request.WithTemplateParameterFromProvider(name,
+				ValueProvider<TContext>.FromSelector(getValue).Convert().ValueToString()
+			);
+		}
+
+		/// <summary>
+		///		Create a copy of the request builder with the specified request URI template parameter.
+		/// </summary>
+		/// <typeparam name="TContext">
+		///		The type of object used as a context for resolving deferred parameters.
+		/// </typeparam>
+		/// <typeparam name="TParameter">
+		///		The parameter data-type.
+		/// </typeparam>
+		/// <param name="request">
+		///		The HTTP request.
+		/// </param>
 		/// <param name="name">
 		///		The parameter name.
 		/// </param>
@@ -94,7 +140,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The new <see cref="HttpRequest{TContext}"/>.
 		/// </returns>
-		public static HttpRequest<TContext> WithTemplateParameterFromProvider<TContext>(this HttpRequest<TContext> request, string name, IValueProvider<TContext, object> valueProvider)
+		public static HttpRequest<TContext> WithTemplateParameterFromProvider<TContext, TParameter>(this HttpRequest<TContext> request, string name, IValueProvider<TContext, TParameter> valueProvider)
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
@@ -117,6 +163,9 @@ namespace HTTPlease
 		/// <summary>
 		///		Create a copy of the request, but with template parameters from the specified object's properties.
 		/// </summary>
+		/// <typeparam name="TContext">
+		///		The type of object used as a context for resolving deferred parameters.
+		/// </typeparam>
 		/// <typeparam name="TParameters">
 		///		The type of object whose properties will form the parameters.
 		/// </typeparam>
@@ -129,16 +178,16 @@ namespace HTTPlease
 		/// <returns>
 		///		The new <see cref="HttpRequest{TContext}"/>.
 		/// </returns>
-		public static HttpRequest<TContext> WithTemplateParameters<TContext>(HttpRequest<TContext> request, object parameters)
+		public static HttpRequest<TContext> WithTemplateParameters<TContext, TParameters>(HttpRequest<TContext> request, TParameters parameters)
 		{
-			if (parameters == null)
+			if (ReferenceEquals(parameters, null))
 				throw new ArgumentNullException(nameof(parameters));
 
 			if (parameters == null)
 				throw new ArgumentNullException(nameof(parameters));
 
 			return request.WithTemplateParametersFromProviders(
-				CreateDeferredParameters<TContext>(parameters)
+				CreateDeferredParameters<TContext, TParameters>(parameters)
 			);
 		}
 

@@ -45,13 +45,13 @@ namespace HTTPlease
 		HttpRequest(ImmutableDictionary<string, object> properties)
 			: base(properties)
 		{
-			EnsurePropertyType<ImmutableList<RequestAction<object>>>(
+			EnsurePropertyType<ImmutableList<RequestAction<TContext>>>(
 				propertyName: nameof(RequestActions)
 			);
-			EnsurePropertyType<ImmutableDictionary<string, IValueProvider<object, string>>>(
+			EnsurePropertyType<ImmutableDictionary<string, IValueProvider<TContext, string>>>(
 				propertyName: nameof(TemplateParameters)
 			);
-			EnsurePropertyType<ImmutableDictionary<string, IValueProvider<object, string>>>(
+			EnsurePropertyType<ImmutableDictionary<string, IValueProvider<TContext, string>>>(
 				propertyName: nameof(QueryParameters)
 			);
 		}
@@ -145,7 +145,7 @@ namespace HTTPlease
 		/// <returns>
 		///     The configured <see cref="HttpRequestMessage" />.
 		/// </returns>
-		public HttpRequestMessage BuildRequestMessage(HttpMethod httpMethod, TContext context, HttpContent body, Uri baseUri)
+		public HttpRequestMessage BuildRequestMessage(HttpMethod httpMethod, TContext context, HttpContent body = null, Uri baseUri = null)
 		{
 			if (httpMethod == null)
 				throw new ArgumentNullException(nameof(httpMethod));

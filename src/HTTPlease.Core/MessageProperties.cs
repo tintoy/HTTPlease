@@ -1,9 +1,7 @@
-﻿using System.Net.Http;
-
 namespace HTTPlease
 {
 	/// <summary>
-	///		The names of well-known <see cref="HttpRequestMessage"/> / <see cref="HttpResponseMessage"/> properties.
+	///		The names of well-known HttpRequestMessage / HttpResponseMessage properties.
 	/// </summary>
     public static class MessageProperties
 	{

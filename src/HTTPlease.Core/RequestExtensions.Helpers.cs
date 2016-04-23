@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Reflection;
 using System.Text;
 
 namespace HTTPlease
 {
 	using Core.ValueProviders;
-
-	using RequestProperties = ImmutableDictionary<string, object>;
 
 	/// <summary>
 	///		Helper methods for <see cref="HttpRequest"/> / <see cref="IHttpRequest"/> extensions.

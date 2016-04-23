@@ -3,8 +3,6 @@ using System.Collections.Generic;
 
 namespace HTTPlease.Formatters
 {
-	using System.Text;
-
 	/// <summary>
 	///		Represents a collection of <see cref="IFormatter">content formatter</see>s.
 	/// </summary>
@@ -59,6 +57,6 @@ namespace HTTPlease.Formatters
 		/// <returns>
 		///		<c>true</c>, if the formatter was removed; otherwise, <c>false</c>.
 		/// </returns>
-		bool Remove(Type formatterType);	
+		bool Remove(Type formatterType);
 	}
 }
