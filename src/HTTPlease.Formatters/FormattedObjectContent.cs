@@ -16,14 +16,14 @@ namespace HTTPlease.Formatters
 		/// <summary>
 		///		Create new formatted object content.
 		/// </summary>
-		/// <param name="dataType">
-		///		The type of data that will be serialised to form the content.
+		/// <param name="formatter">
+		///		The <see cref="IOutputFormatter"/> that will be used to serialise the data.
 		/// </param>
 		/// <param name="data">
 		///		The data that will be serialised to form the content.
 		/// </param>
-		/// <param name="formatter">
-		///		The <see cref="IOutputFormatter"/> that will be used to serialise the data.
+		/// <param name="dataType">
+		///		The type of data that will be serialised to form the content.
 		/// </param>
 		/// <param name="mediaType">
 		///		The content type being serialised.
@@ -31,22 +31,22 @@ namespace HTTPlease.Formatters
 		/// <remarks>
 		///		Uses UTF-8 encoding.
 		/// </remarks>
-		public FormattedObjectContent(Type dataType, object data, IOutputFormatter formatter, string mediaType)
-			: this(dataType, data, formatter, mediaType, Encoding.UTF8)
+		public FormattedObjectContent(IOutputFormatter formatter, Type dataType, object data, string mediaType)
+			: this(formatter, data, dataType, mediaType, Encoding.UTF8)
 		{
 		}
 
 		/// <summary>
 		///		Create new formatted object content.
 		/// </summary>
-		/// <param name="dataType">
-		///		The type of data that will be serialised to form the content.
+		/// <param name="formatter">
+		///		The <see cref="IOutputFormatter"/> that will be used to serialise the data.
 		/// </param>
 		/// <param name="data">
 		///		The data that will be serialised to form the content.
 		/// </param>
-		/// <param name="formatter">
-		///		The <see cref="IOutputFormatter"/> that will be used to serialise the data.
+		/// <param name="dataType">
+		///		The type of data that will be serialised to form the content.
 		/// </param>
 		/// <param name="mediaType">
 		///		The media type that the formatter should produce.
@@ -54,36 +54,31 @@ namespace HTTPlease.Formatters
 		/// <param name="encoding">
 		///		The <see cref="Encoding"/> that the formatter should use for serialised data.
 		/// </param>
-		public FormattedObjectContent(Type dataType, object data, IOutputFormatter formatter, string mediaType, Encoding encoding)
+		public FormattedObjectContent(IOutputFormatter formatter, object data, Type dataType, string mediaType, Encoding encoding)
+			: this(formatter, new OutputFormatterContext(data, dataType, mediaType, encoding))
 		{
-			if (dataType == null)
-				throw new ArgumentNullException(nameof(dataType));
-
-			if (formatter == null)
-				throw new ArgumentNullException(nameof(formatter));
-
-			if (String.IsNullOrWhiteSpace(mediaType))
-				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'contentType'.", nameof(mediaType));
-
-			if (encoding == null)
-				throw new ArgumentNullException(nameof(encoding));
-
-			DataType = dataType;
-			Data = data;
-			Formatter = formatter;
-			MediaType = mediaType;
-			Encoding = encoding;
 		}
 
 		/// <summary>
-		///		The type of data that will be serialised to form the content.
+		///		Create new formatted object content.
 		/// </summary>
-		public Type DataType { get; }
+		/// <param name="formatter">
+		///		The <see cref="IOutputFormatter"/> that will be used to serialise the data.
+		/// </param>
+		/// <param name="formatterContext">
+		///		Contextual information use by the <see cref="IOutputFormatter"/>.
+		/// </param>
+		public FormattedObjectContent(IOutputFormatter formatter, OutputFormatterContext formatterContext)
+		{
+			if (formatter == null)
+				throw new ArgumentNullException(nameof(formatter));
 
-		/// <summary>
-		///		The data that will be serialised to form the content.
-		/// </summary>
-		public object Data { get; }
+			if (formatterContext == null)
+				throw new ArgumentNullException(nameof(formatterContext));
+
+			Formatter = formatter;
+			FormatterContext = formatterContext;
+		}
 
 		/// <summary>
 		///		The <see cref="IOutputFormatter"/> that will be used to serialise the data.
@@ -91,14 +86,29 @@ namespace HTTPlease.Formatters
 		public IOutputFormatter Formatter { get; }
 
 		/// <summary>
+		///		Contextual information use by the <see cref="Formatter"/>.
+		/// </summary>
+		public OutputFormatterContext FormatterContext { get; }
+
+		/// <summary>
+		///		The type of data that will be serialised to form the content.
+		/// </summary>
+		public Type DataType => FormatterContext.DataType;
+
+		/// <summary>
+		///		The data that will be serialised to form the content.
+		/// </summary>
+		public object Data => FormatterContext.Data;
+
+		/// <summary>
 		///		The media type that the formatter should produce.
 		/// </summary>
-		public string MediaType { get; }
+		public string MediaType => FormatterContext.MediaType;
 
 		/// <summary>
 		///		The <see cref="Encoding"/> that the formatter should use for serialised data.
 		/// </summary>
-		public Encoding Encoding { get; }
+		public Encoding Encoding => FormatterContext.Encoding;
 
 		/// <summary>
 		///     Try to pre-compute the formatted content length.
@@ -136,60 +146,7 @@ namespace HTTPlease.Formatters
 			if (context == null)
 				throw new ArgumentNullException(nameof(context));
 
-			OutputFormatterContext writeContext = new OutputFormatterContext(Data, DataType, MediaType, Encoding);
-			await Formatter.WriteAsync(writeContext, stream);
+			await Formatter.WriteAsync(FormatterContext, stream);
 		}
-	}
-
-	/// <summary>
-	///		HTTP content formatted using an <see cref="IOutputFormatter"/>.
-	/// </summary>
-	public class FormattedObjectContent<T>
-		: FormattedObjectContent
-	{
-		/// <summary>
-		///		Create new formatted object content.
-		/// </summary>
-		/// <param name="data">
-		///		The data that will be serialised to form the content.
-		/// </param>
-		/// <param name="formatter">
-		///		The <see cref="IOutputFormatter"/> that will be used to serialise the data.
-		/// </param>
-		/// <param name="mediaType">
-		///		The content type being serialised.
-		/// </param>
-		/// <remarks>
-		///		Uses UTF-8 encoding.
-		/// </remarks>
-		public FormattedObjectContent(T data, IOutputFormatter formatter, string mediaType)
-			: this(data, formatter, mediaType, Encoding.UTF8)
-		{
-		}
-
-		/// <summary>
-		///		Create new formatted object content.
-		/// </summary>
-		/// <param name="data">
-		///		The data that will be serialised to form the content.
-		/// </param>
-		/// <param name="formatter">
-		///		The <see cref="IOutputFormatter"/> that will be used to serialise the data.
-		/// </param>
-		/// <param name="mediaType">
-		///		The media type that the formatter should produce.
-		/// </param>
-		/// <param name="encoding">
-		///		The <see cref="FormattedObjectContent.Encoding"/> that the formatter should use for serialised data.
-		/// </param>
-		public FormattedObjectContent(object data, IOutputFormatter formatter, string mediaType, Encoding encoding)
-			: base(typeof(T), data, formatter, mediaType, encoding)
-		{
-		}
-
-		/// <summary>
-		///		The data that will be serialised to form the content.
-		/// </summary>
-		public new T Data => (T)base.Data;
 	}
 }

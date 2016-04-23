@@ -1,13 +1,89 @@
 ﻿using System;
 using System.Collections.Immutable;
+using System.Net.Http;
+using System.Text;
 
 namespace HTTPlease.Formatters
 {
 	/// <summary>
 	///		Extension methods for working with <see cref="HttpRequest"/>s.
 	/// </summary>
-    public static class RequestExtensions
+	public static class RequestExtensions
     {
+		/// <summary>
+		///		Build an HTTP request message, selecting an appropriate content formatter to serialise its body content.
+		/// </summary>
+		/// <param name="request">
+		///		The <see cref="HttpRequest"/>.
+		/// </param>
+		/// <param name="httpMethod">
+		///		The HTTP request method.
+		/// </param>
+		/// <param name="bodyContent">
+		///		The request body content.
+		/// </param>
+		/// <param name="mediaType">
+		///		The request body media type to use.
+		/// </param>
+		/// <param name="baseUri">
+		///		An optional base URI to use if the request does not already have an absolute request URI.
+		/// </param>
+		/// <returns>
+		///		The configured <see cref="HttpRequestMessage"/>.
+		/// </returns>
+		public static HttpRequestMessage BuildRequestMessage(this HttpRequest request, HttpMethod httpMethod, object bodyContent, string mediaType, Uri baseUri = null)
+		{
+			if (request == null)
+				throw new ArgumentNullException(nameof(request));
+
+			return request.BuildRequestMessage(httpMethod, bodyContent, mediaType, Encoding.UTF8, baseUri);
+		}
+
+		/// <summary>
+		///		Build an HTTP request message, selecting an appropriate content formatter to serialise its body content.
+		/// </summary>
+		/// <param name="request">
+		///		The <see cref="HttpRequest"/>.
+		/// </param>
+		/// <param name="httpMethod">
+		///		The HTTP request method.
+		/// </param>
+		/// <param name="bodyContent">
+		///		The request body content.
+		/// </param>
+		/// <param name="mediaType">
+		///		The request body media type to use.
+		/// </param>
+		/// <param name="encoding">
+		///		The request body encoding to use.
+		/// </param>
+		/// <param name="baseUri">
+		///		An optional base URI to use if the request does not already have an absolute request URI.
+		/// </param>
+		/// <returns>
+		///		The configured <see cref="HttpRequestMessage"/>.
+		/// </returns>
+		public static HttpRequestMessage BuildRequestMessage(this HttpRequest request, HttpMethod httpMethod, object bodyContent, string mediaType, Encoding encoding, Uri baseUri = null)
+		{
+			if (request == null)
+				throw new ArgumentNullException(nameof(request));
+
+			HttpContent httpContent = bodyContent as HttpContent;
+			if (httpContent == null && bodyContent != null)
+			{
+				IFormatterCollection formatters = request.CreateFormatterCollection();
+
+				OutputFormatterContext writeContext = new OutputFormatterContext(bodyContent, bodyContent.GetType(), mediaType, encoding);
+				IOutputFormatter writeFormatter = formatters.FindOutputFormatter(writeContext);
+				if (writeFormatter == null)
+					throw new HttpRequestException($"None of the supplied formatters can write data of type '{writeContext.DataType.FullName}' to media type '{writeContext.MediaType}'.");
+
+				httpContent = new FormattedObjectContent(writeFormatter, writeContext);
+			}
+
+			return request.BuildRequestMessage(httpMethod, httpContent, baseUri);
+		}
+
 		/// <summary>
 		///		Create a copy of the <see cref="HttpRequest"/>, adding the specified content formatter.
 		/// </summary>
@@ -96,6 +172,25 @@ namespace HTTPlease.Formatters
 				return (ImmutableDictionary<Type, IFormatter>)formatters;
 
 			return ImmutableDictionary<Type, IFormatter>.Empty;
+		}
+
+		/// <summary>
+		///		Create an <see cref="IFormatterCollection"/> from the request's registered formatters.
+		/// </summary>
+		/// <param name="request">
+		///		The <see cref="HttpRequest"/>.
+		/// </param>
+		/// <returns>
+		///		An <see cref="IFormatterCollection"/> representing the formatter collection.
+		/// </returns>
+		public static IFormatterCollection CreateFormatterCollection(this HttpRequest request)
+		{
+			if (request == null)
+				throw new ArgumentNullException(nameof(request));
+
+			return new FormatterCollection(
+				request.GetFormatters().Values
+			);
 		}
 	}
 }
