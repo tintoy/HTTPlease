@@ -10,7 +10,7 @@ namespace HTTPlease.Formatters
 	///		Extension methods for the <see cref="HttpResponseMessage"/>s returned asynchronously by invocation of <see cref="HttpRequest"/>s by <see cref="HttpClient"/>s.
 	/// </summary>
 	public static class ResponseExtensions
-    {
+	{
 		/// <summary>
 		///		Asynchronously read the response body as the specified type using a specific content formatter.
 		/// </summary>
@@ -25,7 +25,7 @@ namespace HTTPlease.Formatters
 		/// </param>
 		/// <param name="expectedStatusCodes">
 		///		Optional <see cref="HttpStatusCode"/>s that are expected and should therefore not prevent the response from being deserialised.
-		/// 
+		///
 		///		If not specified, then the standard behaviour provided by <see cref="HttpResponseMessage.EnsureSuccessStatusCode"/> is used.
 		/// </param>
 		/// <returns>
@@ -62,7 +62,7 @@ namespace HTTPlease.Formatters
 		/// </param>
 		/// <param name="expectedStatusCodes">
 		///		Optional <see cref="HttpStatusCode"/>s that are expected and should therefore not prevent the response from being deserialised.
-		/// 
+		///
 		///		If not specified, then the standard behaviour provided by <see cref="HttpResponseMessage.EnsureSuccessStatusCode"/> is used.
 		/// </param>
 		/// <returns>
@@ -96,7 +96,7 @@ namespace HTTPlease.Formatters
 		/// </param>
 		/// <param name="expectedStatusCodes">
 		///		Optional <see cref="HttpStatusCode"/>s that are expected and should therefore not prevent the response from being deserialised.
-		/// 
+		///
 		///		If not specified, then the standard behaviour provided by <see cref="HttpResponseMessage.EnsureSuccessStatusCode"/> is used.
 		/// </param>
 		/// <returns>
@@ -104,7 +104,7 @@ namespace HTTPlease.Formatters
 		/// </returns>
 		/// <exception cref="InvalidOperationException">
 		///		No content formatters were configured for the request that generated the response message.
-		///		
+		///
 		///		Consider using the overload of ReadAsAsync that takes a specific <see cref="IInputFormatter"/>.
 		/// </exception>
 		public static async Task<TBody> ReadAsAsync<TBody>(this Task<HttpResponseMessage> response, params HttpStatusCode[] expectedStatusCodes)
