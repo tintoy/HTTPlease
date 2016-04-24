@@ -1,11 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace HTTPlease
 {
-	using System.Collections.Generic;
 	using Core;
 
 	/// <summary>
@@ -28,9 +27,9 @@ namespace HTTPlease
 		///		An optional cancellation token that can be used to cancel the asynchronous operation.
 		/// </param>
 		/// <returns>
-		///		An <see cref="HttpResponseMessage"/> representing the response.
+		///		An <see cref="HttpResponse"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> HeadAsync(this HttpClient httpClient, HttpRequest request, CancellationToken cancellationToken = default(CancellationToken))
+		public static HttpResponse HeadAsync(this HttpClient httpClient, HttpRequest request, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if (httpClient == null)
 				throw new ArgumentNullException(nameof(httpClient));
@@ -38,7 +37,10 @@ namespace HTTPlease
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
-			return await httpClient.SendAsync(request, HttpMethod.Head, cancellationToken: cancellationToken).ConfigureAwait(false);
+			return new HttpResponse(request, async () =>
+			{
+				return await httpClient.SendAsync(request, HttpMethod.Head, cancellationToken: cancellationToken).ConfigureAwait(false);
+			});
 		}
 
 		/// <summary>
@@ -54,9 +56,9 @@ namespace HTTPlease
 		///		An optional cancellation token that can be used to cancel the asynchronous operation.
 		/// </param>
 		/// <returns>
-		///		An <see cref="HttpResponseMessage"/> representing the response.
+		///		An <see cref="HttpResponse"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> GetAsync(this HttpClient httpClient, HttpRequest request, CancellationToken cancellationToken = default(CancellationToken))
+		public static HttpResponse GetAsync(this HttpClient httpClient, HttpRequest request, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if (httpClient == null)
 				throw new ArgumentNullException(nameof(httpClient));
@@ -64,7 +66,10 @@ namespace HTTPlease
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
-			return await httpClient.SendAsync(request, HttpMethod.Get, cancellationToken: cancellationToken).ConfigureAwait(false);
+			return new HttpResponse(request, async () =>
+			{
+				return await httpClient.SendAsync(request, HttpMethod.Get, cancellationToken: cancellationToken).ConfigureAwait(false);
+			});
 		}
 
 		/// <summary>
@@ -83,9 +88,9 @@ namespace HTTPlease
 		///		An optional cancellation token that can be used to cancel the asynchronous operation.
 		/// </param>
 		/// <returns>
-		///		An <see cref="HttpResponseMessage"/> representing the response.
+		///		An <see cref="HttpResponse"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> PostAsync(this HttpClient httpClient, HttpRequest request, HttpContent postBody = null, CancellationToken cancellationToken = default(CancellationToken))
+		public static HttpResponse PostAsync(this HttpClient httpClient, HttpRequest request, HttpContent postBody = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if (httpClient == null)
 				throw new ArgumentNullException(nameof(httpClient));
@@ -93,7 +98,10 @@ namespace HTTPlease
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
-			return await httpClient.SendAsync(request, HttpMethod.Post, postBody, cancellationToken).ConfigureAwait(false);
+			return new HttpResponse(request, async () =>
+			{
+				return await httpClient.SendAsync(request, HttpMethod.Post, postBody, cancellationToken).ConfigureAwait(false);
+			});
 		}
 
 		/// <summary>
@@ -112,9 +120,9 @@ namespace HTTPlease
 		///		An optional cancellation token that can be used to cancel the asynchronous operation.
 		/// </param>
 		/// <returns>
-		///		An <see cref="HttpResponseMessage"/> representing the response.
+		///		An <see cref="HttpResponse"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> PutAsync(this HttpClient httpClient, HttpRequest request, HttpContent putBody, CancellationToken cancellationToken = default(CancellationToken))
+		public static HttpResponse PutAsync(this HttpClient httpClient, HttpRequest request, HttpContent putBody, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if (httpClient == null)
 				throw new ArgumentNullException(nameof(httpClient));
@@ -125,7 +133,10 @@ namespace HTTPlease
 			if (putBody == null)
 				throw new ArgumentNullException(nameof(putBody));
 
-			return await httpClient.SendAsync(request, HttpMethod.Put, putBody, cancellationToken).ConfigureAwait(false);
+			return new HttpResponse(request, async () =>
+			{
+				return await httpClient.SendAsync(request, HttpMethod.Put, putBody, cancellationToken).ConfigureAwait(false);
+			});
 		}
 
 		/// <summary>
@@ -144,9 +155,9 @@ namespace HTTPlease
 		///		An optional cancellation token that can be used to cancel the asynchronous operation.
 		/// </param>
 		/// <returns>
-		///		An <see cref="HttpResponseMessage"/> representing the response.
+		///		An <see cref="HttpResponse"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> PatchAsync(this HttpClient httpClient, HttpRequest request, HttpContent patchBody, CancellationToken cancellationToken = default(CancellationToken))
+		public static HttpResponse PatchAsync(this HttpClient httpClient, HttpRequest request, HttpContent patchBody, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
@@ -154,7 +165,10 @@ namespace HTTPlease
 			if (patchBody == null)
 				throw new ArgumentNullException(nameof(patchBody));
 
-			return await httpClient.SendAsync(request, OtherHttpMethods.Patch, patchBody, cancellationToken).ConfigureAwait(false);
+			return new HttpResponse(request, async () =>
+			{
+				return await httpClient.SendAsync(request, OtherHttpMethods.Patch, patchBody, cancellationToken).ConfigureAwait(false);
+			});
 		}
 
 		/// <summary>
@@ -170,14 +184,17 @@ namespace HTTPlease
 		///		An optional cancellation token that can be used to cancel the asynchronous operation.
 		/// </param>
 		/// <returns>
-		///		An <see cref="HttpResponseMessage"/> representing the response.
+		///		An <see cref="HttpResponse"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> DeleteAsync(this HttpClient httpClient, HttpRequest request, CancellationToken cancellationToken = default(CancellationToken))
+		public static HttpResponse DeleteAsync(this HttpClient httpClient, HttpRequest request, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
-			return await httpClient.SendAsync(request, HttpMethod.Delete, cancellationToken: cancellationToken).ConfigureAwait(false);
+			return new HttpResponse(request, async () =>
+			{
+				return await httpClient.SendAsync(request, HttpMethod.Delete, cancellationToken: cancellationToken).ConfigureAwait(false);
+			});
 		}
 
 		/// <summary>
@@ -199,30 +216,33 @@ namespace HTTPlease
 		///		An optional cancellation token that can be used to cancel the asynchronous operation.
 		/// </param>
 		/// <returns>
-		///		An <see cref="HttpResponseMessage"/> representing the response.
+		///		An <see cref="HttpResponse"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> SendAsync(this HttpClient httpClient, HttpRequest request, HttpMethod method, HttpContent body = null, CancellationToken cancellationToken = default(CancellationToken))
+		public static HttpResponse SendAsync(this HttpClient httpClient, HttpRequest request, HttpMethod method, HttpContent body = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
-			using (HttpRequestMessage requestMessage = request.BuildRequestMessage(method, body, httpClient.BaseAddress))
+			return new HttpResponse(request, async () =>
 			{
-				HttpResponseMessage responseMessage = await httpClient.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
-				try
+				using (HttpRequestMessage requestMessage = request.BuildRequestMessage(method, body, httpClient.BaseAddress))
 				{
-					request.ExecuteResponseActions(responseMessage);
-				}
-				catch
-				{
-					using (responseMessage)
+					HttpResponseMessage responseMessage = await httpClient.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
+					try
 					{
-						throw;
+						request.ExecuteResponseActions(responseMessage);
 					}
-				}
+					catch
+					{
+						using (responseMessage)
+						{
+							throw;
+						}
+					}
 
-				return responseMessage;
-			}
+					return responseMessage;
+				}
+			});
 		}
 
 		#endregion // Invoke

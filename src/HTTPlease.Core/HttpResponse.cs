@@ -14,12 +14,12 @@ namespace HTTPlease
 		///		Create a new <see cref="HttpResponse"/>.
 		/// </summary>
 		/// <param name="request">
-		///		The request whose response is represented by the <see cref="HttpResponse"/>.
+		///		The properties for the request whose response is represented by the <see cref="HttpResponse"/>.
 		/// </param>
 		/// <param name="task">
 		///		The underlying <see cref="Task{HttpResponse}"/> represented by the <see cref="HttpResponse"/>.
 		/// </param>
-		public HttpResponse(HttpRequest request, Task<HttpResponseMessage> task)
+		public HttpResponse(IHttpRequestProperties request, Task<HttpResponseMessage> task)
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
@@ -35,12 +35,12 @@ namespace HTTPlease
 		///		Create a new <see cref="HttpResponse"/> for the specified asynchronous action.
 		/// </summary>
 		/// <param name="request">
-		///		The request whose response is represented by the <see cref="HttpResponse"/>.
+		///		The properties for the request whose response is represented by the <see cref="HttpResponse"/>.
 		/// </param>
 		/// <param name="asyncAction">
 		///		An asynchronous delegate that produces the action's resulting <see cref="HttpResponseMessage"/>.
 		/// </param>
-		public HttpResponse(HttpRequest request, Func<Task<HttpResponseMessage>> asyncAction)
+		public HttpResponse(IHttpRequestProperties request, Func<Task<HttpResponseMessage>> asyncAction)
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
@@ -55,9 +55,9 @@ namespace HTTPlease
 		}
 
 		/// <summary>
-		///		The request whose response is represented by the <see cref="HttpResponse"/>.
+		///		The properties for the request whose response is represented by the <see cref="HttpResponse"/>.
 		/// </summary>
-		public HttpRequest Request { get; set; }
+		public IHttpRequestProperties Request { get; set; }
 
 		/// <summary>
 		///		The underlying <see cref="Task{T}"/> represented by the <see cref="HttpResponse"/>.
