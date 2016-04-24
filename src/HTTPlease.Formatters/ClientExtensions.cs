@@ -1,5 +1,4 @@
 using System;
-using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,11 +19,11 @@ namespace HTTPlease.Formatters
 		/// <param name="request">
 		///		The HTTP request.
 		/// </param>
-		/// <param name="patchBody">
+		/// <param name="postBody">
 		///		An optional object to be used as the the request body.
 		/// </param>
 		/// <param name="mediaType">
-		///		If <paramref name="patchBody"/> is specified, the media type to be used
+		///		If <paramref name="postBody"/> is specified, the media type to be used
 		/// </param>
 		/// <param name="cancellationToken">
 		///		An optional cancellation token that can be used to cancel the asynchronous operation.
@@ -35,10 +34,10 @@ namespace HTTPlease.Formatters
 		public static async Task<HttpResponseMessage> PostAsync(this HttpClient httpClient, HttpRequest request, object postBody, string mediaType, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if (httpClient == null)
-				throw new ArgumentNullException("httpClient");
+				throw new ArgumentNullException(nameof(httpClient));
 
 			if (request == null)
-				throw new ArgumentNullException("request");
+				throw new ArgumentNullException(nameof(request));
 
 			using (HttpRequestMessage requestMessage = request.BuildRequestMessage(HttpMethod.Post, postBody, mediaType, baseUri: httpClient.BaseAddress))
 			{
@@ -66,7 +65,7 @@ namespace HTTPlease.Formatters
 		/// </returns>
 		public static Task<HttpResponseMessage> PostAsJsonAsync(this HttpClient httpClient, HttpRequest request, object postBody, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			return httpClient.PostAsync(request, postBody, "application/json", cancellationToken);
+			return httpClient.PostAsync(request, postBody, WellKnownMediaTypes.Json, cancellationToken);
 		}
 
 		/// <summary>
@@ -93,10 +92,10 @@ namespace HTTPlease.Formatters
 		public static async Task<HttpResponseMessage> PutAsync(this HttpClient httpClient, HttpRequest request, object putBody, string mediaType, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if (httpClient == null)
-				throw new ArgumentNullException("httpClient");
+				throw new ArgumentNullException(nameof(httpClient));
 
 			if (request == null)
-				throw new ArgumentNullException("request");
+				throw new ArgumentNullException(nameof(request));
 
 			using (HttpRequestMessage requestMessage = request.BuildRequestMessage(HttpMethod.Put, putBody, mediaType, baseUri: httpClient.BaseAddress))
 			{
@@ -124,7 +123,7 @@ namespace HTTPlease.Formatters
 		/// </returns>
 		public static Task<HttpResponseMessage> PutAsJsonAsync(this HttpClient httpClient, HttpRequest request, object putBody, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			return httpClient.PutAsync(request, putBody, "application/json", cancellationToken);
+			return httpClient.PutAsync(request, putBody, WellKnownMediaTypes.Json, cancellationToken);
 		}
 
 		/// <summary>
@@ -151,10 +150,10 @@ namespace HTTPlease.Formatters
 		public static async Task<HttpResponseMessage> PatchAsync(this HttpClient httpClient, HttpRequest request, object patchBody, string mediaType, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if (httpClient == null)
-				throw new ArgumentNullException("httpClient");
+				throw new ArgumentNullException(nameof(httpClient));
 
 			if (request == null)
-				throw new ArgumentNullException("request");
+				throw new ArgumentNullException(nameof(request));
 
 			using (HttpRequestMessage requestMessage = request.BuildRequestMessage(OtherHttpMethods.Patch, patchBody, mediaType, baseUri: httpClient.BaseAddress))
 			{
@@ -182,7 +181,7 @@ namespace HTTPlease.Formatters
 		/// </returns>
 		public static Task<HttpResponseMessage> PatchAsJsonAsync(this HttpClient httpClient, HttpRequest request, object patchBody, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			return httpClient.PatchAsync(request, patchBody, "application/json", cancellationToken);
+			return httpClient.PatchAsync(request, patchBody, WellKnownMediaTypes.Json, cancellationToken);
 		}
 	}
 }

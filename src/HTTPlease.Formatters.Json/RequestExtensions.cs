@@ -71,7 +71,7 @@ namespace HTTPlease.Formatters
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
-			return request.AcceptMediaType("application/json");
+			return request.AcceptMediaType(WellKnownMediaTypes.Json);
 		}
 
 		/// <summary>
@@ -91,7 +91,7 @@ namespace HTTPlease.Formatters
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
-			return request.AcceptMediaType("application/json");
+			return request.AcceptMediaType(WellKnownMediaTypes.Json);
 		}
 	}
 }

@@ -3,17 +3,17 @@ using System;
 using System.Net;
 using System.Net.Http;
 
-namespace HTTPlease.Formatters.Tests
+namespace HTTPlease.Formatters.FunctionalTests
 {
 	/// <summary>
-	/// 	Formatter-related extension methods for <see cref="HttpRequestMessage"> / <see cref="HttpResponseMessage">.
+	/// 	Formatter-related extension methods for <see cref="HttpRequestMessage"/> / <see cref="HttpResponseMessage"/>.
 	/// </summary>
 	public static class MessageExtensions
 	{
 		/// <summary>
 		/// 	Create a <see cref="HttpResponseMessage">response message</see>.
 		/// </summary>
-		/// <typeparam name="TContext">
+		/// <typeparam name="TBody">
 		///		The type of object that represents the response body.
 		/// </typeparam>
 		/// <param name="request">

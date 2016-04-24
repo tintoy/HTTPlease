@@ -27,10 +27,7 @@ namespace HTTPlease.Formatters.Json
 		/// <summary>
 		///		Content types supported by the formatter.
 		/// </summary>
-		public ISet<string> SupportedMediaTypes { get; } = new HashSet<string>
-		{
-			"application/json"
-		};
+		public ISet<string> SupportedMediaTypes { get; } = new HashSet<string> { WellKnownMediaTypes.Json };
 
 		/// <summary>
 		///		Determine whether the formatter can deserialise the specified data.
