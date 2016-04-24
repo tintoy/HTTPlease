@@ -8,13 +8,67 @@ using Xunit;
 
 namespace HTTPlease.Formatters.Tests
 {
-	using Formatters.Json;
-
+	using Json;
+	
 	/// <summary>
 	///		Tests for HTTP requests using content formatters.
 	/// </summary>
 	public class FormattedRequestTests
 	{
+		/// <summary>
+		///		Verify that a request builder can build a request with an absolute and then relative template URI, then perform an HTTP GET request.
+		/// </summary>
+		/// <returns>
+		///		A <see cref="Task"/> representing asynchronous test execution.
+		/// </returns>
+		[Fact]
+		public async Task Can_Build_Request_RelativeTemplateUri_Get()
+		{
+			Uri baseUri = new Uri("http://localhost:1234/");
+
+			MockMessageHandler mockHandler = new MockMessageHandler(
+				request =>
+				{
+					Assert.NotNull(request);
+					Assert.Equal(HttpMethod.Get, request.Method);
+					Assert.Equal(
+						new Uri(baseUri, "foo/1234/bar?diddly=bonk"),
+						request.RequestUri
+					);
+					
+					return request.CreateResponse(
+						HttpStatusCode.OK,
+						"Success!",
+						"application/json",
+						new JsonFormatter()
+					);
+				}
+			);
+
+			using (HttpClient mockClient = new HttpClient(mockHandler))
+			{
+				HttpResponseMessage response =
+					await mockClient.GetAsync(
+						HttpRequest.Create(baseUri)
+							.WithRelativeRequestUri("foo/{variable}/bar")
+							.WithQueryParameter("diddly", "bonk")
+							.WithTemplateParameter("variable", 1234)
+							.WithTemplateParameter("diddly", "bonk")
+							.UseJson().ExpectJson()
+					);
+
+				using (response)
+				{
+					Assert.True(response.IsSuccessStatusCode);
+					Assert.NotNull(response.Content);
+					Assert.Equal("application/json", response.Content.Headers.ContentType.MediaType);
+
+					string responseBody = await response.ReadContentAsAsync<string>();
+					Assert.Equal("Success!", responseBody);
+				}
+			}
+		}
+
 		/// <summary>
 		///		Verify that a request builder can build a request with an absolute and then relative URI, expecting a JSON response, and then perform an HTTP POST request.
 		/// </summary>
@@ -27,7 +81,7 @@ namespace HTTPlease.Formatters.Tests
 			Uri baseUri = new Uri("http://localhost:1234/");
 
 			MockMessageHandler mockHandler = new MockMessageHandler(
-				request =>
+				async request =>
 				{
 					Assert.NotNull(request);
 					Assert.Equal(HttpMethod.Post, request.Method);
@@ -42,6 +96,11 @@ namespace HTTPlease.Formatters.Tests
 						request.Headers.Accept.First().MediaType
 					);
 
+					const string expectedRequestBody = @"{""Foo"":""Bar"",""Baz"":1234}";
+
+					string requestBody = await request.Content.ReadAsStringAsync();
+					Assert.Equal(expectedRequestBody, requestBody);
+					
 					return request.CreateResponse(
 						HttpStatusCode.OK,
 						"Success!",
@@ -57,8 +116,13 @@ namespace HTTPlease.Formatters.Tests
 					mockClient.PostAsync(
 						HttpRequest.Create(baseUri)
 							.WithRelativeRequestUri("foo/bar")
-							.ExpectJson(),
-						postBody: new StringContent("{}")
+							.UseJson().ExpectJson(),
+						postBody: new
+						{
+							Foo = "Bar",
+							Baz = 1234
+						},
+						mediaType: "application/json"
 					);
 
 				using (response)
@@ -67,8 +131,8 @@ namespace HTTPlease.Formatters.Tests
 					Assert.NotNull(response.Content?.Headers?.ContentType);
 					Assert.Equal("application/json", response.Content.Headers.ContentType.MediaType);
 
-					string responseBody = await response.Content.ReadAsStringAsync();
-					Assert.Equal("\"Success!\"", responseBody);
+					string responseBody = await response.ReadContentAsAsync<string>();
+					Assert.Equal("Success!", responseBody);
 				}
 			}
 		}
