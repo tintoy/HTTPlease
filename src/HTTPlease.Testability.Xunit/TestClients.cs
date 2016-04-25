@@ -112,6 +112,210 @@ namespace HTTPlease.Testability
 		}
 
 		/// <summary>
+		///		Create an <see cref="HttpClient"/> that expects an incoming GET request message and returns an <see cref="HttpStatusCode.OK"/> response.
+		/// </summary>
+		/// <param name="expectedRequestUri">
+		///		The expected URI for the incoming request message.
+		/// </param>
+		/// <returns>
+		///		The configured <see cref="HttpClient"/>.
+		/// </returns>
+		public static HttpClient ExpectGet(Uri expectedRequestUri)
+		{
+			return ExpectGet(expectedRequestUri, HttpStatusCode.OK, assertion: null);
+		}
+
+		/// <summary>
+		///		Create an <see cref="HttpClient"/> that performs assertions on an incoming GET request message and returns an <see cref="HttpStatusCode.OK"/> response.
+		/// </summary>
+		/// <param name="expectedRequestUri">
+		///		The expected URI for the incoming request message.
+		/// </param>
+		/// <param name="assertion">
+		///		A delegate that makes assertions about the incoming request message.
+		/// </param>
+		/// <returns>
+		///		The configured <see cref="HttpClient"/>.
+		/// </returns>
+		public static HttpClient ExpectGet(Uri expectedRequestUri, Action<HttpRequestMessage> assertion)
+		{
+			return ExpectGet(expectedRequestUri, HttpStatusCode.OK, assertion);
+		}
+
+		/// <summary>
+		///		Create an <see cref="HttpClient"/> that performs assertions on an incoming GET request message and returns a predefined response.
+		/// </summary>
+		/// <param name="expectedRequestUri">
+		///		The expected URI for the incoming request message.
+		/// </param>
+		/// <param name="responseStatusCode">
+		///		The HTTP status code for the outgoing response message.
+		/// </param>
+		/// <param name="assertion">
+		///		A delegate that makes assertions about the incoming request message.
+		/// </param>
+		/// <returns>
+		///		The configured <see cref="HttpClient"/>.
+		/// </returns>
+		public static HttpClient ExpectGet(Uri expectedRequestUri, HttpStatusCode responseStatusCode, Action<HttpRequestMessage> assertion)
+		{
+			return Expect(expectedRequestUri, HttpMethod.Get, responseStatusCode, assertion);
+		}
+
+		/// <summary>
+		///		Create an <see cref="HttpClient"/> that expects an incoming POST request message and returns an <see cref="HttpStatusCode.OK"/> response.
+		/// </summary>
+		/// <param name="expectedRequestUri">
+		///		The expected URI for the incoming request message.
+		/// </param>
+		/// <returns>
+		///		The configured <see cref="HttpClient"/>.
+		/// </returns>
+		public static HttpClient ExpectPost(Uri expectedRequestUri)
+		{
+			return ExpectPost(expectedRequestUri, HttpStatusCode.OK, assertion: null);
+		}
+
+		/// <summary>
+		///		Create an <see cref="HttpClient"/> that performs assertions on an incoming POST request message and returns an <see cref="HttpStatusCode.OK"/> response.
+		/// </summary>
+		/// <param name="expectedRequestUri">
+		///		The expected URI for the incoming request message.
+		/// </param>
+		/// <param name="assertion">
+		///		A delegate that makes assertions about the incoming request message.
+		/// </param>
+		/// <returns>
+		///		The configured <see cref="HttpClient"/>.
+		/// </returns>
+		public static HttpClient ExpectPost(Uri expectedRequestUri, Action<HttpRequestMessage> assertion)
+		{
+			return ExpectPost(expectedRequestUri, HttpStatusCode.OK, assertion);
+		}
+
+		/// <summary>
+		///		Create an <see cref="HttpClient"/> that performs assertions on an incoming POST request message and returns a predefined response.
+		/// </summary>
+		/// <param name="expectedRequestUri">
+		///		The expected URI for the incoming request message.
+		/// </param>
+		/// <param name="responseStatusCode">
+		///		The HTTP status code for the outgoing response message.
+		/// </param>
+		/// <param name="assertion">
+		///		A delegate that makes assertions about the incoming request message.
+		/// </param>
+		/// <returns>
+		///		The configured <see cref="HttpClient"/>.
+		/// </returns>
+		public static HttpClient ExpectPost(Uri expectedRequestUri, HttpStatusCode responseStatusCode, Action<HttpRequestMessage> assertion)
+		{
+			return Expect(expectedRequestUri, HttpMethod.Post, responseStatusCode, assertion);
+		}
+
+		/// <summary>
+		///		Create an <see cref="HttpClient"/> that expects an incoming PUT request message and returns an <see cref="HttpStatusCode.OK"/> response.
+		/// </summary>
+		/// <param name="expectedRequestUri">
+		///		The expected URI for the incoming request message.
+		/// </param>
+		/// <returns>
+		///		The configured <see cref="HttpClient"/>.
+		/// </returns>
+		public static HttpClient ExpectPut(Uri expectedRequestUri)
+		{
+			return ExpectPut(expectedRequestUri, HttpStatusCode.OK, assertion: null);
+		}
+
+		/// <summary>
+		///		Create an <see cref="HttpClient"/> that performs assertions on an incoming PUT request message and returns an <see cref="HttpStatusCode.OK"/> response.
+		/// </summary>
+		/// <param name="expectedRequestUri">
+		///		The expected URI for the incoming request message.
+		/// </param>
+		/// <param name="assertion">
+		///		A delegate that makes assertions about the incoming request message.
+		/// </param>
+		/// <returns>
+		///		The configured <see cref="HttpClient"/>.
+		/// </returns>
+		public static HttpClient ExpectPut(Uri expectedRequestUri, Action<HttpRequestMessage> assertion)
+		{
+			return ExpectPut(expectedRequestUri, HttpStatusCode.OK, assertion);
+		}
+
+		/// <summary>
+		///		Create an <see cref="HttpClient"/> that performs assertions on an incoming PUT request message and returns a predefined response.
+		/// </summary>
+		/// <param name="expectedRequestUri">
+		///		The expected URI for the incoming request message.
+		/// </param>
+		/// <param name="responseStatusCode">
+		///		The HTTP status code for the outgoing response message.
+		/// </param>
+		/// <param name="assertion">
+		///		A delegate that makes assertions about the incoming request message.
+		/// </param>
+		/// <returns>
+		///		The configured <see cref="HttpClient"/>.
+		/// </returns>
+		public static HttpClient ExpectPut(Uri expectedRequestUri, HttpStatusCode responseStatusCode, Action<HttpRequestMessage> assertion)
+		{
+			return Expect(expectedRequestUri, HttpMethod.Put, responseStatusCode, assertion);
+		}
+
+		/// <summary>
+		///		Create an <see cref="HttpClient"/> that expects an incoming DELETE request message and returns an <see cref="HttpStatusCode.OK"/> response.
+		/// </summary>
+		/// <param name="expectedRequestUri">
+		///		The expected URI for the incoming request message.
+		/// </param>
+		/// <returns>
+		///		The configured <see cref="HttpClient"/>.
+		/// </returns>
+		public static HttpClient ExpectDelete(Uri expectedRequestUri)
+		{
+			return ExpectDelete(expectedRequestUri, HttpStatusCode.OK, assertion: null);
+		}
+
+		/// <summary>
+		///		Create an <see cref="HttpClient"/> that performs assertions on an incoming DELETE request message and returns an <see cref="HttpStatusCode.OK"/> response.
+		/// </summary>
+		/// <param name="expectedRequestUri">
+		///		The expected URI for the incoming request message.
+		/// </param>
+		/// <param name="assertion">
+		///		A delegate that makes assertions about the incoming request message.
+		/// </param>
+		/// <returns>
+		///		The configured <see cref="HttpClient"/>.
+		/// </returns>
+		public static HttpClient ExpectDelete(Uri expectedRequestUri, Action<HttpRequestMessage> assertion)
+		{
+			return ExpectDelete(expectedRequestUri, HttpStatusCode.OK, assertion);
+		}
+
+		/// <summary>
+		///		Create an <see cref="HttpClient"/> that performs assertions on an incoming DELETE request message and returns a predefined response.
+		/// </summary>
+		/// <param name="expectedRequestUri">
+		///		The expected URI for the incoming request message.
+		/// </param>
+		/// <param name="responseStatusCode">
+		///		The HTTP status code for the outgoing response message.
+		/// </param>
+		/// <param name="assertion">
+		///		A delegate that makes assertions about the incoming request message.
+		/// </param>
+		/// <returns>
+		///		The configured <see cref="HttpClient"/>.
+		/// </returns>
+		public static HttpClient ExpectDelete(Uri expectedRequestUri, HttpStatusCode responseStatusCode, Action<HttpRequestMessage> assertion)
+		{
+			return Expect(expectedRequestUri, HttpMethod.Delete, responseStatusCode, assertion);
+		}
+
+		/// <summary>
 		///		Create an <see cref="HttpClient"/> that performs assertions on an incoming request message and returns a predefined response.
 		/// </summary>
 		/// <param name="assertion">
@@ -175,7 +379,8 @@ namespace HTTPlease.Testability
 			if (expectedRequestMethod == null)
 				throw new ArgumentNullException(nameof(expectedRequestMethod));
 
-			return Expect(responseStatusCode, requestMessage => {
+			return Expect(responseStatusCode, requestMessage =>
+			{
 				Assert.Equal(expectedRequestMethod, requestMessage.Method);
 				Assert.Equal(expectedRequestUri, requestMessage.RequestUri);
 
