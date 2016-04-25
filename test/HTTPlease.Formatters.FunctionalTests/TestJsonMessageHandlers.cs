@@ -2,7 +2,6 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Xunit;
 
 namespace HTTPlease.Formatters.FunctionalTests
 {
@@ -10,9 +9,9 @@ namespace HTTPlease.Formatters.FunctionalTests
 	using Tests.Mocks;
 
 	/// <summary>
-	///		Factory methods for <see cref="MockMessageHandler"/>s used by tests.
+	///		Factory methods for JSON-formatted <see cref="MockMessageHandler"/>s used by tests.
 	/// </summary>
-    public static class MockMessageHandlers
+    public static class TestJsonMessageHandlers
     {
 		/// <summary>
 		///		Create a <see cref="MockMessageHandler"/> that performs assertions on an incoming request message and returns a predefined (JSON-formatted) response.
@@ -32,9 +31,9 @@ namespace HTTPlease.Formatters.FunctionalTests
 		/// <returns>
 		///		The configured <see cref="MockMessageHandler"/>.
 		/// </returns>
-		public static MockMessageHandler AssertJson<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, TResponseBody responseBody)
+		public static MockMessageHandler ExpectJson<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, TResponseBody responseBody)
 		{
-			return AssertJson(expectedRequestUri, expectedRequestMethod, responseBody, assertion: null);
+			return ExpectJson(expectedRequestUri, expectedRequestMethod, responseBody, assertion: null);
 		}
 
 		/// <summary>
@@ -58,9 +57,9 @@ namespace HTTPlease.Formatters.FunctionalTests
 		/// <returns>
 		///		The configured <see cref="MockMessageHandler"/>.
 		/// </returns>
-		public static MockMessageHandler AssertJson<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, TResponseBody responseBody, Action<HttpRequestMessage> assertion)
+		public static MockMessageHandler ExpectJson<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, TResponseBody responseBody, Action<HttpRequestMessage> assertion)
 		{
-			return AssertJson(expectedRequestUri, expectedRequestMethod, HttpStatusCode.OK, responseBody, assertion);
+			return ExpectJson(expectedRequestUri, expectedRequestMethod, HttpStatusCode.OK, responseBody, assertion);
 		}
 
 		/// <summary>
@@ -87,9 +86,9 @@ namespace HTTPlease.Formatters.FunctionalTests
 		/// <returns>
 		///		The configured <see cref="MockMessageHandler"/>.
 		/// </returns>
-		public static MockMessageHandler AssertJson<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, HttpStatusCode responseStatusCode, TResponseBody responseBody, Action<HttpRequestMessage> assertion)
+		public static MockMessageHandler ExpectJson<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, HttpStatusCode responseStatusCode, TResponseBody responseBody, Action<HttpRequestMessage> assertion)
 		{
-			return Assert(expectedRequestUri, expectedRequestMethod, responseStatusCode, responseBody, WellKnownMediaTypes.Json, new JsonFormatter(), assertion);
+			return Expect(expectedRequestUri, expectedRequestMethod, responseStatusCode, responseBody, WellKnownMediaTypes.Json, new JsonFormatter(), assertion);
 		}
 
 		/// <summary>
@@ -122,7 +121,7 @@ namespace HTTPlease.Formatters.FunctionalTests
 		/// <returns>
 		///		The configured <see cref="MockMessageHandler"/>.
 		/// </returns>
-		public static MockMessageHandler Assert<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, HttpStatusCode responseStatusCode, TResponseBody responseBody, string responseMediaType, IOutputFormatter responseFormatter, Action<HttpRequestMessage> assertion)
+		public static MockMessageHandler Expect<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, HttpStatusCode responseStatusCode, TResponseBody responseBody, string responseMediaType, IOutputFormatter responseFormatter, Action<HttpRequestMessage> assertion)
 		{
 			if (expectedRequestUri == null)
 				throw new ArgumentNullException(nameof(expectedRequestUri));
@@ -174,9 +173,9 @@ namespace HTTPlease.Formatters.FunctionalTests
 		/// <returns>
 		///		The configured <see cref="MockMessageHandler"/>.
 		/// </returns>
-		public static MockMessageHandler AssertJson<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, TResponseBody responseBody, Func<HttpRequestMessage, Task> asyncAssertion)
+		public static MockMessageHandler ExpectJson<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, TResponseBody responseBody, Func<HttpRequestMessage, Task> asyncAssertion)
 		{
-			return AssertJson(expectedRequestUri, expectedRequestMethod, HttpStatusCode.OK, responseBody, asyncAssertion);
+			return ExpectJson(expectedRequestUri, expectedRequestMethod, HttpStatusCode.OK, responseBody, asyncAssertion);
 		}
 
 		/// <summary>
@@ -203,9 +202,9 @@ namespace HTTPlease.Formatters.FunctionalTests
 		/// <returns>
 		///		The configured <see cref="MockMessageHandler"/>.
 		/// </returns>
-		public static MockMessageHandler AssertJson<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, HttpStatusCode responseStatusCode, TResponseBody responseBody, Func<HttpRequestMessage, Task> asyncAssertion)
+		public static MockMessageHandler ExpectJson<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, HttpStatusCode responseStatusCode, TResponseBody responseBody, Func<HttpRequestMessage, Task> asyncAssertion)
 		{
-			return Assert(expectedRequestUri, expectedRequestMethod, responseStatusCode, responseBody, WellKnownMediaTypes.Json, new JsonFormatter(), asyncAssertion);
+			return Expect(expectedRequestUri, expectedRequestMethod, responseStatusCode, responseBody, WellKnownMediaTypes.Json, new JsonFormatter(), asyncAssertion);
 		}
 
 		/// <summary>
@@ -238,7 +237,7 @@ namespace HTTPlease.Formatters.FunctionalTests
 		/// <returns>
 		///		The configured <see cref="MockMessageHandler"/>.
 		/// </returns>
-		public static MockMessageHandler Assert<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, HttpStatusCode responseStatusCode, TResponseBody responseBody, string responseMediaType, IOutputFormatter responseFormatter, Func<HttpRequestMessage, Task> asyncAssertion)
+		public static MockMessageHandler Expect<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, HttpStatusCode responseStatusCode, TResponseBody responseBody, string responseMediaType, IOutputFormatter responseFormatter, Func<HttpRequestMessage, Task> asyncAssertion)
 		{
 			if (expectedRequestUri == null)
 				throw new ArgumentNullException(nameof(expectedRequestUri));

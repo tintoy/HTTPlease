@@ -32,7 +32,7 @@ namespace HTTPlease.Formatters.FunctionalTests
 		[Fact]
 		public async Task Request_RelativeTemplateUri_Get()
 		{
-			MockMessageHandler mockHandler = MockMessageHandlers.AssertJson(
+			MockMessageHandler mockHandler = TestJsonMessageHandlers.ExpectJson(
 				new Uri(BaseUri, "foo/1234/bar?diddly=bonk"), HttpMethod.Get,
 				responseBody: "Success!"
 			);
@@ -67,7 +67,7 @@ namespace HTTPlease.Formatters.FunctionalTests
 		[Fact]
 		public async Task Request_RelativeUri_ExpectJson_Post()
 		{
-			MockMessageHandler mockHandler = MockMessageHandlers.AssertJson(
+			MockMessageHandler mockHandler = TestJsonMessageHandlers.ExpectJson(
 				new Uri(BaseUri, "foo/bar"), HttpMethod.Post,
 				responseBody: "Success!",
 				assertion: async request =>
@@ -115,7 +115,7 @@ namespace HTTPlease.Formatters.FunctionalTests
 		[Fact]
 		public async Task Request_RelativeUri_PostAsJson()
 		{
-			MockMessageHandler mockHandler = MockMessageHandlers.AssertJson(
+			MockMessageHandler mockHandler = TestJsonMessageHandlers.ExpectJson(
 				new Uri(BaseUri, "foo/bar"), HttpMethod.Post, responseBody: 1234,
 				assertion: async request =>
 				{

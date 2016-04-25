@@ -7,7 +7,7 @@ namespace HTTPlease.Tests
 	/// <summary>
 	///		Unit-tests for <see cref="HttpRequest"/>.
 	/// </summary>
-	public sealed class RequestBuilderTests
+	public sealed class RequestTests
 	{
 		/// <summary>
 		///		Verify that a request builder can build a message with an absolute and then relative template URI.

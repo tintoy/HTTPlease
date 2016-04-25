@@ -11,7 +11,7 @@ namespace HTTPlease.Tests
 	/// <summary>
 	///		Unit-tests for <see cref="HttpRequest{TContext}"/> that use a context for resolving deferred parameters.
 	/// </summary>
-	public class TypedRequestBuilderTests
+	public class TypedRequestTests
 	{
 		/// <summary>
 		///		Verify that a request can build and then invoke request with an absolute and then relative template URI (with query parameters) with deferred values that come from a supplied context value.
@@ -20,7 +20,7 @@ namespace HTTPlease.Tests
 		///		A <see cref="Task"/> representing asynchronous test execution.
 		/// </returns>
 		[Fact]
-		public async Task Can_Invoke_GetRequest_RelativeTemplateUriWithQuery_DeferredValues_FromContext()
+		public async Task Request_RelativeTemplateUriWithQuery_DeferredValues_FromContext_Get()
 		{
 			Uri baseUri = new Uri("http://localhost:1234/");
 
@@ -72,7 +72,7 @@ namespace HTTPlease.Tests
 		///		Verify that a request can build a request with an absolute and then relative template URI (with query parameters) with deferred values that come from a supplied context value.
 		/// </summary>
 		[Fact]
-		public void Can_Build_Request_RelativeTemplateUriWithQuery_DeferredValues_FromContext()
+		public void Request_RelativeTemplateUriWithQuery_DeferredValues_FromContext_Build()
 		{
 			Uri baseUri = new Uri("http://localhost:1234/");
 
@@ -122,7 +122,7 @@ namespace HTTPlease.Tests
 		///		Verify that a request can build a request with an absolute and then relative template URI (with query parameters) with deferred values that come from the request's default (intrinsic) context.
 		/// </summary>
 		[Fact]
-		public void Can_Build_Request_RelativeTemplateUriWithQuery_DeferredValues_FromDefaultContext()
+		public void Request_RelativeTemplateUriWithQuery_DeferredValues_FromDefaultContext_Build()
 		{
 			Uri baseUri = new Uri("http://localhost:1234/");
 
