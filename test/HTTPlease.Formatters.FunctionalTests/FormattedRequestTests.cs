@@ -1,4 +1,3 @@
-using HTTPlease.Tests.Mocks;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -6,7 +5,7 @@ using Xunit;
 
 namespace HTTPlease.Formatters.FunctionalTests
 {
-	using HTTPlease.Tests;
+	using Testability;
 	using Tests;
 
 	/// <summary>

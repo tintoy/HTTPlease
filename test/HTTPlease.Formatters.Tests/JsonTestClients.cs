@@ -6,30 +6,13 @@ using System.Threading.Tasks;
 namespace HTTPlease.Formatters.Tests
 {
 	using Json;
-	using HTTPlease.Tests;
-	using HTTPlease.Tests.Mocks;
-
+	using Testability;
+	
 	/// <summary>
 	///		Factory methods for JSON-formatted mocked <see cref="HttpClient"/>s used by tests.
 	/// </summary>
 	public static class JsonTestClients
     {
-		/// <summary>
-		///		Create an <see cref="HttpClient"/> that always responds to requests with the specified status code.
-		/// </summary>
-		/// <param name="statusCode">
-		///		The HTTP status code.
-		/// </param>
-		/// <returns>
-		///		The configured <see cref="HttpClient"/>.
-		/// </returns>
-		public static HttpClient RespondWith(HttpStatusCode statusCode)
-		{
-			return new HttpClient(new MockMessageHandler(
-				request => request.CreateResponse(statusCode)
-			));
-		}
-
 		/// <summary>
 		///		Create an <see cref="HttpClient"/> that always responds to requests with the specified status code.
 		/// </summary>
@@ -47,9 +30,9 @@ namespace HTTPlease.Formatters.Tests
 		/// </returns>
 		public static HttpClient RespondWith<TBody>(HttpStatusCode statusCode, TBody body)
 		{
-			return new HttpClient(new MockMessageHandler(
+			return TestClients.RespondWith(
 				request => request.CreateResponse(statusCode, body, WellKnownMediaTypes.Json, new JsonFormatter())
-			));
+			);
 		}
 
 		/// <summary>
@@ -174,7 +157,7 @@ namespace HTTPlease.Formatters.Tests
 			if (responseFormatter == null)
 				throw new ArgumentNullException(nameof(responseFormatter));
 
-			return new HttpClient(new MockMessageHandler(requestMessage =>
+			return TestClients.RespondWith(requestMessage =>
 			{
 				Xunit.Assert.NotNull(requestMessage);
 				Xunit.Assert.Equal(expectedRequestMethod, requestMessage.Method);
@@ -188,7 +171,7 @@ namespace HTTPlease.Formatters.Tests
 					responseMediaType,
 					new JsonFormatter()
 				);
-			}));
+			});
 		}
 
 		/// <summary>
@@ -290,7 +273,7 @@ namespace HTTPlease.Formatters.Tests
 			if (responseFormatter == null)
 				throw new ArgumentNullException(nameof(responseFormatter));
 
-			return new HttpClient(new MockMessageHandler(async requestMessage =>
+			return TestClients.AsyncRespondWith(async requestMessage =>
 			{
 				Xunit.Assert.NotNull(requestMessage);
 				Xunit.Assert.Equal(expectedRequestMethod, requestMessage.Method);
@@ -306,7 +289,7 @@ namespace HTTPlease.Formatters.Tests
 					responseMediaType,
 					new JsonFormatter()
 				);
-			}));
+			});
 		}
 	}
 }

@@ -6,7 +6,7 @@ using Xunit;
 
 namespace HTTPlease.Tests
 {
-	using Mocks;
+	using Testability;
 
 	/// <summary>
 	///		Unit-tests for <see cref="HttpRequest{TContext}"/> that use a context for resolving deferred parameters.
@@ -24,21 +24,14 @@ namespace HTTPlease.Tests
 		{
 			Uri baseUri = new Uri("http://localhost:1234/");
 
-			Uri expectedUri = null;
-			MockMessageHandler mockHandler = new MockMessageHandler(
-				requestMessage =>
-				{
-					Assert.Equal(
-						expectedUri,
-						requestMessage.RequestUri
-					);
-
-					return requestMessage.CreateResponse(HttpStatusCode.OK);
-				}
-			);
-
 			TestParameterContext testParameterContext = new TestParameterContext();
-			using (HttpClient client = new HttpClient(mockHandler))
+
+			Uri expectedUri = null;
+			HttpClient client = TestClients.Expect(requestMessage =>
+			{
+				Assert.Equal(expectedUri, requestMessage.RequestUri);
+			});
+			using (client)
 			{
 				HttpRequest<TestParameterContext> requestBuilder =
 					HttpRequest<TestParameterContext>.Create(baseUri)

@@ -3,8 +3,8 @@ using Xunit;
 
 namespace HTTPlease.Formatters.Tests
 {
-	using HTTPlease.Tests;
-	
+	using Testability;
+
 	/// <summary>
 	///		Tests for JSON-formatted HTTP requests.
 	/// </summary>

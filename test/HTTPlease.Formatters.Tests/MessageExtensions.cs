@@ -1,10 +1,11 @@
-using HTTPlease.Tests;
 using System;
 using System.Net;
 using System.Net.Http;
 
 namespace HTTPlease.Formatters.Tests
 {
+	using Testability;
+
 	/// <summary>
 	/// 	Formatter-related extension methods for <see cref="HttpRequestMessage"/> / <see cref="HttpResponseMessage"/>.
 	/// </summary>
