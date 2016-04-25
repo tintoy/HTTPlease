@@ -6,6 +6,7 @@ using Xunit;
 
 namespace HTTPlease.Formatters.FunctionalTests
 {
+	using HTTPlease.Tests;
 	using Tests;
 
 	/// <summary>
@@ -30,14 +31,13 @@ namespace HTTPlease.Formatters.FunctionalTests
 		///		A <see cref="Task"/> representing asynchronous test execution.
 		/// </returns>
 		[Fact]
-		public async Task Request_RelativeTemplateUri_Get()
+		public async Task Request_Get_RelativeTemplateUri()
 		{
-			MockMessageHandler mockHandler = TestJsonMessageHandlers.ExpectJson(
+			HttpClient client = JsonTestClients.ExpectJson(
 				new Uri(BaseUri, "foo/1234/bar?diddly=bonk"), HttpMethod.Get,
 				responseBody: "Success!"
 			);
-
-			using (HttpClient mockClient = new HttpClient(mockHandler))
+			using (client)
 			{
 				HttpRequest request =
 					BaseRequest.WithRelativeRequestUri("foo/{variable}/bar")
@@ -46,7 +46,7 @@ namespace HTTPlease.Formatters.FunctionalTests
 						.WithTemplateParameter("diddly", "bonk")
 						.UseJson().ExpectJson();
 
-				using (HttpResponseMessage response = await mockClient.GetAsync(request))
+				using (HttpResponseMessage response = await client.GetAsync(request))
 				{
 					Assert.True(response.IsSuccessStatusCode);
 					Assert.NotNull(response.Content);
@@ -65,9 +65,9 @@ namespace HTTPlease.Formatters.FunctionalTests
 		///		A <see cref="Task"/> representing asynchronous test execution.
 		/// </returns>
 		[Fact]
-		public async Task Request_RelativeUri_ExpectJson_Post()
+		public async Task Request_Post_RelativeUri_ExpectJson()
 		{
-			MockMessageHandler mockHandler = TestJsonMessageHandlers.ExpectJson(
+			HttpClient client = JsonTestClients.ExpectJson(
 				new Uri(BaseUri, "foo/bar"), HttpMethod.Post,
 				responseBody: "Success!",
 				assertion: async request =>
@@ -79,14 +79,14 @@ namespace HTTPlease.Formatters.FunctionalTests
 					);
 				}
 			);
-			using (HttpClient mockClient = new HttpClient(mockHandler))
+			using (client)
 			{
 				HttpRequest request =
 					BaseRequest.WithRelativeRequestUri("foo/bar")
 						.UseJson().ExpectJson();
 
 				HttpResponseMessage response = await
-					mockClient.PostAsJsonAsync(request,
+					client.PostAsJsonAsync(request,
 						postBody: new
 						{
 							Foo = "Bar",
@@ -113,9 +113,9 @@ namespace HTTPlease.Formatters.FunctionalTests
 		///		A <see cref="Task"/> representing asynchronous test execution.
 		/// </returns>
 		[Fact]
-		public async Task Request_RelativeUri_PostAsJson()
+		public async Task Request_PostAsJson_RelativeUri()
 		{
-			MockMessageHandler mockHandler = TestJsonMessageHandlers.ExpectJson(
+			HttpClient client = JsonTestClients.ExpectJson(
 				new Uri(BaseUri, "foo/bar"), HttpMethod.Post, responseBody: 1234,
 				assertion: async request =>
 				{
@@ -124,14 +124,14 @@ namespace HTTPlease.Formatters.FunctionalTests
 					await MessageAssert.BodyIsAsync(request, "\"1234\"");
 				}
 			);
-			using (HttpClient mockClient = new HttpClient(mockHandler))
+			using (client)
 			{
 				HttpRequest request =
 					BaseRequest.WithRelativeRequestUri("foo/bar")
 						.UseJson().ExpectJson();
 
 				int responseBody = await
-					mockClient.PostAsJsonAsync(request,
+					client.PostAsJsonAsync(request,
 						postBody: 1234.ToString()
 					)
 					.ReadAsAsync<int>();

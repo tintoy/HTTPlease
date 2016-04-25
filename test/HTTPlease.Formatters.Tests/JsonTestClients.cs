@@ -3,18 +3,57 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace HTTPlease.Formatters.FunctionalTests
+namespace HTTPlease.Formatters.Tests
 {
 	using Json;
-	using Tests.Mocks;
+	using HTTPlease.Tests;
+	using HTTPlease.Tests.Mocks;
 
 	/// <summary>
-	///		Factory methods for JSON-formatted <see cref="MockMessageHandler"/>s used by tests.
+	///		Factory methods for JSON-formatted mocked <see cref="HttpClient"/>s used by tests.
 	/// </summary>
-    public static class TestJsonMessageHandlers
+	public static class JsonTestClients
     {
 		/// <summary>
-		///		Create a <see cref="MockMessageHandler"/> that performs assertions on an incoming request message and returns a predefined (JSON-formatted) response.
+		///		Create an <see cref="HttpClient"/> that always responds to requests with the specified status code.
+		/// </summary>
+		/// <param name="statusCode">
+		///		The HTTP status code.
+		/// </param>
+		/// <returns>
+		///		The configured <see cref="HttpClient"/>.
+		/// </returns>
+		public static HttpClient RespondWith(HttpStatusCode statusCode)
+		{
+			return new HttpClient(new MockMessageHandler(
+				request => request.CreateResponse(statusCode)
+			));
+		}
+
+		/// <summary>
+		///		Create an <see cref="HttpClient"/> that always responds to requests with the specified status code.
+		/// </summary>
+		/// <typeparam name="TBody">
+		///		The response body type.
+		/// </typeparam>
+		/// <param name="statusCode">
+		///		The HTTP status code.
+		/// </param>
+		/// <param name="body">
+		///		The response body (will be serialised as JSON).
+		/// </param>
+		/// <returns>
+		///		The configured <see cref="HttpClient"/>.
+		/// </returns>
+		public static HttpClient RespondWith<TBody>(HttpStatusCode statusCode, TBody body)
+		{
+			return new HttpClient(new MockMessageHandler(
+				request => request.CreateResponse(statusCode, body, WellKnownMediaTypes.Json, new JsonFormatter())
+			));
+		}
+
+		/// <summary>
+		///		Create an <see cref="HttpClient"/> that performs assertions on an incoming request message and returns a predefined (JSON-formatted) response.
 		/// </summary>
 		/// <typeparam name="TResponseBody">
 		///		The type to be sent as a response body.
@@ -29,15 +68,15 @@ namespace HTTPlease.Formatters.FunctionalTests
 		///		The <typeparamref name="TResponseBody"/> instance to be serialised into the outgoing response message.
 		/// </param>
 		/// <returns>
-		///		The configured <see cref="MockMessageHandler"/>.
+		///		The configured <see cref="HttpClient"/>.
 		/// </returns>
-		public static MockMessageHandler ExpectJson<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, TResponseBody responseBody)
+		public static HttpClient ExpectJson<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, TResponseBody responseBody)
 		{
 			return ExpectJson(expectedRequestUri, expectedRequestMethod, responseBody, assertion: null);
 		}
 
 		/// <summary>
-		///		Create a <see cref="MockMessageHandler"/> that performs assertions on an incoming request message and returns a predefined (JSON-formatted) response.
+		///		Create an <see cref="HttpClient"/> that performs assertions on an incoming request message and returns a predefined (JSON-formatted) response.
 		/// </summary>
 		/// <typeparam name="TResponseBody">
 		///		The type to be sent as a response body.
@@ -55,15 +94,15 @@ namespace HTTPlease.Formatters.FunctionalTests
 		///		A delegate that makes assertions about the incoming request message.
 		/// </param>
 		/// <returns>
-		///		The configured <see cref="MockMessageHandler"/>.
+		///		The configured <see cref="HttpClient"/>.
 		/// </returns>
-		public static MockMessageHandler ExpectJson<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, TResponseBody responseBody, Action<HttpRequestMessage> assertion)
+		public static HttpClient ExpectJson<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, TResponseBody responseBody, Action<HttpRequestMessage> assertion)
 		{
 			return ExpectJson(expectedRequestUri, expectedRequestMethod, HttpStatusCode.OK, responseBody, assertion);
 		}
 
 		/// <summary>
-		///		Create a <see cref="MockMessageHandler"/> that performs assertions on an incoming request message and returns a predefined (JSON-formatted) response.
+		///		Create an <see cref="HttpClient"/> that performs assertions on an incoming request message and returns a predefined (JSON-formatted) response.
 		/// </summary>
 		/// <typeparam name="TResponseBody">
 		///		The type to be sent as a response body.
@@ -84,15 +123,15 @@ namespace HTTPlease.Formatters.FunctionalTests
 		///		A delegate that makes assertions about the incoming request message.
 		/// </param>
 		/// <returns>
-		///		The configured <see cref="MockMessageHandler"/>.
+		///		The configured <see cref="HttpClient"/>.
 		/// </returns>
-		public static MockMessageHandler ExpectJson<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, HttpStatusCode responseStatusCode, TResponseBody responseBody, Action<HttpRequestMessage> assertion)
+		public static HttpClient ExpectJson<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, HttpStatusCode responseStatusCode, TResponseBody responseBody, Action<HttpRequestMessage> assertion)
 		{
 			return Expect(expectedRequestUri, expectedRequestMethod, responseStatusCode, responseBody, WellKnownMediaTypes.Json, new JsonFormatter(), assertion);
 		}
 
 		/// <summary>
-		///		Create a <see cref="MockMessageHandler"/> that performs assertions on an incoming request message and returns a predefined response.
+		///		Create an <see cref="HttpClient"/> that performs assertions on an incoming request message and returns a predefined response.
 		/// </summary>
 		/// <typeparam name="TResponseBody">
 		///		The type to be sent as a response body.
@@ -119,9 +158,9 @@ namespace HTTPlease.Formatters.FunctionalTests
 		///		A delegate that makes assertions about the incoming request message.
 		/// </param>
 		/// <returns>
-		///		The configured <see cref="MockMessageHandler"/>.
+		///		The configured <see cref="HttpClient"/>.
 		/// </returns>
-		public static MockMessageHandler Expect<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, HttpStatusCode responseStatusCode, TResponseBody responseBody, string responseMediaType, IOutputFormatter responseFormatter, Action<HttpRequestMessage> assertion)
+		public static HttpClient Expect<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, HttpStatusCode responseStatusCode, TResponseBody responseBody, string responseMediaType, IOutputFormatter responseFormatter, Action<HttpRequestMessage> assertion)
 		{
 			if (expectedRequestUri == null)
 				throw new ArgumentNullException(nameof(expectedRequestUri));
@@ -135,7 +174,7 @@ namespace HTTPlease.Formatters.FunctionalTests
 			if (responseFormatter == null)
 				throw new ArgumentNullException(nameof(responseFormatter));
 
-			return new MockMessageHandler(requestMessage =>
+			return new HttpClient(new MockMessageHandler(requestMessage =>
 			{
 				Xunit.Assert.NotNull(requestMessage);
 				Xunit.Assert.Equal(expectedRequestMethod, requestMessage.Method);
@@ -149,11 +188,11 @@ namespace HTTPlease.Formatters.FunctionalTests
 					responseMediaType,
 					new JsonFormatter()
 				);
-			});
+			}));
 		}
 
 		/// <summary>
-		///		Create a <see cref="MockMessageHandler"/> that performs assertions on an incoming request message and returns a predefined (JSON-formatted) response.
+		///		Create an <see cref="HttpClient"/> that performs assertions on an incoming request message and returns a predefined (JSON-formatted) response.
 		/// </summary>
 		/// <typeparam name="TResponseBody">
 		///		The type to be sent as a response body.
@@ -171,15 +210,15 @@ namespace HTTPlease.Formatters.FunctionalTests
 		///		A delegate that makes assertions about the incoming request message.
 		/// </param>
 		/// <returns>
-		///		The configured <see cref="MockMessageHandler"/>.
+		///		The configured <see cref="HttpClient"/>.
 		/// </returns>
-		public static MockMessageHandler ExpectJson<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, TResponseBody responseBody, Func<HttpRequestMessage, Task> asyncAssertion)
+		public static HttpClient ExpectJson<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, TResponseBody responseBody, Func<HttpRequestMessage, Task> asyncAssertion)
 		{
 			return ExpectJson(expectedRequestUri, expectedRequestMethod, HttpStatusCode.OK, responseBody, asyncAssertion);
 		}
 
 		/// <summary>
-		///		Create a <see cref="MockMessageHandler"/> that performs assertions on an incoming request message and returns a predefined (JSON-formatted) response.
+		///		Create an <see cref="HttpClient"/> that performs assertions on an incoming request message and returns a predefined (JSON-formatted) response.
 		/// </summary>
 		/// <typeparam name="TResponseBody">
 		///		The type to be sent as a response body.
@@ -200,15 +239,15 @@ namespace HTTPlease.Formatters.FunctionalTests
 		///		A delegate that makes assertions about the incoming request message.
 		/// </param>
 		/// <returns>
-		///		The configured <see cref="MockMessageHandler"/>.
+		///		The configured <see cref="HttpClient"/>.
 		/// </returns>
-		public static MockMessageHandler ExpectJson<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, HttpStatusCode responseStatusCode, TResponseBody responseBody, Func<HttpRequestMessage, Task> asyncAssertion)
+		public static HttpClient ExpectJson<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, HttpStatusCode responseStatusCode, TResponseBody responseBody, Func<HttpRequestMessage, Task> asyncAssertion)
 		{
 			return Expect(expectedRequestUri, expectedRequestMethod, responseStatusCode, responseBody, WellKnownMediaTypes.Json, new JsonFormatter(), asyncAssertion);
 		}
 
 		/// <summary>
-		///		Create a <see cref="MockMessageHandler"/> that performs assertions on an incoming request message and returns a predefined response.
+		///		Create an <see cref="HttpClient"/> that performs assertions on an incoming request message and returns a predefined response.
 		/// </summary>
 		/// <typeparam name="TResponseBody">
 		///		The type to be sent as a response body.
@@ -235,9 +274,9 @@ namespace HTTPlease.Formatters.FunctionalTests
 		///		An asynchronous delegate that makes assertions about the incoming request message.
 		/// </param>
 		/// <returns>
-		///		The configured <see cref="MockMessageHandler"/>.
+		///		The configured <see cref="HttpClient"/>.
 		/// </returns>
-		public static MockMessageHandler Expect<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, HttpStatusCode responseStatusCode, TResponseBody responseBody, string responseMediaType, IOutputFormatter responseFormatter, Func<HttpRequestMessage, Task> asyncAssertion)
+		public static HttpClient Expect<TResponseBody>(Uri expectedRequestUri, HttpMethod expectedRequestMethod, HttpStatusCode responseStatusCode, TResponseBody responseBody, string responseMediaType, IOutputFormatter responseFormatter, Func<HttpRequestMessage, Task> asyncAssertion)
 		{
 			if (expectedRequestUri == null)
 				throw new ArgumentNullException(nameof(expectedRequestUri));
@@ -251,7 +290,7 @@ namespace HTTPlease.Formatters.FunctionalTests
 			if (responseFormatter == null)
 				throw new ArgumentNullException(nameof(responseFormatter));
 
-			return new MockMessageHandler(async requestMessage =>
+			return new HttpClient(new MockMessageHandler(async requestMessage =>
 			{
 				Xunit.Assert.NotNull(requestMessage);
 				Xunit.Assert.Equal(expectedRequestMethod, requestMessage.Method);
@@ -267,7 +306,7 @@ namespace HTTPlease.Formatters.FunctionalTests
 					responseMediaType,
 					new JsonFormatter()
 				);
-			});
+			}));
 		}
 	}
 }

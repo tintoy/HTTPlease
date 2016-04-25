@@ -3,7 +3,7 @@ using System;
 using System.Net;
 using System.Net.Http;
 
-namespace HTTPlease.Formatters.FunctionalTests
+namespace HTTPlease.Formatters.Tests
 {
 	/// <summary>
 	/// 	Formatter-related extension methods for <see cref="HttpRequestMessage"/> / <see cref="HttpResponseMessage"/>.

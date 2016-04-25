@@ -5,53 +5,53 @@ using Xunit;
 
 namespace HTTPlease.Tests
 {
-	using Tests.Mocks;
+	using Mocks;
 
 	/// <summary>
-	///		Factory methods for <see cref="MockMessageHandler"/>s used by tests.
+	///		Factory methods for mocked <see cref="HttpClient"/>s used by tests.
 	/// </summary>
-    public static class TestMessageHandlers
+    public static class TestClients
 	{
 		/// <summary>
-		///		Create a <see cref="MockMessageHandler"/> that performs assertions on an incoming request message and returns a predefined response.
+		///		Create an <see cref="HttpClient"/> that performs assertions on an incoming request message and returns a predefined response.
 		/// </summary>
 		/// <param name="assertion">
 		///		A delegate that makes assertions about the incoming request message.
 		/// </param>
 		/// <returns>
-		///		The configured <see cref="MockMessageHandler"/>.
+		///		The configured <see cref="HttpClient"/>.
 		/// </returns>
-		public static MockMessageHandler Expect(Action<HttpRequestMessage> assertion)
+		public static HttpClient Expect(Action<HttpRequestMessage> assertion)
 		{
 			return Expect(HttpStatusCode.OK, assertion);
 		}
 
 		/// <summary>
-		///		Create a <see cref="MockMessageHandler"/> that performs assertions on an incoming request message and returns a predefined response.
+		///		Create an <see cref="HttpClient"/> that performs assertions on an incoming request message and returns a predefined response.
 		/// </summary>
-		/// <param name="statusCode">
+		/// <param name="responseStatusCode">
 		///		The HTTP status code for the outgoing response message.
 		/// </param>
 		/// <param name="assertion">
 		///		A delegate that makes assertions about the incoming request message.
 		/// </param>
 		/// <returns>
-		///		The configured <see cref="MockMessageHandler"/>.
+		///		The configured <see cref="HttpClient"/>.
 		/// </returns>
-		public static MockMessageHandler Expect(HttpStatusCode responseStatusCode, Action<HttpRequestMessage> assertion)
+		public static HttpClient Expect(HttpStatusCode responseStatusCode, Action<HttpRequestMessage> assertion)
 		{
-			return new MockMessageHandler(requestMessage =>
+			return new HttpClient(new MockMessageHandler(requestMessage =>
 			{
-				Xunit.Assert.NotNull(requestMessage);
+				Assert.NotNull(requestMessage);
 
 				assertion?.Invoke(requestMessage);
 
 				return requestMessage.CreateResponse(responseStatusCode);
-			});
+			}));
 		}
 
 		/// <summary>
-		///		Create a <see cref="MockMessageHandler"/> that performs assertions on an incoming request message and returns a predefined response.
+		///		Create an <see cref="HttpClient"/> that performs assertions on an incoming request message and returns a predefined response.
 		/// </summary>
 		/// <param name="expectedRequestUri">
 		///		The expected URI for the incoming request message.
@@ -66,9 +66,9 @@ namespace HTTPlease.Tests
 		///		A delegate that makes assertions about the incoming request message.
 		/// </param>
 		/// <returns>
-		///		The configured <see cref="MockMessageHandler"/>.
+		///		The configured <see cref="HttpClient"/>.
 		/// </returns>
-		public static MockMessageHandler Expect(Uri expectedRequestUri, HttpMethod expectedRequestMethod, HttpStatusCode responseStatusCode, Action<HttpRequestMessage> assertion)
+		public static HttpClient Expect(Uri expectedRequestUri, HttpMethod expectedRequestMethod, HttpStatusCode responseStatusCode, Action<HttpRequestMessage> assertion)
 		{
 			if (expectedRequestUri == null)
 				throw new ArgumentNullException(nameof(expectedRequestUri));
