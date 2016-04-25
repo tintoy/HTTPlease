@@ -48,7 +48,7 @@ namespace HTTPlease
 		/// <summary>
 		///		The default factory for <see cref="HttpRequest"/>s.
 		/// </summary>
-		public static HttpRequestFactory Factory { get; } = new HttpRequestFactory(Empty);
+		public static HttpRequestFactory Create { get; } = new HttpRequestFactory(Empty);
 
 		#endregion // Constants
 
@@ -72,40 +72,6 @@ namespace HTTPlease
 			EnsurePropertyType<ImmutableDictionary<string, IValueProvider<object, string>>>(
 				propertyName: nameof(QueryParameters)
 			);
-		}
-
-		/// <summary>
-		///		Create a new HTTP request.
-		/// </summary>
-		/// <param name="requestUri">
-		///		The request URI (can be relative or absolute).
-		/// </param>
-		/// <returns>
-		///		The new <see cref="HttpRequest"/>.
-		/// </returns>
-		public static HttpRequest Create(string requestUri)
-		{
-			if (String.IsNullOrWhiteSpace(requestUri))
-				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'requestUri'.", nameof(requestUri));
-
-			return Factory.Create(requestUri);
-		}
-
-		/// <summary>
-		///		Create a new HTTP request.
-		/// </summary>
-		/// <param name="requestUri">
-		///		The request URI (can be relative or absolute).
-		/// </param>
-		/// <returns>
-		///		The new <see cref="HttpRequest"/>.
-		/// </returns>
-		public static HttpRequest Create(Uri requestUri)
-		{
-			if (requestUri == null)
-				throw new ArgumentNullException(nameof(requestUri));
-
-			return Factory.Create(requestUri);
 		}
 
 		#endregion // Construction

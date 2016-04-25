@@ -19,7 +19,7 @@ namespace HTTPlease.Formatters.Json
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
 		/// </returns>
-		public static HttpRequest CreateJson(this HttpRequestFactory requestFactory, string requestUri)
+		public static HttpRequest JsonFromUri(this HttpRequestFactory requestFactory, string requestUri)
 		{
 			if (requestFactory == null)
 				throw new ArgumentNullException(nameof(requestFactory));
@@ -28,11 +28,9 @@ namespace HTTPlease.Formatters.Json
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'requestUri'.", nameof(requestUri));
 
 			return
-				requestFactory.Create(
-					new Uri(requestUri, UriKind.RelativeOrAbsolute)
-				)
-				.ExpectJson()
-				.UseJson();
+				requestFactory.FromUri(requestUri)
+					.ExpectJson()
+					.UseJson();
 		}
 
 		/// <summary>
@@ -47,7 +45,7 @@ namespace HTTPlease.Formatters.Json
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
 		/// </returns>
-		public static HttpRequest CreateJson(this HttpRequestFactory requestFactory, Uri requestUri)
+		public static HttpRequest JsonFromUri(this HttpRequestFactory requestFactory, Uri requestUri)
 		{
 			if (requestFactory == null)
 				throw new ArgumentNullException(nameof(requestFactory));
@@ -56,7 +54,7 @@ namespace HTTPlease.Formatters.Json
 				throw new ArgumentNullException(nameof(requestUri));
 
 			return
-				requestFactory.Create(requestUri)
+				requestFactory.FromUri(requestUri)
 					.ExpectJson()
 					.UseJson();
 		}

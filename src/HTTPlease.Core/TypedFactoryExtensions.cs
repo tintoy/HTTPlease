@@ -8,7 +8,7 @@ namespace HTTPlease
 	public static class TypedFactoryExtensions
     {
 		/// <summary>
-		///		Create a new HTTP request.
+		///		Create a new HTTP request with the specified request URI.
 		/// </summary>
 		/// <typeparam name="TContext">
 		///		The type of object used as a context for resolving deferred parameters.
@@ -22,7 +22,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
 		/// </returns>
-		public static HttpRequest<TContext> Create<TContext>(this HttpRequestFactory<TContext> requestFactory, string requestUri)
+		public static HttpRequest<TContext> FromUri<TContext>(this HttpRequestFactory<TContext> requestFactory, string requestUri)
 		{
 			if (requestFactory == null)
 				throw new ArgumentNullException(nameof(requestFactory));
@@ -30,7 +30,7 @@ namespace HTTPlease
 			if (String.IsNullOrWhiteSpace(requestUri))
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'requestUri'.", nameof(requestUri));
 
-			return requestFactory.Create(
+			return requestFactory.FromUri(
 				new Uri(requestUri, UriKind.RelativeOrAbsolute)
 			);
 		}

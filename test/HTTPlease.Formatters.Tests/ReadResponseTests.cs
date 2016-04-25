@@ -15,7 +15,7 @@ namespace HTTPlease.Formatters.Tests
 		/// <summary>
 		///		The default request used for tests.
 		/// </summary>
-		static readonly HttpRequest DefaultRequest = HttpRequest.Factory.Create("http://localhost/");
+		static readonly HttpRequest DefaultRequest = HttpRequest.Create.FromUri("http://localhost/");
 
 		/// <summary>
 		///		Create a new response-read test suite.
