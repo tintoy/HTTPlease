@@ -1,23 +1,19 @@
 ﻿using System;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
 using Xunit;
 
 namespace HTTPlease.Tests
 {
-	using Mocks;
-
 	/// <summary>
 	///		Unit-tests for <see cref="HttpRequest"/>.
 	/// </summary>
 	public sealed class RequestBuilderTests
 	{
 		/// <summary>
-		///		Verify that a request builder can build a request with an absolute and then relative template URI.
+		///		Verify that a request builder can build a message with an absolute and then relative template URI.
 		/// </summary>
 		[Fact]
-		public void Can_Build_Request_RelativeTemplateUri()
+		public void Request_RelativeTemplateUri_BuildMessage()
 		{
 			Uri baseUri = new Uri("http://localhost:1234/");
 
@@ -36,10 +32,10 @@ namespace HTTPlease.Tests
 		}
 
 		/// <summary>
-		///		Verify that a request builder can build a request with an absolute and then relative template URI with deferred values.
+		///		Verify that a request builder can build a message with an absolute and then relative template URI with deferred values.
 		/// </summary>
 		[Fact]
-		public void Can_Build_Request_RelativeTemplateUri_DeferredValues()
+		public void Request_RelativeTemplateUri_DeferredValues_BuildMessage()
 		{
 			Uri baseUri = new Uri("http://localhost:1234/");
 
@@ -73,10 +69,10 @@ namespace HTTPlease.Tests
 		}
 
 		/// <summary>
-		///		Verify that a request builder can build a request with an absolute and then relative template URI (with query parameters) .
+		///		Verify that a request builder can build a message with an absolute and then relative template URI (with query parameters) .
 		/// </summary>
 		[Fact]
-		public void Can_Build_Request_RelativeTemplateUriWithQuery()
+		public void Request_RelativeTemplateUriWithQuery_BuildMessage()
 		{
 			Uri baseUri = new Uri("http://localhost:1234/");
 
@@ -99,7 +95,7 @@ namespace HTTPlease.Tests
 		///		Verify that a request builder can build a request with an absolute and then relative template URI (with query parameters) with deferred values.
 		/// </summary>
 		[Fact]
-		public void Can_Build_Request_RelativeTemplateUriWithQuery_DeferredValues()
+		public void Request_RelativeTemplateUriWithQuery_DeferredValues_Build()
 		{
 			Uri baseUri = new Uri("http://localhost:1234/");
 
@@ -139,7 +135,7 @@ namespace HTTPlease.Tests
 		///		Verify that a request builder can build a request with an absolute and then relative URI with query parameters.
 		/// </summary>
 		[Fact]
-		public void Can_Build_Request_RelativeUriWithQuery()
+		public void Request_RelativeUriWithQuery_Build()
 		{
 			Uri baseUri = new Uri("http://localhost:1234/");
 
@@ -160,7 +156,7 @@ namespace HTTPlease.Tests
 		///		Verify that a request builder can build a request with an absolute and then relative URI with query parameters that have deferred values.
 		/// </summary>
 		[Fact]
-		public void Can_Build_Request_RelativeUriWithQuery_DeferredValues()
+		public void Request_RelativeUriWithQuery_DeferredValues_Build()
 		{
 			Uri baseUri = new Uri("http://localhost:1234/");
 

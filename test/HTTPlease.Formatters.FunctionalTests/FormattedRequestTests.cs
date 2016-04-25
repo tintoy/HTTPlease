@@ -1,6 +1,5 @@
 using HTTPlease.Tests.Mocks;
 using System;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
@@ -22,7 +21,7 @@ namespace HTTPlease.Formatters.FunctionalTests
 		/// <summary>
 		///		The base <see cref="HttpRequest"/> definition used by tests.
 		/// </summary>
-		static readonly HttpRequest BaseRequest	= HttpRequest.Create(BaseUri);
+		static readonly HttpRequest BaseRequest	= HttpRequest.Factory.Create(BaseUri);
 
 		/// <summary>
 		///		Verify that a request builder can build a request with an absolute and then relative template URI, then perform an HTTP GET request.

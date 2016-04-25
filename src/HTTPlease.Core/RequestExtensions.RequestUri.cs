@@ -92,8 +92,6 @@ namespace HTTPlease
 		/// </param>
 		/// <param name="requestUri">
 		///		The new request URI.
-		/// 
-		///		Must be an absolute URI (otherwise, use <see cref="WithRelativeRequestUri(HttpRequest, Uri)"/>).
 		/// </param>
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
@@ -105,9 +103,6 @@ namespace HTTPlease
 
 			if (requestUri == null)
 				throw new ArgumentNullException(nameof(requestUri));
-
-			if (!requestUri.IsAbsoluteUri)
-				throw new ArgumentException("The specified URI is not an absolute URI.", nameof(requestUri));
 
 			return request.Clone(properties =>
 			{

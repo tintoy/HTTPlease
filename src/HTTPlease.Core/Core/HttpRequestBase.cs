@@ -240,6 +240,21 @@ namespace HTTPlease.Core
 		protected abstract HttpRequestBase CreateInstance(ImmutableDictionary<string, object> requestProperties);
 
 		#endregion // Cloning
+
+		#region ToString
+
+		/// <summary>
+		///		Convert the HTTP request to a textual representation.
+		/// </summary>
+		/// <returns>
+		///		The textual representation.
+		/// </returns>
+		public override string ToString()
+		{
+			return $"HTTP Request ({RequestUri?.ToString() ?? "empty"})";
+		}
+
+		#endregion // ToString
 	}
 }
 

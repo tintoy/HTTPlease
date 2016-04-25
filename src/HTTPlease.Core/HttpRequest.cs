@@ -40,6 +40,16 @@ namespace HTTPlease
 			}
 			.ToImmutableDictionary();
 
+		/// <summary>
+		///		An empty <see cref="HttpRequest"/>.
+		/// </summary>
+		public static HttpRequest Empty = new HttpRequest(BaseProperties);
+
+		/// <summary>
+		///		The default factory for <see cref="HttpRequest"/>s.
+		/// </summary>
+		public static HttpRequestFactory Factory { get; } = new HttpRequestFactory(Empty);
+
 		#endregion // Constants
 
 		#region Construction
@@ -78,9 +88,7 @@ namespace HTTPlease
 			if (String.IsNullOrWhiteSpace(requestUri))
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'requestUri'.", nameof(requestUri));
 
-			return Create(
-				new Uri(requestUri, UriKind.RelativeOrAbsolute)
-			);
+			return Factory.Create(requestUri);
 		}
 
 		/// <summary>
@@ -97,14 +105,7 @@ namespace HTTPlease
 			if (requestUri == null)
 				throw new ArgumentNullException(nameof(requestUri));
 
-			RequestProperties.Builder properties = BaseProperties.ToBuilder();
-
-			properties[nameof(RequestUri)] = requestUri;
-			properties[nameof(IsUriTemplate)] = UriTemplate.IsTemplate(requestUri);
-
-			return new HttpRequest(
-				properties.ToImmutable()
-			);
+			return Factory.Create(requestUri);
 		}
 
 		#endregion // Construction
