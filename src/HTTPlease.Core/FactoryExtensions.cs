@@ -8,7 +8,7 @@ namespace HTTPlease
 	public static class FactoryExtensions
     {
 		/// <summary>
-		///		Create a new HTTP request.
+		///		Create a new HTTP request with the specified request URI.
 		/// </summary>
 		/// <param name="requestFactory">
 		///		The HTTP request factory.
@@ -19,7 +19,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
 		/// </returns>
-		public static HttpRequest Create(this HttpRequestFactory requestFactory, string requestUri)
+		public static HttpRequest FromUri(this HttpRequestFactory requestFactory, string requestUri)
 		{
 			if (requestFactory == null)
 				throw new ArgumentNullException(nameof(requestFactory));
@@ -27,7 +27,7 @@ namespace HTTPlease
 			if (String.IsNullOrWhiteSpace(requestUri))
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'requestUri'.", nameof(requestUri));
 
-			return requestFactory.Create(
+			return requestFactory.FromUri(
 				new Uri(requestUri, UriKind.RelativeOrAbsolute)
 			);
 		}

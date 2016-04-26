@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace HTTPlease.Tests.Mocks
+namespace HTTPlease.Testability.Mocks
 {
 	/// <summary>
 	///		Mock <see cref="DelegatingHandler"/> that calls an arbitrary delegate to receive and respond to a message.

@@ -40,7 +40,7 @@ namespace HTTPlease
 		/// <summary>
 		///		The default factory for <see cref="HttpRequest{TContext}"/>s.
 		/// </summary>
-		public static HttpRequestFactory<TContext> Factory { get; } = new HttpRequestFactory<TContext>(Empty);
+		public static HttpRequestFactory<TContext> Create { get; } = new HttpRequestFactory<TContext>(Empty);
 
 		#endregion // Constants
 
@@ -64,40 +64,6 @@ namespace HTTPlease
 			EnsurePropertyType<ImmutableDictionary<string, IValueProvider<TContext, string>>>(
 				propertyName: nameof(QueryParameters)
 			);
-		}
-
-		/// <summary>
-		///		Create a new HTTP request.
-		/// </summary>
-		/// <param name="requestUri">
-		///		The request URI (can be relative or absolute).
-		/// </param>
-		/// <returns>
-		///		The new <see cref="HttpRequest"/>.
-		/// </returns>
-		public static HttpRequest<TContext> Create(string requestUri)
-		{
-			if (String.IsNullOrWhiteSpace(requestUri))
-				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'requestUri'.", nameof(requestUri));
-
-			return Factory.Create(requestUri);
-		}
-
-		/// <summary>
-		///		Create a new HTTP request.
-		/// </summary>
-		/// <param name="requestUri">
-		///		The request URI (can be relative or absolute).
-		/// </param>
-		/// <returns>
-		///		The new <see cref="HttpRequest"/>.
-		/// </returns>
-		public static HttpRequest<TContext> Create(Uri requestUri)
-		{
-			if (requestUri == null)
-				throw new ArgumentNullException(nameof(requestUri));
-
-			return Factory.Create(requestUri);
 		}
 
 		#endregion // Construction

@@ -1,13 +1,28 @@
-{
+﻿{
     "version": "1.0.0-alpha1",
-    "description": "Functional (integration) tests for HTTPlease.Formatters",
-    "authors": [ "tintoy" ],
-    "tags": [ "" ],
-    "projectUrl": "",
-    "licenseUrl": "",
+    "title": "HTTPlease Testability",
+    "summary": "Testability support for HTTPlease",
+    "description": "Request / response mocking and other test-related functionality for HTTPlease Immutable HTTP templates",
+    "authors": [
+        "tintoy@tintoy.io"
+    ],
+    "copyright": "Copyright © Adam Friedman 2016",
+    "owners": [
+        "tintoy@tintoy.io"
+    ],
+    "tags": [
+        "HTTP",
+        "HTTPlease",
+        "Template",
+        "Immutable",
+        "Test",
+        "Testability"
+    ],
+    "projectUrl": "https://github.com/tintoy/HTTPlease",
+    "licenseUrl": "https://raw.githubusercontent.com/tintoy/HTTPlease/development/r1.0/LICENSE",
 
     "tooling": {
-        "defaultNamespace": "HTTPlease.Formatters.FunctionalTests"
+        "defaultNamespace": "HTTPlease.Testability"
     },
 
     "frameworks": {
@@ -28,16 +43,10 @@
         "HTTPlease.Core": "1.0.0-alpha1",
         "HTTPlease.Formatters": "1.0.0-alpha1",
         "HTTPlease.Formatters.Json": "1.0.0-alpha1",
-        "HTTPlease.Formatters.Tests": "1.0.0-alpha1",
-        "HTTPlease.Testability.Xunit": "1.0.0-alpha1",
         "System.Collections.Concurrent": "4.0.11-beta-23516",
         "System.Collections.Immutable": "1.1.37",
         "System.Net.Http": "4.0.1-beta-23516",
         "xunit": "2.1.0",
         "xunit.runner.dnx": "2.1.0-rc1-build204"
-    },
-
-    "commands": {
-        "test": "xunit.runner.dnx"
     }
 }
