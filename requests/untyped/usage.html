@@ -172,35 +172,41 @@
         <span class="c1">// If variable 2 is given a value (&quot;hello world&quot;), the request URI will be:</span>
         <span class="c1">//      http://localhost:1234/api/1234/foo/hello%20world/bar?diddly=bonk</span>
 
-        <span class="n">ExampleResponseBody</span> <span class="n">responseBody</span><span class="p">;</span>
+        <span class="c1">// For the most ceremony-free way possible:</span>
 
-        <span class="c1">// If you want full control of response handling:</span>
+        <span class="c1">// Uses appropriate formatter configured above by calling UseJson.</span>
+        <span class="n">ExampleResponseBody</span> <span class="n">responseBody</span> <span class="p">=</span>
+                <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+                        <span class="p">.</span><span class="n">ReadAsAsync</span><span class="p">&lt;</span><span class="n">ExampleResponseBody</span><span class="p">&gt;();</span>
+
+        <span class="c1">// Or, for something a bit more verbose that enables more flexible status code and serialisation handling:</span>
 
         <span class="k">using</span> <span class="p">(</span><span class="n">HttpResponseMessage</span> <span class="n">response</span> <span class="p">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
         <span class="p">{</span>
+                <span class="c1">// Handle specific status code differently.</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">StatusCode</span> <span class="p">==</span> <span class="n">HttpStatusCode</span><span class="p">.</span><span class="n">NotFound</span> <span class="p">||</span> <span class="n">response</span><span class="p">.</span><span class="n">StatusCode</span> <span class="p">==</span> <span class="n">HttpStatusCode</span><span class="p">.</span><span class="n">BadRequest</span><span class="p">)</span>
+                <span class="p">{</span>
+                        <span class="n">ErrorResponseBody</span> <span class="n">errorResponseBody</span> <span class="p">=</span> <span class="k">await</span> <span class="n">response</span><span class="p">.</span><span class="n">ReadContentAsAsync</span><span class="p">&lt;</span><span class="n">ErrorResponseBody</span><span class="p">&gt;();</span>
+
+                        <span class="k">throw</span> <span class="k">new</span> <span class="n">HttpRequestException</span><span class="p">&lt;</span><span class="n">ErrorResponseBody</span><span class="p">&gt;(</span><span class="n">errorResponseBody</span><span class="p">);</span>
+                <span class="p">}</span>
+
+                <span class="n">response</span><span class="p">.</span><span class="n">EnsureSuccessStatusCode</span><span class="p">();</span>
+
+                <span class="n">responseBody</span> <span class="p">=</span> <span class="k">await</span> <span class="n">response</span><span class="p">.</span><span class="n">ReadContentAsAsync</span><span class="p">&lt;</span><span class="n">ExampleResponseBody</span><span class="p">&gt;();</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Or, if you want full control of response / content handling:</span>
+
+        <span class="k">using</span> <span class="p">(</span><span class="n">HttpResponseMessage</span> <span class="n">response</span> <span class="p">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
+        <span class="p">{</span>
+                <span class="c1">// Perform any response message processing required.</span>
+
                 <span class="n">response</span><span class="p">.</span><span class="n">EnsureSuccessStatusCode</span><span class="p">();</span>
 
                 <span class="c1">// If reading directly from the content you&#39;ll have to specify the content formatter to use.</span>
                 <span class="n">responseBody</span> <span class="p">=</span> <span class="k">await</span> <span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">.</span><span class="n">ReadAsAsync</span><span class="p">&lt;</span><span class="n">ExampleResponseBody</span><span class="p">&gt;(</span><span class="k">new</span> <span class="n">JsonFormatter</span><span class="p">());</span>
         <span class="p">}</span>
-
-        <span class="c1">// Or, for something a bit less verbose:</span>
-
-        <span class="k">using</span> <span class="p">(</span><span class="n">HttpResponseMessage</span> <span class="n">response</span> <span class="p">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
-        <span class="p">{</span>
-                <span class="n">response</span><span class="p">.</span><span class="n">EnsureSuccessStatusCode</span><span class="p">();</span>
-
-                <span class="c1">// Uses appropriate formatter configured above by calling UseJson.</span>
-                <span class="n">responseBody</span> <span class="p">=</span> <span class="k">await</span> <span class="n">response</span><span class="p">.</span><span class="n">ReadContentAsAsync</span><span class="p">&lt;</span><span class="n">ExampleResponseBody</span><span class="p">&gt;();</span>
-        <span class="p">}</span>
-
-        <span class="c1">// Or, for the most ceremony-free way possible:</span>
-
-        <span class="c1">// Uses appropriate formatter configured above by calling UseJson.</span>
-        <span class="n">ExampleResponseBody</span> <span class="n">responseBody</span> <span class="p">=</span>
-                <span class="k">await</span> <span class="n">client</span>
-                        <span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
-                        <span class="p">.</span><span class="n">ReadAsAsync</span><span class="p">&lt;</span><span class="n">ExampleResponseBody</span><span class="p">&gt;();</span>
 <span class="p">}</span>
 </pre></div>
 </div>
