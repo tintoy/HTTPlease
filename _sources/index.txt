@@ -26,6 +26,7 @@ Contents:
 
    clients/index
    requests/index
+   Extensibility <extensibility/index>
 
 Indices and tables
 ==================

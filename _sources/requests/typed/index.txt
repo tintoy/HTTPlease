@@ -8,4 +8,4 @@ So while HttpRequest tends to be used either for non-parameterised requests (i.e
 .. toctree::
    :maxdepth: 2
 
-   usage
+   Usage <usage>

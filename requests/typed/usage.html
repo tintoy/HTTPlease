@@ -32,6 +32,7 @@
   
     <link rel="top" title="HTTPlease 1.0.0-alpha1 documentation" href="../../index.html"/>
         <link rel="up" title="HttpRequest&lt;TContext&gt;" href="index.html"/>
+        <link rel="next" title="Extending HTTPlease" href="../../extensibility/index.html"/>
         <link rel="prev" title="HttpRequest&lt;TContext&gt;" href="index.html"/> 
 
   
@@ -86,11 +87,12 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Requests</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../untyped/index.html">HttpRequest</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="index.html">HttpRequest&lt;TContext&gt;</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Using HttpRequest&lt;TContext&gt;</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Usage</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../extensibility/index.html">Extensibility</a></li>
 </ul>
 
             
@@ -143,9 +145,9 @@
 
 <span class="k">class</span> <span class="nc">ExampleRequestContext</span>
 <span class="p">{</span>
-        <span class="k">public</span> <span class="kt">string</span> <span class="n">Action</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-        <span class="k">public</span> <span class="kt">int</span> <span class="n">Id</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-        <span class="k">public</span> <span class="kt">bool?</span> <span class="n">Flag</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Action</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">Id</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">bool?</span> <span class="n">Flag</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 <span class="p">}</span>
 
 <span class="c1">// Some examples using the request context.</span>
@@ -154,31 +156,31 @@
 
 <span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">httpClient</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span><span class="p">())</span>
 <span class="p">{</span>
-        <span class="n">HttpRequest</span><span class="p">&lt;</span><span class="n">ExampleRequestContext</span><span class="p">&gt;</span> <span class="n">requestBuilder</span> <span class="p">=</span>
-                <span class="n">HttpRequest</span><span class="p">&lt;</span><span class="n">ExampleRequestContext</span><span class="p">&gt;.</span><span class="n">Create</span><span class="p">.</span><span class="n">FromUri</span><span class="p">(</span><span class="s">&quot;http://localhost:1234/&quot;</span><span class="p">)</span>
-                        <span class="p">.</span><span class="n">WithRelativeRequestUri</span><span class="p">(</span><span class="s">&quot;{action}/{id}?flag={flag?}&quot;</span><span class="p">)</span>
-                        <span class="p">.</span><span class="n">WithTemplateParameter</span><span class="p">(</span><span class="s">&quot;action&quot;</span><span class="p">,</span> <span class="n">context</span> <span class="p">=&gt;</span> <span class="n">context</span><span class="p">.</span><span class="n">Action</span><span class="p">)</span>
-                        <span class="p">.</span><span class="n">WithTemplateParameter</span><span class="p">(</span><span class="s">&quot;id&quot;</span><span class="p">,</span> <span class="n">context</span> <span class="p">=&gt;</span> <span class="n">context</span><span class="p">.</span><span class="n">Id</span><span class="p">)</span>
-                        <span class="p">.</span><span class="n">WithTemplateParameter</span><span class="p">(</span><span class="s">&quot;flag&quot;</span><span class="p">,</span> <span class="n">context</span> <span class="p">=&gt;</span> <span class="n">context</span><span class="p">.</span><span class="n">Flag</span><span class="p">);</span>
+    <span class="n">HttpRequest</span><span class="p">&lt;</span><span class="n">ExampleRequestContext</span><span class="p">&gt;</span> <span class="n">requestBuilder</span> <span class="p">=</span>
+      <span class="n">HttpRequest</span><span class="p">&lt;</span><span class="n">ExampleRequestContext</span><span class="p">&gt;.</span><span class="n">Create</span><span class="p">.</span><span class="n">FromUri</span><span class="p">(</span><span class="s">&quot;http://localhost:1234/&quot;</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">WithRelativeRequestUri</span><span class="p">(</span><span class="s">&quot;{action}/{id}?flag={flag?}&quot;</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">WithTemplateParameter</span><span class="p">(</span><span class="s">&quot;action&quot;</span><span class="p">,</span> <span class="n">context</span> <span class="p">=&gt;</span> <span class="n">context</span><span class="p">.</span><span class="n">Action</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">WithTemplateParameter</span><span class="p">(</span><span class="s">&quot;id&quot;</span><span class="p">,</span> <span class="n">context</span> <span class="p">=&gt;</span> <span class="n">context</span><span class="p">.</span><span class="n">Id</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">WithTemplateParameter</span><span class="p">(</span><span class="s">&quot;flag&quot;</span><span class="p">,</span> <span class="n">context</span> <span class="p">=&gt;</span> <span class="n">context</span><span class="p">.</span><span class="n">Flag</span><span class="p">);</span>
 
-        <span class="n">context</span><span class="p">.</span><span class="n">Action</span> <span class="p">=</span> <span class="s">&quot;foo&quot;</span><span class="p">;</span>
-        <span class="n">context</span><span class="p">.</span><span class="n">Id</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
-        <span class="n">context</span><span class="p">.</span><span class="n">Flag</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+    <span class="n">context</span><span class="p">.</span><span class="n">Action</span> <span class="p">=</span> <span class="s">&quot;foo&quot;</span><span class="p">;</span>
+    <span class="n">context</span><span class="p">.</span><span class="n">Id</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+    <span class="n">context</span><span class="p">.</span><span class="n">Flag</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
 
-        <span class="c1">// Request URI will be &quot;http://localhost:1234/foo/1?flag=True&quot;.</span>
-        <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">requestBuilder</span><span class="p">,</span> <span class="n">context</span><span class="p">);</span>
+    <span class="c1">// Request URI will be &quot;http://localhost:1234/foo/1?flag=True&quot;.</span>
+    <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">requestBuilder</span><span class="p">,</span> <span class="n">context</span><span class="p">);</span>
 
-        <span class="n">context</span><span class="p">.</span><span class="n">Flag</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+    <span class="n">context</span><span class="p">.</span><span class="n">Flag</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
 
-        <span class="c1">// Request URI will be &quot;http://localhost:1234/foo/1?flag=False&quot;.</span>
-        <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">requestBuilder</span><span class="p">,</span> <span class="n">context</span><span class="p">);</span>
+    <span class="c1">// Request URI will be &quot;http://localhost:1234/foo/1?flag=False&quot;.</span>
+    <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">requestBuilder</span><span class="p">,</span> <span class="n">context</span><span class="p">);</span>
 
-        <span class="n">context</span><span class="p">.</span><span class="n">Action</span> <span class="p">=</span> <span class="s">&quot;diddly&quot;</span><span class="p">;</span>
-        <span class="n">context</span><span class="p">.</span><span class="n">Id</span> <span class="p">=</span> <span class="p">-</span><span class="m">17</span><span class="p">;</span>
-        <span class="n">context</span><span class="p">.</span><span class="n">Flag</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+    <span class="n">context</span><span class="p">.</span><span class="n">Action</span> <span class="p">=</span> <span class="s">&quot;diddly&quot;</span><span class="p">;</span>
+    <span class="n">context</span><span class="p">.</span><span class="n">Id</span> <span class="p">=</span> <span class="p">-</span><span class="m">17</span><span class="p">;</span>
+    <span class="n">context</span><span class="p">.</span><span class="n">Flag</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
 
-        <span class="c1">// Request URI will be &quot;http://localhost:1234/diddly/-17&quot;.</span>
-        <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">requestBuilder</span><span class="p">,</span> <span class="n">context</span><span class="p">);</span>
+    <span class="c1">// Request URI will be &quot;http://localhost:1234/diddly/-17&quot;.</span>
+    <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">requestBuilder</span><span class="p">,</span> <span class="n">context</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -190,6 +192,8 @@
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../../extensibility/index.html" class="btn btn-neutral float-right" title="Extending HTTPlease" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="index.html" class="btn btn-neutral" title="HttpRequest&lt;TContext&gt;" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>

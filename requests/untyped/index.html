@@ -32,7 +32,7 @@
   
     <link rel="top" title="HTTPlease 1.0.0-alpha1 documentation" href="../../index.html"/>
         <link rel="up" title="Requests" href="../index.html"/>
-        <link rel="next" title="HttpRequest&lt;TContext&gt;" href="../typed/index.html"/>
+        <link rel="next" title="Using HttpRequest" href="usage.html"/>
         <link rel="prev" title="Requests" href="../index.html"/> 
 
   
@@ -85,10 +85,14 @@
                 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../clients/index.html">Clients</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Requests</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">HttpRequest</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">HttpRequest</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usage.html">Usage</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../typed/index.html">HttpRequest&lt;TContext&gt;</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../extensibility/index.html">Extensibility</a></li>
 </ul>
 
             
@@ -135,7 +139,17 @@
             
   <div class="section" id="httprequest">
 <h1>HttpRequest<a class="headerlink" href="#httprequest" title="Permalink to this headline">¶</a></h1>
-<p>TODO: Talk about <code class="docutils literal"><span class="pre">HttpRequest</span></code>.</p>
+<p>Think of <cite>HttpRequest</cite> as a template for creating an <a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.net.http.httprequestmessage(v=vs.118).aspx">HttpRequestMessage</a>.</p>
+<p>At its heart, it is a collection of configuration actions (and any data required to support those actions) that are invoked against each outgoing request message.</p>
+<p>Because its functionality is expressed in terms of actions, it is trivially easy to write your own domain-specific extensions for <cite>HttpRequest</cite> (see the section on <a class="reference external" href="../../extensibility/index">extensibility</a> for details).</p>
+<p>A powerful feature of HTTPlease is that the data used by those actions is resolved at the time each outgoing <cite>HttpRequestMessage</cite> is created (rather than when the <cite>HttpRequest</cite> template is created).</p>
+<p>This enables each <cite>HttpRequest</cite> to be immutable; each change (or sequence of changes) to the <cite>HttpRequest</cite> produces a new <cite>HttpRequest</cite> that only captures the differences from the previous <cite>HttpRequest</cite>.</p>
+<p><cite>HttpRequest</cite> uses an <a class="reference external" href="https://msdn.microsoft.com/en-us/library/dn467181%28v=vs.111%29.aspx">ImmutableDictionary</a> to store its properties.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+</ul>
+</div>
 </div>
 
 
@@ -145,7 +159,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../typed/index.html" class="btn btn-neutral float-right" title="HttpRequest&lt;TContext&gt;" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="usage.html" class="btn btn-neutral float-right" title="Using HttpRequest" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="../index.html" class="btn btn-neutral" title="Requests" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
