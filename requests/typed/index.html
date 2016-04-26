@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>HttpRequest &mdash; HTTPlease 1.0.0-alpha1 documentation</title>
+  <title>HttpRequest&lt;TContext&gt; &mdash; HTTPlease 1.0.0-alpha1 documentation</title>
   
 
   
@@ -31,8 +31,9 @@
 
   
     <link rel="top" title="HTTPlease 1.0.0-alpha1 documentation" href="../../index.html"/>
-        <link rel="next" title="HttpRequest&lt;TContext&gt;" href="../typed/index.html"/>
-        <link rel="prev" title="Using HttpClientBuilder" href="../../client-builder/usage.html"/> 
+        <link rel="up" title="Requests" href="../index.html"/>
+        <link rel="next" title="Using HttpRequest&lt;TContext&gt;" href="usage.html"/>
+        <link rel="prev" title="HttpRequest" href="../untyped/index.html"/> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
@@ -82,9 +83,15 @@
             
             
                 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../client-builder/index.html">HttpClientBuilder</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">HttpRequest</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../typed/index.html">HttpRequest&lt;TContext&gt;</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../clients/index.html">Clients</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Requests</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../untyped/index.html">HttpRequest</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">HttpRequest&lt;TContext&gt;</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usage.html">Using HttpRequest&lt;TContext&gt;</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
             
@@ -115,7 +122,9 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../../index.html">Docs</a> &raquo;</li>
       
-    <li>HttpRequest</li>
+          <li><a href="../index.html">Requests</a> &raquo;</li>
+      
+    <li>HttpRequest&lt;TContext&gt;</li>
       <li class="wy-breadcrumbs-aside">
         
           
@@ -127,9 +136,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="httprequest">
-<h1>HttpRequest<a class="headerlink" href="#httprequest" title="Permalink to this headline">¶</a></h1>
-<p>TODO: Talk about <code class="docutils literal"><span class="pre">HttpRequest</span></code>.</p>
+  <div class="section" id="httprequest-tcontext">
+<h1>HttpRequest&lt;TContext&gt;<a class="headerlink" href="#httprequest-tcontext" title="Permalink to this headline">¶</a></h1>
+<p><code class="docutils literal"><span class="pre">HttpRequest&lt;TContext&gt;</span></code> is much the same as <code class="docutils literal"><span class="pre">HttpRequest</span></code>, except that it supports resolving deferred values from an object supplied when the request is built / invoked.</p>
+<p>So while HttpRequest tends to be used either for non-parameterised requests (i.e. simply as an HTTP request DLS), <code class="docutils literal"><span class="pre">HttpRequest&lt;TContext&gt;</span></code> is more commonly constructed once and cached (e.g. in a static read-only field) and its parameters get their values at runtime.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Using HttpRequest&lt;TContext&gt;</a></li>
+</ul>
+</div>
 </div>
 
 
@@ -139,10 +154,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../typed/index.html" class="btn btn-neutral float-right" title="HttpRequest&lt;TContext&gt;" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="usage.html" class="btn btn-neutral float-right" title="Using HttpRequest&lt;TContext&gt;" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../../client-builder/usage.html" class="btn btn-neutral" title="Using HttpClientBuilder" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../untyped/index.html" class="btn btn-neutral" title="HttpRequest" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
