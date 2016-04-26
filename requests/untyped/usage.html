@@ -143,8 +143,8 @@
 <h1>Using HttpRequest<a class="headerlink" href="#using-httprequest" title="Permalink to this headline">¶</a></h1>
 <div class="highlight-csharp"><div class="highlight"><pre><span class="k">class</span> <span class="nc">ExampleResponseBody</span>
 <span class="p">{</span>
-        <span class="k">public</span> <span class="kt">string</span> <span class="n">Message</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-        <span class="k">public</span> <span class="kt">int</span> <span class="n">ErrorCode</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Message</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">ErrorCode</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 <span class="p">}</span>
 
 <span class="c1">// Our base request definition.</span>
@@ -154,59 +154,59 @@
 
 <span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span><span class="p">())</span>
 <span class="p">{</span>
-        <span class="kt">string</span> <span class="n">variable2</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="n">variable2</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
 
-        <span class="n">HttpRequest</span> <span class="n">request</span> <span class="p">=</span>
-                <span class="n">baseRequest</span><span class="p">.</span><span class="n">WithRelativeRequestUri</span><span class="p">(</span><span class="s">&quot;api/{variable1}/foo/{variable2}/bar&quot;</span><span class="p">)</span>
-                        <span class="p">.</span><span class="n">WithQueryParameter</span><span class="p">(</span><span class="s">&quot;diddly&quot;</span><span class="p">,</span> <span class="s">&quot;bonk&quot;</span><span class="p">)</span>
-                        <span class="p">.</span><span class="n">WithTemplateParameter</span><span class="p">(</span><span class="s">&quot;variable1&quot;</span><span class="p">,</span> <span class="m">1234</span><span class="p">)</span> <span class="c1">// Use constant value</span>
-                        <span class="p">.</span><span class="n">WithTemplateParameter</span><span class="p">(</span><span class="s">&quot;variable2&quot;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="n">variable2</span><span class="p">)</span> <span class="c1">// Get value when request is invoked</span>
-                        <span class="p">.</span><span class="n">UseJson</span><span class="p">()</span> <span class="c1">// Use Newtonsoft.Json for serialisation</span>
-                        <span class="p">.</span><span class="n">ExpectJson</span><span class="p">();</span> <span class="c1">// Set the Accept header to &quot;application/json&quot;</span>
+    <span class="n">HttpRequest</span> <span class="n">request</span> <span class="p">=</span>
+        <span class="n">baseRequest</span><span class="p">.</span><span class="n">WithRelativeRequestUri</span><span class="p">(</span><span class="s">&quot;api/{variable1}/foo/{variable2}/bar&quot;</span><span class="p">)</span>
+            <span class="p">.</span><span class="n">WithQueryParameter</span><span class="p">(</span><span class="s">&quot;diddly&quot;</span><span class="p">,</span> <span class="s">&quot;bonk&quot;</span><span class="p">)</span>
+            <span class="p">.</span><span class="n">WithTemplateParameter</span><span class="p">(</span><span class="s">&quot;variable1&quot;</span><span class="p">,</span> <span class="m">1234</span><span class="p">)</span> <span class="c1">// Use constant value</span>
+            <span class="p">.</span><span class="n">WithTemplateParameter</span><span class="p">(</span><span class="s">&quot;variable2&quot;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="n">variable2</span><span class="p">)</span> <span class="c1">// Get value when request is invoked</span>
+            <span class="p">.</span><span class="n">UseJson</span><span class="p">()</span> <span class="c1">// Use Newtonsoft.Json for serialisation</span>
+            <span class="p">.</span><span class="n">ExpectJson</span><span class="p">();</span> <span class="c1">// Set the Accept header to &quot;application/json&quot;</span>
 
-        <span class="c1">// Short-hand for .UseJson().ExpectJson() is to call HttpRequest.Create.JsonFromUri(uri).</span>
+    <span class="c1">// Short-hand for .UseJson().ExpectJson() is to call HttpRequest.Create.JsonFromUri(uri).</span>
 
-        <span class="c1">// If variable2 is left as null, the request URI will be:</span>
-        <span class="c1">//      http://localhost:1234/api/1234/foo/bar?diddly=bonk</span>
+    <span class="c1">// If variable2 is left as null, the request URI will be:</span>
+    <span class="c1">//  http://localhost:1234/api/1234/foo/bar?diddly=bonk</span>
 
-        <span class="c1">// If variable 2 is given a value (&quot;hello world&quot;), the request URI will be:</span>
-        <span class="c1">//      http://localhost:1234/api/1234/foo/hello%20world/bar?diddly=bonk</span>
+    <span class="c1">// If variable 2 is given a value (&quot;hello world&quot;), the request URI will be:</span>
+    <span class="c1">//  http://localhost:1234/api/1234/foo/hello%20world/bar?diddly=bonk</span>
 
-        <span class="c1">// For the most ceremony-free way possible:</span>
+    <span class="c1">// For the most ceremony-free way possible:</span>
 
-        <span class="c1">// Uses appropriate formatter configured above by calling UseJson.</span>
-        <span class="n">ExampleResponseBody</span> <span class="n">responseBody</span> <span class="p">=</span>
-                <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
-                        <span class="p">.</span><span class="n">ReadAsAsync</span><span class="p">&lt;</span><span class="n">ExampleResponseBody</span><span class="p">&gt;();</span>
+    <span class="c1">// Uses appropriate formatter configured above by calling UseJson.</span>
+    <span class="n">ExampleResponseBody</span> <span class="n">responseBody</span> <span class="p">=</span>
+        <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+            <span class="p">.</span><span class="n">ReadAsAsync</span><span class="p">&lt;</span><span class="n">ExampleResponseBody</span><span class="p">&gt;();</span>
 
-        <span class="c1">// Or, for something a bit more verbose that enables more flexible status code and serialisation handling:</span>
+    <span class="c1">// Or, for something a bit more verbose that enables more flexible status code and serialisation handling:</span>
 
-        <span class="k">using</span> <span class="p">(</span><span class="n">HttpResponseMessage</span> <span class="n">response</span> <span class="p">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
+    <span class="k">using</span> <span class="p">(</span><span class="n">HttpResponseMessage</span> <span class="n">response</span> <span class="p">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="c1">// Handle specific status code differently.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">StatusCode</span> <span class="p">==</span> <span class="n">HttpStatusCode</span><span class="p">.</span><span class="n">NotFound</span> <span class="p">||</span> <span class="n">response</span><span class="p">.</span><span class="n">StatusCode</span> <span class="p">==</span> <span class="n">HttpStatusCode</span><span class="p">.</span><span class="n">BadRequest</span><span class="p">)</span>
         <span class="p">{</span>
-                <span class="c1">// Handle specific status code differently.</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">StatusCode</span> <span class="p">==</span> <span class="n">HttpStatusCode</span><span class="p">.</span><span class="n">NotFound</span> <span class="p">||</span> <span class="n">response</span><span class="p">.</span><span class="n">StatusCode</span> <span class="p">==</span> <span class="n">HttpStatusCode</span><span class="p">.</span><span class="n">BadRequest</span><span class="p">)</span>
-                <span class="p">{</span>
-                        <span class="n">ErrorResponseBody</span> <span class="n">errorResponseBody</span> <span class="p">=</span> <span class="k">await</span> <span class="n">response</span><span class="p">.</span><span class="n">ReadContentAsAsync</span><span class="p">&lt;</span><span class="n">ErrorResponseBody</span><span class="p">&gt;();</span>
+            <span class="n">ErrorResponseBody</span> <span class="n">errorResponseBody</span> <span class="p">=</span> <span class="k">await</span> <span class="n">response</span><span class="p">.</span><span class="n">ReadContentAsAsync</span><span class="p">&lt;</span><span class="n">ErrorResponseBody</span><span class="p">&gt;();</span>
 
-                        <span class="k">throw</span> <span class="k">new</span> <span class="n">HttpRequestException</span><span class="p">&lt;</span><span class="n">ErrorResponseBody</span><span class="p">&gt;(</span><span class="n">errorResponseBody</span><span class="p">);</span>
-                <span class="p">}</span>
-
-                <span class="n">response</span><span class="p">.</span><span class="n">EnsureSuccessStatusCode</span><span class="p">();</span>
-
-                <span class="n">responseBody</span> <span class="p">=</span> <span class="k">await</span> <span class="n">response</span><span class="p">.</span><span class="n">ReadContentAsAsync</span><span class="p">&lt;</span><span class="n">ExampleResponseBody</span><span class="p">&gt;();</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">HttpRequestException</span><span class="p">&lt;</span><span class="n">ErrorResponseBody</span><span class="p">&gt;(</span><span class="n">errorResponseBody</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="c1">// Or, if you want full control of response / content handling:</span>
+        <span class="n">response</span><span class="p">.</span><span class="n">EnsureSuccessStatusCode</span><span class="p">();</span>
 
-        <span class="k">using</span> <span class="p">(</span><span class="n">HttpResponseMessage</span> <span class="n">response</span> <span class="p">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
-        <span class="p">{</span>
-                <span class="c1">// Perform any response message processing required.</span>
+        <span class="n">responseBody</span> <span class="p">=</span> <span class="k">await</span> <span class="n">response</span><span class="p">.</span><span class="n">ReadContentAsAsync</span><span class="p">&lt;</span><span class="n">ExampleResponseBody</span><span class="p">&gt;();</span>
+    <span class="p">}</span>
 
-                <span class="n">response</span><span class="p">.</span><span class="n">EnsureSuccessStatusCode</span><span class="p">();</span>
+    <span class="c1">// Or, if you want full control of response / content handling:</span>
 
-                <span class="c1">// If reading directly from the content you&#39;ll have to specify the content formatter to use.</span>
-                <span class="n">responseBody</span> <span class="p">=</span> <span class="k">await</span> <span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">.</span><span class="n">ReadAsAsync</span><span class="p">&lt;</span><span class="n">ExampleResponseBody</span><span class="p">&gt;(</span><span class="k">new</span> <span class="n">JsonFormatter</span><span class="p">());</span>
-        <span class="p">}</span>
+    <span class="k">using</span> <span class="p">(</span><span class="n">HttpResponseMessage</span> <span class="n">response</span> <span class="p">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="c1">// Perform any response message processing required.</span>
+
+        <span class="n">response</span><span class="p">.</span><span class="n">EnsureSuccessStatusCode</span><span class="p">();</span>
+
+        <span class="c1">// If reading directly from the content you&#39;ll have to specify the content formatter to use.</span>
+        <span class="n">responseBody</span> <span class="p">=</span> <span class="k">await</span> <span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">.</span><span class="n">ReadAsAsync</span><span class="p">&lt;</span><span class="n">ExampleResponseBody</span><span class="p">&gt;(</span><span class="k">new</span> <span class="n">JsonFormatter</span><span class="p">());</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
