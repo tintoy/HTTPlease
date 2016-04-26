@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>HttpClient, improved &mdash; HTTPlease 1.0.0-alpha1 documentation</title>
+  <title>HttpClient, Improved &mdash; HTTPlease 1.0.0-alpha1 documentation</title>
   
 
   
@@ -30,7 +30,8 @@
   
 
   
-    <link rel="top" title="HTTPlease 1.0.0-alpha1 documentation" href="#"/> 
+    <link rel="top" title="HTTPlease 1.0.0-alpha1 documentation" href="#"/>
+        <link rel="next" title="HttpClientBuilder" href="client-builder/index.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -79,7 +80,10 @@
           
             
             
-                <ul class="simple">
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="client-builder/index.html">HttpClientBuilder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="request-builder/untyped/index.html">HttpRequest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="request-builder/typed/index.html">HttpRequest&lt;TContext&gt;</a></li>
 </ul>
 
             
@@ -110,7 +114,7 @@
   <ul class="wy-breadcrumbs">
     <li><a href="#">Docs</a> &raquo;</li>
       
-    <li>HttpClient, improved</li>
+    <li>HttpClient, Improved</li>
       <li class="wy-breadcrumbs-aside">
         
           
@@ -123,7 +127,7 @@
            <div itemprop="articleBody">
             
   <div class="section" id="httpclient-improved">
-<h1>HttpClient, improved<a class="headerlink" href="#httpclient-improved" title="Permalink to this headline">¶</a></h1>
+<h1>HttpClient, Improved<a class="headerlink" href="#httpclient-improved" title="Permalink to this headline">¶</a></h1>
 <p>HTTPlease is a framework for creating / configuring HttpClients, using them to make HTTP requests, and processing the responses.</p>
 <p>It is based on the concept of an immutable template (with lazily-resolved parameters) that acts as the definition for an HTTP request. Any change to this template makes a copy of it, only capturing the differences between the old and the new template. This allows you to progressively build up a hierarchy of templates that increasingly specialise requests until they refer to a specific API operation.</p>
 <p>For example, you might have a base request with a URL of <code class="docutils literal"><span class="pre">/api</span></code>, and then extend that with a relative URI <code class="docutils literal"><span class="pre">{apiVersion}</span></code>, which would effectively be <code class="docutils literal"><span class="pre">/api/{apiVersion}</span></code>.</p>
@@ -135,7 +139,13 @@
 <p>This project is based on work I previously did for <a class="reference external" href="https://github.com/DimensionDataCBUSydney/Watt">Watt</a>.</p>
 <p>Contents:</p>
 <div class="toctree-wrapper compound">
-<ul class="simple">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="client-builder/index.html">HttpClientBuilder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="client-builder/usage.html">Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="request-builder/untyped/index.html">HttpRequest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="request-builder/typed/index.html">HttpRequest&lt;TContext&gt;</a></li>
 </ul>
 </div>
 </div>
@@ -152,6 +162,13 @@
            </div>
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="client-builder/index.html" class="btn btn-neutral float-right" title="HttpClientBuilder" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
   
 
   <hr/>

@@ -1,4 +1,4 @@
-HttpClient, improved
+HttpClient, Improved
 ====================
 
 HTTPlease is a framework for creating / configuring HttpClients, using them to make HTTP requests, and processing the responses.
@@ -24,10 +24,13 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   client-builder/index
+   request-builder/untyped/index
+   request-builder/typed/index
+
 Indices and tables
 ==================
 
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
