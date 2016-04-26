@@ -34,33 +34,39 @@ Using HttpRequest
 		// If variable 2 is given a value ("hello world"), the request URI will be:
 		//	http://localhost:1234/api/1234/foo/hello%20world/bar?diddly=bonk
 
-		ExampleResponseBody responseBody;
+		// For the most ceremony-free way possible:
 
-		// If you want full control of response handling:
+		// Uses appropriate formatter configured above by calling UseJson.
+		ExampleResponseBody responseBody =
+			await client.GetAsync(request)
+				.ReadAsAsync<ExampleResponseBody>();
+
+		// Or, for something a bit more verbose that enables more flexible status code and serialisation handling:
 
 		using (HttpResponseMessage response = await client.GetAsync(request))
 		{
+			// Handle specific status code differently.
+			if (response.StatusCode == HttpStatusCode.NotFound || response.StatusCode == HttpStatusCode.BadRequest)
+			{
+				ErrorResponseBody errorResponseBody = await response.ReadContentAsAsync<ErrorResponseBody>();
+
+				throw new HttpRequestException<ErrorResponseBody>(errorResponseBody);
+			}
+
+			response.EnsureSuccessStatusCode();
+
+			responseBody = await response.ReadContentAsAsync<ExampleResponseBody>();
+		}
+
+		// Or, if you want full control of response / content handling:
+
+		using (HttpResponseMessage response = await client.GetAsync(request))
+		{
+			// Perform any response message processing required.
+
 			response.EnsureSuccessStatusCode();
 
 			// If reading directly from the content you'll have to specify the content formatter to use.
 			responseBody = await response.Content.ReadAsAsync<ExampleResponseBody>(new JsonFormatter());
 		}
-
-		// Or, for something a bit less verbose:
-
-		using (HttpResponseMessage response = await client.GetAsync(request))
-		{
-			response.EnsureSuccessStatusCode();
-
-			// Uses appropriate formatter configured above by calling UseJson.
-			responseBody = await response.ReadContentAsAsync<ExampleResponseBody>();
-		}
-
-		// Or, for the most ceremony-free way possible:
-
-		// Uses appropriate formatter configured above by calling UseJson.
-		ExampleResponseBody responseBody =
-			await client
-				.GetAsync(request)
-				.ReadAsAsync<ExampleResponseBody>();
 	}
