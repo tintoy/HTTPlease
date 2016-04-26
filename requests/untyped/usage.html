@@ -147,6 +147,9 @@
         <span class="k">public</span> <span class="kt">int</span> <span class="n">ErrorCode</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 <span class="p">}</span>
 
+<span class="c1">// Our base request definition.</span>
+<span class="c1">// You don&#39;t have to do this separately - you can declare the full URI in-place where you use it if you prefer.</span>
+<span class="c1">// You can also use relative URIs if you prefer (the HttpClient&#39;s base URI will be used instead).</span>
 <span class="n">HttpRequest</span> <span class="n">baseRequest</span> <span class="p">=</span> <span class="n">HttpRequest</span><span class="p">.</span><span class="n">Create</span><span class="p">.</span><span class="n">FromUri</span><span class="p">(</span><span class="s">&quot;http://localhost:1234&quot;</span><span class="p">);</span>
 
 <span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span><span class="p">())</span>
@@ -156,9 +159,12 @@
         <span class="n">HttpRequest</span> <span class="n">request</span> <span class="p">=</span>
                 <span class="n">baseRequest</span><span class="p">.</span><span class="n">WithRelativeRequestUri</span><span class="p">(</span><span class="s">&quot;api/{variable1}/foo/{variable2}/bar&quot;</span><span class="p">)</span>
                         <span class="p">.</span><span class="n">WithQueryParameter</span><span class="p">(</span><span class="s">&quot;diddly&quot;</span><span class="p">,</span> <span class="s">&quot;bonk&quot;</span><span class="p">)</span>
-                        <span class="p">.</span><span class="n">WithTemplateParameter</span><span class="p">(</span><span class="s">&quot;variable1&quot;</span><span class="p">,</span> <span class="m">1234</span><span class="p">)</span>
+                        <span class="p">.</span><span class="n">WithTemplateParameter</span><span class="p">(</span><span class="s">&quot;variable1&quot;</span><span class="p">,</span> <span class="m">1234</span><span class="p">)</span> <span class="c1">// Use constant value</span>
                         <span class="p">.</span><span class="n">WithTemplateParameter</span><span class="p">(</span><span class="s">&quot;variable2&quot;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="n">variable2</span><span class="p">)</span> <span class="c1">// Get value when request is invoked</span>
-                        <span class="p">.</span><span class="n">UseJson</span><span class="p">().</span><span class="n">ExpectJson</span><span class="p">();</span>
+                        <span class="p">.</span><span class="n">UseJson</span><span class="p">()</span> <span class="c1">// Use Newtonsoft.Json for serialisation</span>
+                        <span class="p">.</span><span class="n">ExpectJson</span><span class="p">();</span> <span class="c1">// Set the Accept header to &quot;application/json&quot;</span>
+
+        <span class="c1">// Short-hand for .UseJson().ExpectJson() is to call HttpRequest.Create.JsonFromUri(uri).</span>
 
         <span class="c1">// If variable2 is left as null, the request URI will be:</span>
         <span class="c1">//      http://localhost:1234/api/1234/foo/bar?diddly=bonk</span>
