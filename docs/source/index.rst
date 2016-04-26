@@ -24,9 +24,8 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   client-builder/index
-   request-builder/untyped/index
-   request-builder/typed/index
+   clients/index
+   requests/index
 
 Indices and tables
 ==================
