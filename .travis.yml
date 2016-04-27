@@ -3,9 +3,10 @@ mono:
   - beta
 sudo: required
 dist: trusty
-before_install:
-  - sudo apt-get -qq update
-  - sudo apt-get install -y libunwind8
+addons:
+  apt:
+    packages:
+    - libunwind8
 install:
   - uname -a
   - curl -sSL https://raw.githubusercontent.com/aspnet/Home/dev/dnvminstall.sh | sh
@@ -15,3 +16,7 @@ script:
   - dnu restore
   - ./build-all.sh
   - ./run-tests.sh
+branches:
+  only:
+    - development/r1.0
+    - release/r1.0
