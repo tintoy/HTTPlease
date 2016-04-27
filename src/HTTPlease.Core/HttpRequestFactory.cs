@@ -35,7 +35,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
 		/// </returns>
-		public HttpRequest FromUri(Uri requestUri)
+		public HttpRequest Create(Uri requestUri)
 		{
 			if (requestUri == null)
 				throw new ArgumentNullException(nameof(requestUri));
@@ -80,7 +80,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The new <see cref="HttpRequest{TContext}"/>.
 		/// </returns>
-		public HttpRequest<TContext> FromUri(Uri requestUri)
+		public HttpRequest<TContext> Create(Uri requestUri)
 		{
 			if (requestUri == null)
 				throw new ArgumentNullException(nameof(requestUri));

@@ -14,6 +14,12 @@ namespace HTTPlease
 
 	using RequestProperties = ImmutableDictionary<string, object>;
 
+	/// <summary>
+	///		A template for an HTTP request that resolves deferred values from an instance of <typeparamref name="TContext"/>.
+	/// </summary>
+	/// <typeparam name="TContext">
+	///		The type of object used as a context for resolving deferred values.
+	/// </typeparam>
 	public class HttpRequest<TContext>
 		: HttpRequestBase, IHttpRequest<TContext>
 	{
@@ -40,7 +46,7 @@ namespace HTTPlease
 		/// <summary>
 		///		The default factory for <see cref="HttpRequest{TContext}"/>s.
 		/// </summary>
-		public static HttpRequestFactory<TContext> Create { get; } = new HttpRequestFactory<TContext>(Empty);
+		public static HttpRequestFactory<TContext> Factory { get; } = new HttpRequestFactory<TContext>(Empty);
 
 		#endregion // Constants
 
@@ -65,6 +71,28 @@ namespace HTTPlease
 				propertyName: nameof(QueryParameters)
 			);
 		}
+
+		/// <summary>
+		///		Create a new HTTP request with the specified request URI.
+		/// </summary>
+		/// <param name="requestUri">
+		///		The request URI (can be relative or absolute).
+		/// </param>
+		/// <returns>
+		///		The new <see cref="HttpRequest{TContext}"/>.
+		/// </returns>
+		public static HttpRequest<TContext> Create(string requestUri) => Factory.Create(requestUri);
+
+		/// <summary>
+		///		Create a new HTTP request with the specified request URI.
+		/// </summary>
+		/// <param name="requestUri">
+		///		The request URI (can be relative or absolute).
+		/// </param>
+		/// <returns>
+		///		The new <see cref="HttpRequest{TContext}"/>.
+		/// </returns>
+		public static HttpRequest<TContext> Create(Uri requestUri) => Factory.Create(requestUri);
 
 		#endregion // Construction
 

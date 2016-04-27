@@ -15,7 +15,7 @@ namespace HTTPlease.Formatters.Tests
 		/// <summary>
 		///		The default request used for tests.
 		/// </summary>
-		static readonly HttpRequest DefaultRequest = HttpRequest.Create.FromUri("http://localhost/");
+		static readonly HttpRequest DefaultRequest = HttpRequest.Factory.Create("http://localhost/");
 
 		/// <summary>
 		///		Create a new response-read test suite.
@@ -102,7 +102,7 @@ namespace HTTPlease.Formatters.Tests
 			{
 				TestBody actualBody = await client
 					.GetAsync(DefaultRequest)
-					.ReadAsAsync(new JsonFormatter(), 
+					.ReadAsAsync(new JsonFormatter(),
 						onFailureResponse: () => new TestBody
 						{
 							StringProperty = expectedBody.StringProperty,
