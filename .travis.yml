@@ -5,4 +5,6 @@ mono:
 install: curl -sSL https://raw.githubusercontent.com/aspnet/Home/dev/dnvminstall.sh | sh && source ~/.dnx/dnvm/dnvm.sh && dnvm upgrade
 
 script:
-  cd projects/HTTPlease && dnu restore && . ./build-all.sh && . ./run-tests.sh --verbose
+  - dnu restore
+  - ./build-all.sh
+  - ./run-tests.sh --verbose
