@@ -1,3 +1,3 @@
 $dnu = Get-Command dnu
 
-& $dnu build 'src\HTTPlease.*' 'test\HTTPlease.*'
+& $dnu build 'src\HTTPlease.*' 'test\HTTPlease.*' --quiet

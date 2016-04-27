@@ -256,7 +256,7 @@ namespace HTTPlease.Formatters
 
 				return await responseMessage.ReadContentAsAsync<TBody>().ConfigureAwait(false);
 			}
-		}
+        }
 
 		/// <summary>
 		///		Asynchronously read the response body as the specified type using the most appropriate formatter.
@@ -285,21 +285,16 @@ namespace HTTPlease.Formatters
 		/// <exception cref="InvalidOperationException">
 		///		No formatters were configured for the request, or an appropriate formatter could not be found in the request's list of formatters.
 		/// </exception>
-		public static async Task<TBody> ReadAsAsync<TBody, TError>(this Task<HttpResponseMessage> response, Func<HttpResponseMessage, TError> onFailureResponse, params HttpStatusCode[] successStatusCodes)
+		public static async Task<TBody> ReadAsAsync<TBody, TError>(this Task<HttpResponseMessage> response, params HttpStatusCode[] successStatusCodes)
 		{
 			if (response == null)
 				throw new ArgumentNullException(nameof(response));
-
-			if (onFailureResponse == null)
-				throw new ArgumentNullException(nameof(onFailureResponse));
 
 			using (HttpResponseMessage responseMessage = await response.ConfigureAwait(false))
 			{
 				if (!successStatusCodes.Contains(responseMessage.StatusCode) && !responseMessage.IsSuccessStatusCode)
 				{
-					TError error = onFailureResponse(responseMessage);
-					if (error == null)
-						throw new InvalidOperationException("The failure response handler returned null.");
+					TError error = await responseMessage.ReadContentAsAsync<TError>().ConfigureAwait(false);
 
 					throw new HttpRequestException<TError>(responseMessage.StatusCode, error);
 				}
@@ -396,7 +391,7 @@ namespace HTTPlease.Formatters
 				return responseMessage;
 
 			throw new InvalidOperationException("The response body is empty."); // TODO: Consider custom exception type.
-		}
+        }
 
 		/// <summary>
 		///		Deserialise the response message's content into the specified CLR data type using the most appropriate formatter.
@@ -418,6 +413,8 @@ namespace HTTPlease.Formatters
 			if (responseMessage == null)
 				throw new ArgumentNullException(nameof(responseMessage));
 
+			// TODO: All overloads should return default(TBody) instead of throwing when body is empty!
+			// TODO: Otherwise, leave these overloads as-is, and create TryReadContentAsAsync overloads that don't throw.
 			responseMessage.EnsureHasBody();
 
 			IFormatterCollection formatters = responseMessage.GetFormatters();
