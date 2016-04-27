@@ -3,6 +3,7 @@ mono:
  - beta
 
 install:
+  - apt-get install libunwind8
   - curl -sSL https://raw.githubusercontent.com/aspnet/Home/dev/dnvminstall.sh | sh
   - source ~/.dnx/dnvm/dnvm.sh
   - dnvm install 1.0.0-rc1-update2 -r coreclr -arch x64
