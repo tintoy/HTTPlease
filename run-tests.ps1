@@ -1,5 +1,5 @@
 Param(
-	[flag] $Verbose
+	[switch] $Verbose
 )
 
 If (!$Verbose) {
