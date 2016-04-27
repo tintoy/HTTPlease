@@ -3,6 +3,9 @@ mono:
   - beta
 sudo: required
 dist: trusty
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y libunwind8
 install:
   - uname -a
   - curl -sSL https://raw.githubusercontent.com/aspnet/Home/dev/dnvminstall.sh | sh
