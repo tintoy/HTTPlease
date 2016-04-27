@@ -86,7 +86,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../../clients/index.html">Clients</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Requests</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="index.html">HttpRequest</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Usage</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#creating-a-request-from-a-uri">Creating a request from a URI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#binding-request-parameters">Binding request parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#creating-a-request-with-late-bound-parameters">Creating a request with late-bound parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#working-with-responses">Working with responses</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../typed/index.html">HttpRequest&lt;TContext&gt;</a></li>
@@ -141,74 +147,219 @@
             
   <div class="section" id="using-httprequest">
 <h1>Using HttpRequest<a class="headerlink" href="#using-httprequest" title="Permalink to this headline">¶</a></h1>
-<div class="highlight-csharp"><div class="highlight"><pre><span class="k">class</span> <span class="nc">ExampleResponseBody</span>
+<div class="section" id="creating-a-request-from-a-uri">
+<h2>Creating a request from a URI<a class="headerlink" href="#creating-a-request-from-a-uri" title="Permalink to this headline">¶</a></h2>
+<p>First, let&#8217;s define a request that will act as the basis for the requests in subsequent examples.</p>
+<p>Note that, if you prefer, you don&#8217;t have to do this separately (you can declare the full URI in-place where you use it).
+You can also use relative URIs (in which case the the HttpClient&#8217;s base URI will be used).</p>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="n">HttpRequest</span> <span class="n">baseRequest</span> <span class="p">=</span> <span class="n">HttpRequest</span><span class="p">.</span><span class="n">Factory</span><span class="p">.</span><span class="n">Create</span><span class="p">(</span><span class="s">&quot;http://localhost:1234&quot;</span><span class="p">);</span>
+<span class="n">HttpRequest</span> <span class="n">requestTemplate</span> <span class="p">=</span> <span class="n">baseRequest</span><span class="p">.</span><span class="n">WithRelativeRequestUri</span><span class="p">(</span><span class="s">&quot;customers/{variable1}/foo/{variable2}/bar&quot;</span><span class="p">);</span>
+
+<span class="c1">// Full request URI is now http://localhost:1234/customers/{variable1}/foo/{variable2}/bar</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="binding-request-parameters">
+<h2>Binding request parameters<a class="headerlink" href="#binding-request-parameters" title="Permalink to this headline">¶</a></h2>
+<p>The parameters (or &#8220;holes&#8221;) in the request URI must be bound to values before the request can be invoked.
+One way to do this is to give the parameters constant values by specialising the template:</p>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span><span class="p">())</span>
 <span class="p">{</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">Message</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">int</span> <span class="n">ErrorCode</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="c1">// Our base request definition.</span>
-<span class="c1">// You don&#39;t have to do this separately - you can declare the full URI in-place where you use it if you prefer.</span>
-<span class="c1">// You can also use relative URIs if you prefer (the HttpClient&#39;s base URI will be used instead).</span>
-<span class="n">HttpRequest</span> <span class="n">baseRequest</span> <span class="p">=</span> <span class="n">HttpRequest</span><span class="p">.</span><span class="n">Create</span><span class="p">.</span><span class="n">FromUri</span><span class="p">(</span><span class="s">&quot;http://localhost:1234&quot;</span><span class="p">);</span>
-
-<span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span><span class="p">())</span>
-<span class="p">{</span>
-    <span class="kt">string</span> <span class="n">variable2</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
-
     <span class="n">HttpRequest</span> <span class="n">request</span> <span class="p">=</span>
-        <span class="n">baseRequest</span><span class="p">.</span><span class="n">WithRelativeRequestUri</span><span class="p">(</span><span class="s">&quot;api/{variable1}/foo/{variable2}/bar&quot;</span><span class="p">)</span>
-            <span class="p">.</span><span class="n">WithQueryParameter</span><span class="p">(</span><span class="s">&quot;diddly&quot;</span><span class="p">,</span> <span class="s">&quot;bonk&quot;</span><span class="p">)</span>
-            <span class="p">.</span><span class="n">WithTemplateParameter</span><span class="p">(</span><span class="s">&quot;variable1&quot;</span><span class="p">,</span> <span class="m">1234</span><span class="p">)</span> <span class="c1">// Use constant value</span>
-            <span class="p">.</span><span class="n">WithTemplateParameter</span><span class="p">(</span><span class="s">&quot;variable2&quot;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="n">variable2</span><span class="p">)</span> <span class="c1">// Get value when request is invoked</span>
-            <span class="p">.</span><span class="n">UseJson</span><span class="p">()</span> <span class="c1">// Use Newtonsoft.Json for serialisation</span>
-            <span class="p">.</span><span class="n">ExpectJson</span><span class="p">();</span> <span class="c1">// Set the Accept header to &quot;application/json&quot;</span>
-
-    <span class="c1">// Short-hand for .UseJson().ExpectJson() is to call HttpRequest.Create.JsonFromUri(uri).</span>
-
-    <span class="c1">// If variable2 is left as null, the request URI will be:</span>
-    <span class="c1">//  http://localhost:1234/api/1234/foo/bar?diddly=bonk</span>
-
-    <span class="c1">// If variable 2 is given a value (&quot;hello world&quot;), the request URI will be:</span>
-    <span class="c1">//  http://localhost:1234/api/1234/foo/hello%20world/bar?diddly=bonk</span>
-
-    <span class="c1">// For the most ceremony-free way possible:</span>
-
-    <span class="c1">// Uses appropriate formatter configured above by calling UseJson.</span>
-    <span class="n">ExampleResponseBody</span> <span class="n">responseBody</span> <span class="p">=</span>
-        <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
-            <span class="p">.</span><span class="n">ReadAsAsync</span><span class="p">&lt;</span><span class="n">ExampleResponseBody</span><span class="p">&gt;();</span>
-
-    <span class="c1">// Or, for something a bit more verbose that enables more flexible status code and serialisation handling:</span>
+        <span class="n">requestTemplate</span>
+            <span class="p">.</span><span class="n">WithQueryParameter</span><span class="p">(</span><span class="s">&quot;sort&quot;</span><span class="p">,</span> <span class="s">&quot;name&quot;</span><span class="p">)</span>
+            <span class="p">.</span><span class="n">WithTemplateParameter</span><span class="p">(</span><span class="s">&quot;variable1&quot;</span><span class="p">,</span> <span class="m">1234</span><span class="p">)</span>
+            <span class="p">.</span><span class="n">WithTemplateParameter</span><span class="p">(</span><span class="s">&quot;variable2&quot;</span><span class="p">,</span> <span class="p">(</span><span class="kt">string</span><span class="p">)</span><span class="k">null</span><span class="p">);</span>
 
     <span class="k">using</span> <span class="p">(</span><span class="n">HttpResponseMessage</span> <span class="n">response</span> <span class="p">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
     <span class="p">{</span>
-        <span class="c1">// Handle specific status code differently.</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">StatusCode</span> <span class="p">==</span> <span class="n">HttpStatusCode</span><span class="p">.</span><span class="n">NotFound</span> <span class="p">||</span> <span class="n">response</span><span class="p">.</span><span class="n">StatusCode</span> <span class="p">==</span> <span class="n">HttpStatusCode</span><span class="p">.</span><span class="n">BadRequest</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">ErrorResponseBody</span> <span class="n">errorResponseBody</span> <span class="p">=</span> <span class="k">await</span> <span class="n">response</span><span class="p">.</span><span class="n">ReadContentAsAsync</span><span class="p">&lt;</span><span class="n">ErrorResponseBody</span><span class="p">&gt;();</span>
-
-            <span class="k">throw</span> <span class="k">new</span> <span class="n">HttpRequestException</span><span class="p">&lt;</span><span class="n">ErrorResponseBody</span><span class="p">&gt;(</span><span class="n">errorResponseBody</span><span class="p">);</span>
-        <span class="p">}</span>
-
-        <span class="n">response</span><span class="p">.</span><span class="n">EnsureSuccessStatusCode</span><span class="p">();</span>
-
-        <span class="n">responseBody</span> <span class="p">=</span> <span class="k">await</span> <span class="n">response</span><span class="p">.</span><span class="n">ReadContentAsAsync</span><span class="p">&lt;</span><span class="n">ExampleResponseBody</span><span class="p">&gt;();</span>
-    <span class="p">}</span>
-
-    <span class="c1">// Or, if you want full control of response / content handling:</span>
-
-    <span class="k">using</span> <span class="p">(</span><span class="n">HttpResponseMessage</span> <span class="n">response</span> <span class="p">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
-    <span class="p">{</span>
-        <span class="c1">// Perform any response message processing required.</span>
-
-        <span class="n">response</span><span class="p">.</span><span class="n">EnsureSuccessStatusCode</span><span class="p">();</span>
-
-        <span class="c1">// If reading directly from the content you&#39;ll have to specify the content formatter to use.</span>
-        <span class="n">responseBody</span> <span class="p">=</span> <span class="k">await</span> <span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">.</span><span class="n">ReadAsAsync</span><span class="p">&lt;</span><span class="n">ExampleResponseBody</span><span class="p">&gt;(</span><span class="k">new</span> <span class="n">JsonFormatter</span><span class="p">());</span>
+        <span class="c1">// Request URI will be:</span>
+        <span class="c1">//    http://localhost:1234/customers/1234/foo/bar?sort=name</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
+</div>
+</div>
+<div class="section" id="creating-a-request-with-late-bound-parameters">
+<h2>Creating a request with late-bound parameters<a class="headerlink" href="#creating-a-request-with-late-bound-parameters" title="Permalink to this headline">¶</a></h2>
+<p>Instead of constant values, however, request parameters can also be bound to delegates that resolve their values each time the request is invoked.</p>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span><span class="p">())</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">variable1</span> <span class="p">=</span> <span class="m">1234</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="n">variable2</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+
+    <span class="n">HttpRequest</span> <span class="n">request</span> <span class="p">=</span>
+        <span class="n">requestTemplate</span>
+            <span class="p">.</span><span class="n">WithQueryParameter</span><span class="p">(</span><span class="s">&quot;diddly&quot;</span><span class="p">,</span> <span class="s">&quot;bonk&quot;</span><span class="p">)</span>
+            <span class="p">.</span><span class="n">WithTemplateParameter</span><span class="p">(</span><span class="s">&quot;variable1&quot;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="n">variable1</span><span class="p">))</span>
+            <span class="p">.</span><span class="n">WithTemplateParameter</span><span class="p">(</span><span class="s">&quot;variable2&quot;</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="n">variable2</span><span class="p">);</span>
+
+    <span class="k">using</span> <span class="p">(</span><span class="n">HttpResponseMessage</span> <span class="n">response</span> <span class="p">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="c1">// Request URI will be:</span>
+        <span class="c1">//    http://localhost:1234/api/1234/foo/bar?diddly=bonk</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Let&#39;s give &quot;variable2&quot; a value so that its path segment will be present in the final URI.</span>
+    <span class="n">variable2</span> <span class="p">=</span> <span class="s">&quot;hello world&quot;</span><span class="p">;</span>
+
+    <span class="k">using</span> <span class="p">(</span><span class="n">HttpResponseMessage</span> <span class="n">response</span> <span class="p">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="c1">// Request URI will be:</span>
+        <span class="c1">//    http://localhost:1234/api/1234/foo/hello%20world/bar?diddly=bonk</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Note that while all of a request&#8217;s parameters must be bound, they can be have a value of <code class="docutils literal"><span class="pre">null</span></code> which will result in their path segment / query parameter being omitted from the final URI.</p>
+</div>
+<div class="section" id="working-with-responses">
+<h2>Working with responses<a class="headerlink" href="#working-with-responses" title="Permalink to this headline">¶</a></h2>
+<p>HTTPlease offers several styles of interaction with the responses from HTTP requests.
+These range from simple / low-ceremony to fully-customisable.</p>
+<p>Click <a class="reference internal" href="#data-types"><span class="std std-ref">here</span></a> for the definitions of some basic data-types used in these examples.</p>
+<div class="literal-block-wrapper container" id="just-give-me-the-response">
+<div class="code-block-caption"><span class="caption-text">Just give me the response</span><a class="headerlink" href="#just-give-me-the-response" title="Permalink to this code">¶</a></div>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span> <span class="p">{</span> <span class="n">BaseAddress</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Uri</span><span class="p">(</span><span class="s">&quot;http://localhost:1234/&quot;</span><span class="p">)</span> <span class="p">})</span>
+<span class="p">{</span>
+    <span class="n">HttpRequest</span> <span class="n">request</span> <span class="p">=</span> <span class="n">HttpRequest</span><span class="p">.</span><span class="n">Factory</span><span class="p">.</span><span class="n">CreateJson</span><span class="p">(</span><span class="s">&quot;customers/1&quot;</span><span class="p">);</span>
+
+    <span class="c1">// Uses appropriate formatter(s) configured above by calling CreateJson.</span>
+    <span class="n">Customer</span> <span class="n">customer</span> <span class="p">=</span>
+        <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+            <span class="p">.</span><span class="n">ReadAsAsync</span><span class="p">&lt;</span><span class="n">Customer</span><span class="p">&gt;();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper container" id="i-want-to-handle-specific-status-codes">
+<div class="code-block-caption"><span class="caption-text">I want to handle specific status codes</span><a class="headerlink" href="#i-want-to-handle-specific-status-codes" title="Permalink to this code">¶</a></div>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span> <span class="p">{</span> <span class="n">BaseAddress</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Uri</span><span class="p">(</span><span class="s">&quot;http://localhost:1234/&quot;</span><span class="p">)</span> <span class="p">})</span>
+<span class="p">{</span>
+    <span class="n">HttpRequest</span> <span class="n">request</span> <span class="p">=</span> <span class="n">HttpRequest</span><span class="p">.</span><span class="n">Factory</span><span class="p">.</span><span class="n">CreateJson</span><span class="p">(</span><span class="s">&quot;customers/1&quot;</span><span class="p">);</span>
+
+    <span class="k">using</span> <span class="p">(</span><span class="n">HttpResponseMessage</span> <span class="n">response</span> <span class="p">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="c1">// Handle specific status codes.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">StatusCode</span> <span class="p">==</span> <span class="n">HttpStatusCode</span><span class="p">.</span><span class="n">BadRequest</span> <span class="p">||</span> <span class="n">response</span><span class="p">.</span><span class="n">StatusCode</span> <span class="p">==</span> <span class="n">HttpStatusCode</span><span class="p">.</span><span class="n">Forbidden</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">Error</span> <span class="n">error</span> <span class="p">=</span> <span class="k">await</span> <span class="n">response</span><span class="p">.</span><span class="n">ReadContentAsAsync</span><span class="p">&lt;</span><span class="n">Error</span><span class="p">&gt;();</span>
+
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">HttpRequestException</span><span class="p">&lt;</span><span class="n">Error</span><span class="p">&gt;(</span><span class="n">error</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">// For all other status codes, use standard behaviour for deciding whether the response indicates success.</span>
+        <span class="k">if</span> <span class="p">(!</span><span class="n">response</span><span class="p">.</span><span class="n">IsSuccessStatusCode</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">HttpRequestException</span><span class="p">(</span><span class="n">String</span><span class="p">.</span><span class="n">Format</span><span class="p">(</span>
+                <span class="s">&quot;The request failed because an unexpected status code ({0}) was received from the server.&quot;</span><span class="p">,</span>
+                <span class="n">response</span><span class="p">.</span><span class="n">StatusCode</span>
+            <span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Uses appropriate formatter(s) configured above by calling CreateJson.</span>
+        <span class="n">Customer</span> <span class="n">customer</span> <span class="p">=</span> <span class="k">await</span> <span class="n">response</span><span class="p">.</span><span class="n">ReadContentAsAsync</span><span class="p">&lt;</span><span class="n">Customer</span><span class="p">&gt;();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper container" id="i-want-to-do-it-all-myself">
+<div class="code-block-caption"><span class="caption-text">I want to do it all myself</span><a class="headerlink" href="#i-want-to-do-it-all-myself" title="Permalink to this code">¶</a></div>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span> <span class="p">{</span> <span class="n">BaseAddress</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Uri</span><span class="p">(</span><span class="s">&quot;http://localhost:1234/&quot;</span><span class="p">)</span> <span class="p">})</span>
+<span class="p">{</span>
+    <span class="n">HttpRequest</span> <span class="n">request</span> <span class="p">=</span> <span class="n">HttpRequest</span><span class="p">.</span><span class="n">Factory</span><span class="p">.</span><span class="n">CreateJson</span><span class="p">(</span><span class="s">&quot;customers/1&quot;</span><span class="p">);</span>
+
+    <span class="k">using</span> <span class="p">(</span><span class="n">HttpResponseMessage</span> <span class="n">response</span> <span class="p">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="n">response</span><span class="p">.</span><span class="n">EnsureSuccessStatusCode</span><span class="p">();</span>
+
+        <span class="c1">// Perform any response message processing required.</span>
+
+        <span class="c1">// Decide how to interpret the response body (call to CreateJson above would have told the server that we Accept &quot;application/json&quot;).</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">.</span><span class="n">Headers</span><span class="p">.</span><span class="n">ContentType</span><span class="p">.</span><span class="n">MediaType</span> <span class="p">!=</span> <span class="s">&quot;application/json&quot;</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">HttpRequestException</span><span class="p">(</span>
+                <span class="n">String</span><span class="p">.</span><span class="n">Format</span><span class="p">(</span><span class="s">&quot;The response has an unexpected content type: &#39;{0}&#39;.&quot;</span><span class="p">,</span>
+                <span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">.</span><span class="n">Headers</span><span class="p">.</span><span class="n">ContentType</span><span class="p">.</span><span class="n">MediaType</span>
+            <span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Let&#39;s customise the JSON formatter.</span>
+        <span class="n">IInputFormatter</span> <span class="n">formatter</span> <span class="p">=</span> <span class="k">new</span> <span class="n">JsonFormatter</span><span class="p">(</span><span class="k">new</span> <span class="n">JsonSerializerSettings</span>
+        <span class="p">{</span>
+            <span class="n">ObjectCreationHandling</span> <span class="p">=</span> <span class="n">ObjectCreationHandling</span><span class="p">.</span><span class="n">Reuse</span>
+        <span class="p">});</span>
+
+        <span class="c1">// If reading directly from the content you&#39;ll have to specify the content formatter to use.</span>
+        <span class="n">responseBody</span> <span class="p">=</span> <span class="k">await</span> <span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">.</span><span class="n">ReadAsAsync</span><span class="p">&lt;</span><span class="n">Customer</span><span class="p">&gt;(</span><span class="n">formatter</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper container" id="i-want-to-handle-errors">
+<div class="code-block-caption"><span class="caption-text">I want to handle errors</span><a class="headerlink" href="#i-want-to-handle-errors" title="Permalink to this code">¶</a></div>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="n">HttpRequest</span> <span class="n">request</span> <span class="p">=</span> <span class="n">HttpRequest</span><span class="p">.</span><span class="n">Factory</span><span class="p">.</span><span class="n">CreateJson</span><span class="p">(</span><span class="s">&quot;customers/1&quot;</span><span class="p">);</span>
+
+<span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span><span class="p">())</span>
+<span class="p">{</span>
+    <span class="k">try</span>
+    <span class="p">{</span>
+        <span class="c1">// If status code indicates success, read response as Customer.</span>
+        <span class="c1">// If status code indicates failure, read response as Error then throw HttpRequestException&lt;Error&gt;.</span>
+
+        <span class="n">Customer</span> <span class="n">customer</span> <span class="p">=</span>
+            <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+                <span class="p">.</span><span class="n">ReadAsAsync</span><span class="p">&lt;</span><span class="n">Customer</span><span class="p">,</span> <span class="n">Error</span><span class="p">&gt;();</span>
+    <span class="p">}</span>
+    <span class="k">catch</span> <span class="p">(</span><span class="n">HttpRequestException</span><span class="p">&lt;</span><span class="n">Error</span><span class="p">&gt;</span> <span class="n">expectedError</span><span class="p">)</span> <span class="n">when</span> <span class="n">expectedError</span><span class="p">.</span><span class="n">StatusCode</span> <span class="p">==</span> <span class="n">HttpStatusCode</span><span class="p">.</span><span class="n">NotFound</span>
+    <span class="p">{</span>
+        <span class="n">Error</span> <span class="n">errorResponse</span> <span class="p">=</span> <span class="n">expectedError</span><span class="p">.</span><span class="n">Response</span><span class="p">;</span>
+
+        <span class="n">Log</span><span class="p">.</span><span class="n">Error</span><span class="p">(</span><span class="n">expectedError</span><span class="p">,</span> <span class="n">errorResponse</span><span class="p">.</span><span class="n">ErrorMessage</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">catch</span> <span class="p">(</span><span class="n">HttpRequestException</span><span class="p">&lt;</span><span class="n">Error</span><span class="p">&gt;</span> <span class="n">expectedError</span><span class="p">)</span> <span class="n">when</span> <span class="n">expectedError</span><span class="p">.</span><span class="n">StatusCode</span> <span class="p">==</span> <span class="n">HttpStatusCode</span><span class="p">.</span><span class="n">BadRequest</span>
+    <span class="p">{</span>
+        <span class="n">Error</span> <span class="n">errorResponse</span> <span class="p">=</span> <span class="n">expectedError</span><span class="p">.</span><span class="n">Response</span><span class="p">;</span>
+
+        <span class="n">Log</span><span class="p">.</span><span class="n">Error</span><span class="p">(</span><span class="n">expectedError</span><span class="p">,</span> <span class="n">errorResponse</span><span class="p">.</span><span class="n">ErrorMessage</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">catch</span> <span class="p">(</span><span class="n">HttpRequestException</span> <span class="n">unexpectedError</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// Unexpected error (generic request failure, or unable to read response body)</span>
+
+        <span class="n">Log</span><span class="p">.</span><span class="n">Error</span><span class="p">(</span><span class="n">unexpectedError</span><span class="p">,</span> <span class="n">unexpectedError</span><span class="p">.</span><span class="n">Message</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper container" id="data-types">
+<div class="code-block-caption"><span class="caption-text">Some basic data-types</span><a class="headerlink" href="#data-types" title="Permalink to this code">¶</a></div>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Customer</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">FirstName</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">LastName</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">Age</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">enum</span> <span class="n">ErrorCode</span>
+<span class="p">{</span>
+    <span class="n">Unknown</span> <span class="p">=</span> <span class="m">0</span><span class="p">,</span>
+    <span class="n">EntityNotFound</span> <span class="p">=</span> <span class="m">1</span><span class="p">,</span>
+    <span class="n">AccessDenied</span> <span class="p">=</span> <span class="m">2</span><span class="p">,</span>
+    <span class="n">InternalError</span> <span class="p">=</span> <span class="m">3</span>
+<span class="p">}</span>
+
+<span class="k">class</span> <span class="nc">Error</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">ErrorMessage</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">ErrorCode</span> <span class="n">ErrorCode</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
 </div>
 </div>
 
