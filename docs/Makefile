@@ -5,7 +5,8 @@
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 PAPER         =
-BUILDDIR      = ../../HTTPlease-Docs
+BUILDDIR      = _build
+HTMLBUILDDIR  = ../../HTTPlease-Docs
 
 # User-friendly check for sphinx-build
 ifeq ($(shell which $(SPHINXBUILD) >/dev/null 2>&1; echo $$?), 1)
@@ -55,9 +56,9 @@ clean:
 
 .PHONY: html
 html:
-	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)
+	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(HTMLBUILDDIR)
 	@echo
-	@echo "Build finished. The HTML pages are in $(BUILDDIR)."
+	@echo "Build finished. The HTML pages are in $(HTMLBUILDDIR)."
 
 .PHONY: dirhtml
 dirhtml:

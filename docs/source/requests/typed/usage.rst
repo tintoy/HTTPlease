@@ -19,11 +19,11 @@ Using HttpRequest<TContext>
     using (HttpClient httpClient = new HttpClient())
     {
         HttpRequest<ExampleRequestContext> requestBuilder =
-          HttpRequest<ExampleRequestContext>.Create.FromUri("http://localhost:1234/")
-            .WithRelativeRequestUri("{action}/{id}?flag={flag?}")
-            .WithTemplateParameter("action", context => context.Action)
-            .WithTemplateParameter("id", context => context.Id)
-            .WithTemplateParameter("flag", context => context.Flag);
+            HttpRequest<ExampleRequestContext>.Factory.Create("http://localhost:1234/")
+                .WithRelativeRequestUri("{action}/{id}?flag={flag?}")
+                .WithTemplateParameter("action", context => context.Action)
+                .WithTemplateParameter("id", context => context.Id)
+                .WithTemplateParameter("flag", context => context.Flag);
 
         context.Action = "foo";
         context.Id = 1;
