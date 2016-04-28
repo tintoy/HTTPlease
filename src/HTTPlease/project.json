@@ -1,5 +1,5 @@
 {
-	"version": "1.0.0-alpha1",
+	"version": "1.0.0-*",
 	"title": "HTTPlease",
 	"summary": "HTTPlease",
 	"description": "Immutable HTTP templates",
@@ -26,8 +26,8 @@
 	},
 
 	"dependencies": {
-		"HTTPlease.Core": "1.0.0-alpha1",
-		"HTTPlease.Formatters": "1.0.0-alpha1",
-		"HTTPlease.Formatters.Json": "1.0.0-alpha1"
+		"HTTPlease.Core": "1.0.0-*",
+		"HTTPlease.Formatters": "1.0.0-*",
+		"HTTPlease.Formatters.Json": "1.0.0-*"
 	}
 }

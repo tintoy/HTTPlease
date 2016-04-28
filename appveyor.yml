@@ -7,17 +7,19 @@ image: Visual Studio 2015
 install:
 - cmd: >-
     set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
-
     dnvm install 1.0.0-rc1-update2 -r coreclr -arch x64 -nonative
 cache: C:\Users\appveyor\.dnx\packages
 build_script:
 - ps: >-
     dnvm use 1.0.0-rc1-update2 -r coreclr -arch x64
-
-    dnu restore
-
-    .\build-all.ps1 -Verbose
+    
+    $buildVersion = "alpha1-$env:APPVEYOR_BUILD_NUMBER"
+    .\restore-packages.ps1 -BuildVersion $buildVersion -Verbose
+    .\build-all.ps1 -BuildVersion $buildVersion -Verbose
+    .\package-all.ps1 -BuildVersion $buildVersion -Verbose
+artifacts:
+- path: src\artifacts\packages\*.nupkg
 test_script:
-- ps: .\run-tests.ps1 -Verbose
-deploy_script:
-- cmd: dnu pack .\src\HTTPlease.* --quiet
+- ps: >-
+    $buildVersion = "alpha1-$env:APPVEYOR_BUILD_NUMBER"
+    .\run-tests.ps1 -BuildVersion $buildVersion -Verbose

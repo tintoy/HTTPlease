@@ -18,4 +18,4 @@ Else {
 }
 
 $dnu = Get-Command dnu
-& $dnu build '.\src\HTTPlease*' '.\test\HTTPlease*' "$quietSwitch"
+& $dnu restore "$quietSwitch"

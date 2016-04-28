@@ -1,5 +1,5 @@
 ﻿{
-    "version": "1.0.0-alpha1",
+    "version": "1.0.0-*",
     "title": "HTTPlease Testability",
     "summary": "Testability support for HTTPlease",
     "description": "Request / response mocking and other test-related functionality for HTTPlease Immutable HTTP templates",
@@ -40,9 +40,9 @@
     },
 
     "dependencies": {
-        "HTTPlease.Core": "1.0.0-alpha1",
-        "HTTPlease.Formatters": "1.0.0-alpha1",
-        "HTTPlease.Formatters.Json": "1.0.0-alpha1",
+        "HTTPlease.Core": "1.0.0-*",
+        "HTTPlease.Formatters": "1.0.0-*",
+        "HTTPlease.Formatters.Json": "1.0.0-*",
         "System.Collections.Concurrent": "4.0.11-beta-23516",
         "System.Collections.Immutable": "1.1.37",
         "System.Net.Http": "4.0.1-beta-23516",

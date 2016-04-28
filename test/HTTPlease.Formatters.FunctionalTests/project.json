@@ -1,5 +1,5 @@
 {
-    "version": "1.0.0-alpha1",
+    "version": "1.0.0-*",
     "description": "Functional (integration) tests for HTTPlease.Formatters",
     "authors": [ "tintoy" ],
     "tags": [ "" ],
@@ -25,11 +25,11 @@
     },
 
     "dependencies": {
-        "HTTPlease.Core": "1.0.0-alpha1",
-        "HTTPlease.Formatters": "1.0.0-alpha1",
-        "HTTPlease.Formatters.Json": "1.0.0-alpha1",
-        "HTTPlease.Formatters.Tests": "1.0.0-alpha1",
-        "HTTPlease.Testability.Xunit": "1.0.0-alpha1",
+        "HTTPlease.Core": "1.0.0-*",
+        "HTTPlease.Formatters": "1.0.0-*",
+        "HTTPlease.Formatters.Json": "1.0.0-*",
+        "HTTPlease.Formatters.Tests": "1.0.0-*",
+        "HTTPlease.Testability.Xunit": "1.0.0-*",
         "System.Collections.Concurrent": "4.0.11-beta-23516",
         "System.Collections.Immutable": "1.1.37",
         "System.Net.Http": "4.0.1-beta-23516",
