@@ -14,11 +14,10 @@ build_script:
 - ps: >-
     dnvm use 1.0.0-rc1-update2 -r coreclr -arch x64
 
-    dnu restore --quiet
+    dnu restore .\src\HTTPlease.* .\test\HTTPlease.*
 
-    .\build-all.ps1
+    .\build-all.ps1 -Verbose
 test_script:
 - ps: .\run-tests.ps1 -Verbose
 deploy_script:
 - cmd: dnu pack .\src\HTTPlease* --quiet
-tt
