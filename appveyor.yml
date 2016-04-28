@@ -20,4 +20,4 @@ build_script:
 test_script:
 - ps: .\run-tests.ps1 -Verbose
 deploy_script:
-- cmd: dnu pack .\src\HTTPlease* --quiet
+- cmd: dnu pack .\src\HTTPlease.* --quiet
