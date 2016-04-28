@@ -1,5 +1,13 @@
 {
-    "projects": [ "src", "test" ],
+    "projects": [
+      "src/HTTPlease",
+      "src/HTTPlease.Core",
+      "src/HTTPlease.Formatters",
+      "src/HTTPlease.Formatters.Json",
+      "src/HTTPlease.Testability.Xunit",
+      "test/HTTPlease.Core.Tests",
+      "test/HTTPlease.Formatters.Tests"
+    ],
     "sdk": {
         "version": "1.0.0-rc1-update2",
         "runtime": "coreclr"
