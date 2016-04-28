@@ -22,7 +22,7 @@ build_script:
 
     .\package-all.ps1 -BuildVersion $buildVersion -Verbose
 artifacts:
-- path: src\artifacts\packages\*.nupkg
+- path: src\artifacts\packages\Debug\*.nupkg
 test_script:
 - ps: >-
     $buildVersion = "alpha1-$env:APPVEYOR_BUILD_NUMBER"
