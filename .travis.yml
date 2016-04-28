@@ -18,7 +18,7 @@ script:
   - ./restore-packages.sh
   - ./build-all.sh
   - ./run-tests.sh
-  - ./package-all.ps1
+  - ./package-all.sh
 branches:
   only:
     - development/r1.0
