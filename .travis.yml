@@ -3,6 +3,8 @@ mono:
   - beta
 sudo: required
 dist: trusty
+env:
+  - HTTPLEASE_BUILD_VERSION="alpha1"
 addons:
   apt:
     packages:
@@ -13,9 +15,10 @@ install:
   - source ~/.dnx/dnvm/dnvm.sh
   - dnvm install 1.0.0-rc1-update2 -r coreclr -arch x64
 script:
-  - dnu restore
+  - ./restore-packages.sh
   - ./build-all.sh
   - ./run-tests.sh
+  - ./package-all.ps1
 branches:
   only:
     - development/r1.0
