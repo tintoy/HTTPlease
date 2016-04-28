@@ -30,6 +30,8 @@ Function Update-NetCoreProjectVersion([string] $ProjectFile)
     $project | ConvertTo-Json | Set-Content -Path $ProjectFile
 
     Write-Host "Updated version for '$ProjectFile' from '$oldVersion' to '$newVersion'."
+
+		# AF: What about dependencies?
 }
 
 # Update version info for all project files.

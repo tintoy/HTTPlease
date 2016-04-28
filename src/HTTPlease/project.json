@@ -21,6 +21,10 @@
 	"projectUrl": "https://github.com/tintoy/HTTPlease",
 	"licenseUrl": "https://raw.githubusercontent.com/tintoy/HTTPlease/development/r1.0/LICENSE",
 
+	"frameworks": {
+		"dnxcore50": {}
+	},
+
 	"dependencies": {
 		"HTTPlease.Core": "1.0.0-alpha1",
 		"HTTPlease.Formatters": "1.0.0-alpha1",
