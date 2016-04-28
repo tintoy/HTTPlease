@@ -2,13 +2,13 @@ Param(
     [switch] $Verbose
 )
 
+$args = "build 'src\HTTPlease*' 'test\HTTPlease*'"
+
 If (!$Verbose) {
-    $quietFlag = '--quiet'
-}
-Else {
-    $quietFlag = ''
+    $args += ' --quiet'
 }
 
 $dnu = Get-Command dnu
+& $dnu $args
 
-& $dnu build 'src\HTTPlease*' 'test\HTTPlease*' $quietFlag
+Return 0
