@@ -14,12 +14,16 @@ build_script:
     dnvm use 1.0.0-rc1-update2 -r coreclr -arch x64
     
     $buildVersion = "alpha1-$env:APPVEYOR_BUILD_NUMBER"
+
     .\restore-packages.ps1 -BuildVersion $buildVersion -Verbose
+
     .\build-all.ps1 -BuildVersion $buildVersion -Verbose
+
     .\package-all.ps1 -BuildVersion $buildVersion -Verbose
 artifacts:
 - path: src\artifacts\packages\*.nupkg
 test_script:
 - ps: >-
     $buildVersion = "alpha1-$env:APPVEYOR_BUILD_NUMBER"
+    
     .\run-tests.ps1 -BuildVersion $buildVersion -Verbose
