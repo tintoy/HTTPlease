@@ -1,3 +1,3 @@
 #!/bin/bash
 
-dnu build src/* test/* --quiet
+dnu build src/HTTPlease* test/HTTPlease* --quiet

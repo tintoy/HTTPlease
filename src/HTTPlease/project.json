@@ -1,0 +1,29 @@
+{
+	"version": "1.0.0-alpha1",
+	"title": "HTTPlease",
+	"summary": "HTTPlease",
+	"description": "Immutable HTTP templates",
+	"authors": [
+		"tintoy@tintoy.io"
+	],
+	"copyright": "Copyright © Adam Friedman 2016",
+	"owners": [
+		"tintoy@tintoy.io"
+	],
+	"tags": [
+		"HTTP",
+		"HTTPlease",
+		"WebApi",
+		"Client",
+		"Template",
+		"Immutable"
+	],
+	"projectUrl": "https://github.com/tintoy/HTTPlease",
+	"licenseUrl": "https://raw.githubusercontent.com/tintoy/HTTPlease/development/r1.0/LICENSE",
+
+	"dependencies": {
+		"HTTPlease.Core": "1.0.0-alpha1",
+		"HTTPlease.Formatters": "1.0.0-alpha1",
+		"HTTPlease.Formatters.Json": "1.0.0-alpha1"
+	}
+}

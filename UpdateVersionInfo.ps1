@@ -28,12 +28,12 @@ Function Update-NetCoreProjectVersion([string] $ProjectFile)
     Add-Member -InputObject $project -NotePropertyName 'version' -NotePropertyValue $newVersion -Force
 
     $project | ConvertTo-Json | Set-Content -Path $ProjectFile
-    
+
     Write-Host "Updated version for '$ProjectFile' from '$oldVersion' to '$newVersion'."
 }
 
 # Update version info for all project files.
-$projectFiles = Dir -File '.\src\HTTPlease.*\project.json', '.\test\HTTPlease.*\project.json'
+$projectFiles = Dir -File '.\src\HTTPlease*\project.json', '.\test\HTTPlease*\project.json'
 ForEach ($projectFile In $projectFiles) {
 	Update-NetCoreProjectVersion $projectFile
 }

@@ -11,4 +11,4 @@ Else {
 
 $dnu = Get-Command dnu
 
-& $dnu build 'src\HTTPlease.*' 'test\HTTPlease.*' $quietFlag
+& $dnu build 'src\HTTPlease*' 'test\HTTPlease*' $quietFlag
