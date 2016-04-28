@@ -1,6 +1,8 @@
 HttpRequest
 ===========
 
+*This topic is a work in progress*
+
 Think of `HttpRequest` as a template for creating an `HttpRequestMessage <https://msdn.microsoft.com/en-us/library/system.net.http.httprequestmessage(v=vs.118).aspx>`_.
 
 At its heart, it is a collection of configuration actions (and any data required to support those actions) that are invoked against each outgoing request message.
