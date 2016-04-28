@@ -3,10 +3,10 @@ Param(
 )
 
 If (!$Verbose) {
-	$quietFlag = '--quiet'
+	$quietFlag = '-quiet'
 }
 Else {
-	$quietFlag = ''
+	$quietFlag = '-appveyor'
 }
 
 $dnx = Get-Command dnx
