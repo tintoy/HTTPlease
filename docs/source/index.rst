@@ -26,6 +26,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   uri-templates/index
    clients/index
    requests/index
    Extensibility <extensibility/index>
