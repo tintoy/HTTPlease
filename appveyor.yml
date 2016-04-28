@@ -11,12 +11,12 @@ install:
     dnvm install 1.0.0-rc1-update2 -r coreclr -arch x64 -nonative
 cache: C:\Users\appveyor\.dnx\packages
 build_script:
-- ps: >-
+- cmd: >-
     dnvm use 1.0.0-rc1-update2 -r coreclr -arch x64
 
     dnu restore --quiet
 
-    .\build-all.ps1 -Verbose
+    dnu build src\HTTPlease* test\HTTPlease*
 test_script:
 - ps: .\run-tests.ps1 -Verbose
 deploy_script:
