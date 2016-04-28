@@ -16,4 +16,4 @@ Function Invoke-DnxTests([string] $ProjectName) {
 }
 
 Invoke-DnxTests -ProjectName HTTPlease.Core.Tests
-Invoke-DnxTests -ProjectName HTTPlease.Formaters.Tests
+Invoke-DnxTests -ProjectName HTTPlease.Formatters.Tests
