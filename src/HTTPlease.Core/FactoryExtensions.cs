@@ -19,7 +19,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
 		/// </returns>
-		public static HttpRequest FromUri(this HttpRequestFactory requestFactory, string requestUri)
+		public static HttpRequest Create(this HttpRequestFactory requestFactory, string requestUri)
 		{
 			if (requestFactory == null)
 				throw new ArgumentNullException(nameof(requestFactory));
@@ -27,7 +27,7 @@ namespace HTTPlease
 			if (String.IsNullOrWhiteSpace(requestUri))
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'requestUri'.", nameof(requestUri));
 
-			return requestFactory.FromUri(
+			return requestFactory.Create(
 				new Uri(requestUri, UriKind.RelativeOrAbsolute)
 			);
 		}

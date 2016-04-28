@@ -43,12 +43,12 @@ namespace HTTPlease
 		/// <summary>
 		///		An empty <see cref="HttpRequest"/>.
 		/// </summary>
-		public static HttpRequest Empty = new HttpRequest(BaseProperties);
+		public static readonly HttpRequest Empty = new HttpRequest(BaseProperties);
 
 		/// <summary>
 		///		The default factory for <see cref="HttpRequest"/>s.
 		/// </summary>
-		public static HttpRequestFactory Create { get; } = new HttpRequestFactory(Empty);
+		public static HttpRequestFactory Factory { get; } = new HttpRequestFactory(Empty);
 
 		#endregion // Constants
 
@@ -73,6 +73,28 @@ namespace HTTPlease
 				propertyName: nameof(QueryParameters)
 			);
 		}
+
+		/// <summary>
+		///		Create a new HTTP request with the specified request URI.
+		/// </summary>
+		/// <param name="requestUri">
+		///		The request URI (can be relative or absolute).
+		/// </param>
+		/// <returns>
+		///		The new <see cref="HttpRequest"/>.
+		/// </returns>
+		public static HttpRequest Create(string requestUri) => Factory.Create(requestUri);
+
+		/// <summary>
+		///		Create a new HTTP request with the specified request URI.
+		/// </summary>
+		/// <param name="requestUri">
+		///		The request URI (can be relative or absolute).
+		/// </param>
+		/// <returns>
+		///		The new <see cref="HttpRequest"/>.
+		/// </returns>
+		public static HttpRequest Create(Uri requestUri) => Factory.Create(requestUri);
 
 		#endregion // Construction
 
@@ -268,7 +290,7 @@ namespace HTTPlease
 
 			return (HttpRequest)base.Clone(modifications);
 		}
-		
+
 		/// <summary>
 		///		Create a new instance of the HTTP request using the specified properties.
 		/// </summary>
@@ -362,4 +384,3 @@ namespace HTTPlease
 		#endregion // Helpers
 	}
 }
-

@@ -34,7 +34,7 @@ namespace HTTPlease.Tests
 			using (client)
 			{
 				HttpRequest<TestParameterContext> requestBuilder =
-					HttpRequest<TestParameterContext>.Create.FromUri(baseUri)
+					HttpRequest<TestParameterContext>.Factory.Create(baseUri)
 						.WithRelativeRequestUri("{action}/{id}?flag={flag?}")
 						.WithTemplateParameter("action", context => context.Action)
 						.WithTemplateParameter("id", context => context.Id)
@@ -70,7 +70,7 @@ namespace HTTPlease.Tests
 			Uri baseUri = new Uri("http://localhost:1234/");
 
 			HttpRequest<TestParameterContext> requestBuilder =
-				HttpRequest<TestParameterContext>.Create.FromUri(baseUri)
+				HttpRequest<TestParameterContext>.Factory.Create(baseUri)
 					.WithRelativeRequestUri("{action}/{id}?flag={flag?}")
 					.WithTemplateParameter("action", context => context.Action)
 					.WithTemplateParameter("id", context => context.Id)
@@ -127,7 +127,7 @@ namespace HTTPlease.Tests
 			};
 
 			HttpRequest<TestParameterContext> requestBuilder =
-				HttpRequest<TestParameterContext>.Create.FromUri(baseUri)
+				HttpRequest<TestParameterContext>.Factory.Create(baseUri)
 					.WithRelativeRequestUri("{action}/{id}?flag={flag?}")
 					.WithTemplateParameter("action", context => context.Action)
 					.WithTemplateParameter("id", context => context.Id)

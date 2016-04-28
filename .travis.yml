@@ -1,0 +1,22 @@
+language: csharp
+mono:
+  - beta
+sudo: required
+dist: trusty
+addons:
+  apt:
+    packages:
+    - libunwind8
+install:
+  - uname -a
+  - curl -sSL https://raw.githubusercontent.com/aspnet/Home/dev/dnvminstall.sh | sh
+  - source ~/.dnx/dnvm/dnvm.sh
+  - dnvm install 1.0.0-rc1-update2 -r coreclr -arch x64
+script:
+  - dnu restore
+  - ./build-all.sh
+  - ./run-tests.sh
+branches:
+  only:
+    - development/r1.0
+    - release/r1.0

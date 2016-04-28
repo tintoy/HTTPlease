@@ -31,7 +31,7 @@ namespace HTTPlease.Formatters.Json
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'requestUri'.", nameof(requestUri));
 
 			return
-				requestFactory.FromUri(requestUri)
+				requestFactory.Create(requestUri)
 					.ExpectJson()
 					.UseJson();
 		}
@@ -60,7 +60,7 @@ namespace HTTPlease.Formatters.Json
 				throw new ArgumentNullException(nameof(requestUri));
 
 			return
-				requestFactory.FromUri(requestUri)
+				requestFactory.Create(requestUri)
 					.ExpectJson()
 					.UseJson();
 		}

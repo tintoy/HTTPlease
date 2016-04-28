@@ -18,7 +18,7 @@ namespace HTTPlease.Tests
 			Uri baseUri = new Uri("http://localhost:1234/");
 
 			HttpRequest request =
-				HttpRequest.Create.FromUri(baseUri)
+				HttpRequest.Factory.Create(baseUri)
 					.WithRelativeRequestUri("{action}/{id}")
 					.WithTemplateParameter("action", "foo")
 					.WithTemplateParameter("id", "bar");
@@ -43,7 +43,7 @@ namespace HTTPlease.Tests
 			string id = "bar";
 
 			HttpRequest request =
-				HttpRequest.Create.FromUri(baseUri)
+				HttpRequest.Factory.Create(baseUri)
 					.WithRelativeRequestUri("{action}/{id}")
 					.WithTemplateParameter("action", () => action)
 					.WithTemplateParameter("id", () => id);
@@ -77,7 +77,7 @@ namespace HTTPlease.Tests
 			Uri baseUri = new Uri("http://localhost:1234/");
 
 			HttpRequest request =
-				HttpRequest.Create.FromUri(baseUri)
+				HttpRequest.Factory.Create(baseUri)
 					.WithRelativeRequestUri("{action}/{id}?flag={flag}")
 					.WithTemplateParameter("action", "foo")
 					.WithTemplateParameter("id", "bar")
@@ -104,7 +104,7 @@ namespace HTTPlease.Tests
 			string flag = "true";
 
 			HttpRequest request =
-				HttpRequest.Create.FromUri(baseUri)
+				HttpRequest.Factory.Create(baseUri)
 					.WithRelativeRequestUri("{action}/{id}?flag={flag?}")
 					.WithTemplateParameter("action", () => action)
 					.WithTemplateParameter("id", () => id)
@@ -140,7 +140,7 @@ namespace HTTPlease.Tests
 			Uri baseUri = new Uri("http://localhost:1234/");
 
 			HttpRequest request =
-				HttpRequest.Create.FromUri(baseUri)
+				HttpRequest.Factory.Create(baseUri)
 					.WithRelativeRequestUri("foo/bar")
 					.WithQueryParameter("flag", "true");
 			using (HttpRequestMessage requestMessage = request.BuildRequestMessage(HttpMethod.Get))
@@ -163,7 +163,7 @@ namespace HTTPlease.Tests
 			string flag = "true";
 
 			HttpRequest request =
-				HttpRequest.Create.FromUri(baseUri)
+				HttpRequest.Factory.Create(baseUri)
 					.WithRelativeRequestUri("foo/bar")
 					.WithQueryParameter("flag", () => flag);
 
