@@ -14,7 +14,7 @@ build_script:
 - ps: >-
     dnvm use 1.0.0-rc1-update2 -r coreclr -arch x64
 
-    dnu restore .\src\HTTPlease.* .\test\HTTPlease.*
+    dnu restore
 
     .\build-all.ps1 -Verbose
 test_script:
