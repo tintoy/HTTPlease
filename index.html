@@ -85,6 +85,7 @@
 <li class="toctree-l1"><a class="reference internal" href="clients/index.html">Clients</a></li>
 <li class="toctree-l1"><a class="reference internal" href="requests/index.html">Requests</a></li>
 <li class="toctree-l1"><a class="reference internal" href="extensibility/index.html">Extensibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development/index.html">Development</a></li>
 </ul>
 
             
@@ -129,9 +130,12 @@
             
   <div class="section" id="httpclient-improved">
 <h1>HttpClient, Improved<a class="headerlink" href="#httpclient-improved" title="Permalink to this headline">¶</a></h1>
+<p>Shortcuts:</p>
+<ul class="simple">
+<li><a class="reference external" href="requests/untyped/usage">Usage examples</a>.</li>
+<li><a class="reference external" href="https://github.com/tintoy/HTTPlease">Source code</a>.</li>
+</ul>
 <p>HTTPlease is a framework for creating / configuring HttpClients, using them to make HTTP requests, and processing the responses.</p>
-<p>Click <a class="reference external" href="requests/untyped/usage">here</a> to jump to a usage example.
-Click <a class="reference external" href="https://github.com/tintoy/HTTPlease">here</a> for the source code.</p>
 <p>It is based on the concept of an immutable template (with lazily-resolved parameters) that acts as the definition for an HTTP request. Any change to this template makes a copy of it, only capturing the differences between the old and the new template. This allows you to progressively build up a hierarchy of templates that increasingly specialise requests until they refer to a specific API operation.</p>
 <p>For example, you might have a base request with a URL of <code class="docutils literal"><span class="pre">/api</span></code>, and then extend that with a relative URI <code class="docutils literal"><span class="pre">{apiVersion}</span></code>, which would effectively be <code class="docutils literal"><span class="pre">/api/{apiVersion}</span></code>.</p>
 <p>Then you might extend that with <code class="docutils literal"><span class="pre">{entitySet}</span></code> to become <code class="docutils literal"><span class="pre">api/{apiVersion}/{entitySet}</span></code> (let&#8217;s call this template &#8220;entity list&#8221;), and extend that with <code class="docutils literal"><span class="pre">{entityId}</span></code> resulting in <code class="docutils literal"><span class="pre">api/{apiVersion}/{entitySet}/{entityId}</span></code> (let&#8217;s call this template &#8220;entity by Id&#8221;).</p>
@@ -140,7 +144,6 @@ Click <a class="reference external" href="https://github.com/tintoy/HTTPlease">h
 <p>Note that not all template parameters have to be deferred (lazily evaluated). Some can be given constant values as part of the template definition. See the tests for examples of how the API can be used.</p>
 <p>The HttpClient builder performs a similar role; it is a template describing how to create and configure an HttpClient (most of its power comes from the ability to define extension methods to encapsulate special configuration or custom message handlers in the pipeline). Again, see the tests for examples of how it can be used.</p>
 <p>This project is based on work I previously did for <a class="reference external" href="https://github.com/DimensionDataCBUSydney/Watt">Watt</a>.</p>
-<p>Contents:</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="uri-templates/index.html">URI Templates</a><ul>
@@ -159,6 +162,12 @@ Click <a class="reference external" href="https://github.com/tintoy/HTTPlease">h
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="extensibility/index.html">Extensibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development/index.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="development/design/index.html">      Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development/contributing/index.html">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extensibility/index.html">Extensiblity</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>

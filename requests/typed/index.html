@@ -94,6 +94,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../extensibility/index.html">Extensibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Development</a></li>
 </ul>
 
             
@@ -140,14 +141,14 @@
             
   <div class="section" id="httprequest-tcontext">
 <h1>HttpRequest&lt;TContext&gt;<a class="headerlink" href="#httprequest-tcontext" title="Permalink to this headline">¶</a></h1>
-<p><em>This topic is a work in progress</em></p>
-<p><code class="docutils literal"><span class="pre">HttpRequest&lt;TContext&gt;</span></code> is much the same as <code class="docutils literal"><span class="pre">HttpRequest</span></code>, except that it supports resolving deferred values from an object supplied when the request is built / invoked.</p>
-<p>So while HttpRequest tends to be used either for non-parameterised requests (i.e. simply as an HTTP request DLS), <code class="docutils literal"><span class="pre">HttpRequest&lt;TContext&gt;</span></code> is more commonly constructed once and cached (e.g. in a static read-only field) and its parameters get their values at runtime.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
 </ul>
 </div>
+<p><em>This topic is a work in progress</em></p>
+<p><code class="docutils literal"><span class="pre">HttpRequest&lt;TContext&gt;</span></code> is much the same as <code class="docutils literal"><span class="pre">HttpRequest</span></code>, except that it supports resolving deferred values from an object supplied when the request is built / invoked.</p>
+<p>So while HttpRequest tends to be used either for non-parameterised requests (i.e. simply as an HTTP request DSL), <code class="docutils literal"><span class="pre">HttpRequest&lt;TContext&gt;</span></code> is more commonly constructed once and cached (e.g. in a static read-only field) and its parameters get their values from an object passed to construct each request.</p>
 </div>
 
 

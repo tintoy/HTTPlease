@@ -90,6 +90,7 @@
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Usage</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#creating-a-request-from-a-uri">Creating a request from a URI</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#binding-request-parameters">Binding request parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#binding-request-parameters-to-an-object-s-properties">Binding request parameters to an object&#8217;s properties</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#creating-a-request-with-late-bound-parameters">Creating a request with late-bound parameters</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#working-with-responses">Working with responses</a></li>
 </ul>
@@ -100,6 +101,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../extensibility/index.html">Extensibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Development</a></li>
 </ul>
 
             
@@ -148,6 +150,19 @@
             
   <div class="section" id="using-httprequest">
 <h1>Using HttpRequest<a class="headerlink" href="#using-httprequest" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="#creating-a-request-from-a-uri">Creating a request from a URI</a></li>
+<li><a class="reference internal" href="#binding-request-parameters">Binding request parameters</a></li>
+<li><a class="reference internal" href="#binding-request-parameters-to-an-object-s-properties">Binding request parameters to an object&#8217;s properties</a></li>
+<li><a class="reference internal" href="#creating-a-request-with-late-bound-parameters">Creating a request with late-bound parameters</a></li>
+<li><a class="reference internal" href="#working-with-responses">Working with responses</a><ul>
+<li><a class="reference internal" href="#just-give-me-the-response">Just give me the response</a></li>
+<li><a class="reference internal" href="#i-want-to-handle-specific-status-codes">I want to handle specific status codes</a></li>
+<li><a class="reference internal" href="#i-want-to-handle-failure-status-codes-as-exceptions">I want to handle failure status codes as exceptions</a></li>
+<li><a class="reference internal" href="#some-basic-data-types">Some basic data-types</a></li>
+</ul>
+</li>
+</ul>
 <div class="section" id="creating-a-request-from-a-uri">
 <h2>Creating a request from a URI<a class="headerlink" href="#creating-a-request-from-a-uri" title="Permalink to this headline">¶</a></h2>
 <p>First, let&#8217;s define a request that will act as the basis for the requests in subsequent examples.</p>
@@ -171,6 +186,30 @@ One way to do this is to give the parameters constant values by specialising the
             <span class="p">.</span><span class="n">WithQueryParameter</span><span class="p">(</span><span class="s">&quot;sort&quot;</span><span class="p">,</span> <span class="s">&quot;name&quot;</span><span class="p">)</span>
             <span class="p">.</span><span class="n">WithTemplateParameter</span><span class="p">(</span><span class="s">&quot;variable1&quot;</span><span class="p">,</span> <span class="m">1234</span><span class="p">)</span>
             <span class="p">.</span><span class="n">WithTemplateParameter</span><span class="p">(</span><span class="s">&quot;variable2&quot;</span><span class="p">,</span> <span class="p">(</span><span class="kt">string</span><span class="p">)</span><span class="k">null</span><span class="p">);</span>
+
+    <span class="k">using</span> <span class="p">(</span><span class="n">HttpResponseMessage</span> <span class="n">response</span> <span class="p">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="c1">// Request URI will be:</span>
+        <span class="c1">//    http://localhost:1234/customers/1234/foo/bar?sort=name</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="binding-request-parameters-to-an-object-s-properties">
+<h2>Binding request parameters to an object&#8217;s properties<a class="headerlink" href="#binding-request-parameters-to-an-object-s-properties" title="Permalink to this headline">¶</a></h2>
+<p>The parameters in the request URI can also be bound to the properties of an object (including anonymous types).
+If you&#8217;re not using anonymous types (or other immutable object types) then you may be better off using <a class="reference external" href="../typed/index">HttpRequest&lt;TContext&gt;</a>.</p>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span><span class="p">())</span>
+<span class="p">{</span>
+    <span class="n">HttpRequest</span> <span class="n">request</span> <span class="p">=</span>
+        <span class="n">requestTemplate</span>
+            <span class="p">.</span><span class="n">WithQueryParameter</span><span class="p">(</span><span class="s">&quot;sort&quot;</span><span class="p">,</span> <span class="s">&quot;name&quot;</span><span class="p">)</span>
+            <span class="p">.</span><span class="n">WithTemplateParameters</span><span class="p">(</span><span class="k">new</span>
+            <span class="p">{</span>
+                <span class="n">variable1</span> <span class="p">=</span> <span class="m">1234</span><span class="p">,</span>
+                <span class="n">variable2</span> <span class="p">=</span> <span class="p">(</span><span class="kt">string</span><span class="p">)</span><span class="k">null</span>
+            <span class="p">});</span>
 
     <span class="k">using</span> <span class="p">(</span><span class="n">HttpResponseMessage</span> <span class="n">response</span> <span class="p">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
     <span class="p">{</span>
@@ -219,8 +258,8 @@ One way to do this is to give the parameters constant values by specialising the
 <p>HTTPlease offers several styles of interaction with the responses from HTTP requests.
 These range from simple / low-ceremony to fully-customisable.</p>
 <p>Click <a class="reference internal" href="#data-types"><span class="std std-ref">here</span></a> for the definitions of some basic data-types used in these examples.</p>
-<div class="literal-block-wrapper container" id="just-give-me-the-response">
-<div class="code-block-caption"><span class="caption-text">Just give me the response</span><a class="headerlink" href="#just-give-me-the-response" title="Permalink to this code">¶</a></div>
+<div class="section" id="just-give-me-the-response">
+<h3>Just give me the response<a class="headerlink" href="#just-give-me-the-response" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-csharp"><div class="highlight"><pre><span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span> <span class="p">{</span> <span class="n">BaseAddress</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Uri</span><span class="p">(</span><span class="s">&quot;http://localhost:1234/&quot;</span><span class="p">)</span> <span class="p">})</span>
 <span class="p">{</span>
     <span class="n">HttpRequest</span> <span class="n">request</span> <span class="p">=</span> <span class="n">HttpRequest</span><span class="p">.</span><span class="n">Factory</span><span class="p">.</span><span class="n">CreateJson</span><span class="p">(</span><span class="s">&quot;customers/1&quot;</span><span class="p">);</span>
@@ -233,8 +272,8 @@ These range from simple / low-ceremony to fully-customisable.</p>
 </pre></div>
 </div>
 </div>
-<div class="literal-block-wrapper container" id="i-want-to-handle-specific-status-codes">
-<div class="code-block-caption"><span class="caption-text">I want to handle specific status codes</span><a class="headerlink" href="#i-want-to-handle-specific-status-codes" title="Permalink to this code">¶</a></div>
+<div class="section" id="i-want-to-handle-specific-status-codes">
+<h3>I want to handle specific status codes<a class="headerlink" href="#i-want-to-handle-specific-status-codes" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-csharp"><div class="highlight"><pre><span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span> <span class="p">{</span> <span class="n">BaseAddress</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Uri</span><span class="p">(</span><span class="s">&quot;http://localhost:1234/&quot;</span><span class="p">)</span> <span class="p">})</span>
 <span class="p">{</span>
     <span class="n">HttpRequest</span> <span class="n">request</span> <span class="p">=</span> <span class="n">HttpRequest</span><span class="p">.</span><span class="n">Factory</span><span class="p">.</span><span class="n">CreateJson</span><span class="p">(</span><span class="s">&quot;customers/1&quot;</span><span class="p">);</span>
@@ -265,8 +304,46 @@ These range from simple / low-ceremony to fully-customisable.</p>
 </pre></div>
 </div>
 </div>
-<div class="literal-block-wrapper container" id="i-want-to-do-it-all-myself">
-<div class="code-block-caption"><span class="caption-text">I want to do it all myself</span><a class="headerlink" href="#i-want-to-do-it-all-myself" title="Permalink to this code">¶</a></div>
+<div class="section" id="i-want-to-handle-failure-status-codes-as-exceptions">
+<h3>I want to handle failure status codes as exceptions<a class="headerlink" href="#i-want-to-handle-failure-status-codes-as-exceptions" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="n">HttpRequest</span> <span class="n">request</span> <span class="p">=</span> <span class="n">HttpRequest</span><span class="p">.</span><span class="n">Factory</span><span class="p">.</span><span class="n">CreateJson</span><span class="p">(</span><span class="s">&quot;customers/1&quot;</span><span class="p">);</span>
+
+<span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span><span class="p">())</span>
+<span class="p">{</span>
+    <span class="k">try</span>
+    <span class="p">{</span>
+        <span class="c1">// If status code indicates success, read response as Customer.</span>
+        <span class="c1">// If status code indicates failure, read response as Error then throw HttpRequestException&lt;Error&gt;.</span>
+        <span class="c1">// You can also pass one or more status codes to ReadAsAsync to tell it which ones indicate success.</span>
+
+        <span class="n">Customer</span> <span class="n">customer</span> <span class="p">=</span>
+            <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+                <span class="p">.</span><span class="n">ReadAsAsync</span><span class="p">&lt;</span><span class="n">Customer</span><span class="p">,</span> <span class="n">Error</span><span class="p">&gt;();</span>
+    <span class="p">}</span>
+    <span class="k">catch</span> <span class="p">(</span><span class="n">HttpRequestException</span><span class="p">&lt;</span><span class="n">Error</span><span class="p">&gt;</span> <span class="n">expectedError</span><span class="p">)</span> <span class="n">when</span> <span class="n">expectedError</span><span class="p">.</span><span class="n">StatusCode</span> <span class="p">==</span> <span class="n">HttpStatusCode</span><span class="p">.</span><span class="n">NotFound</span>
+    <span class="p">{</span>
+        <span class="n">Error</span> <span class="n">errorResponse</span> <span class="p">=</span> <span class="n">expectedError</span><span class="p">.</span><span class="n">Response</span><span class="p">;</span>
+
+        <span class="n">Log</span><span class="p">.</span><span class="n">Error</span><span class="p">(</span><span class="n">expectedError</span><span class="p">,</span> <span class="n">errorResponse</span><span class="p">.</span><span class="n">ErrorMessage</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">catch</span> <span class="p">(</span><span class="n">HttpRequestException</span><span class="p">&lt;</span><span class="n">Error</span><span class="p">&gt;</span> <span class="n">expectedError</span><span class="p">)</span> <span class="n">when</span> <span class="n">expectedError</span><span class="p">.</span><span class="n">StatusCode</span> <span class="p">==</span> <span class="n">HttpStatusCode</span><span class="p">.</span><span class="n">BadRequest</span>
+    <span class="p">{</span>
+        <span class="n">Error</span> <span class="n">errorResponse</span> <span class="p">=</span> <span class="n">expectedError</span><span class="p">.</span><span class="n">Response</span><span class="p">;</span>
+
+        <span class="n">Log</span><span class="p">.</span><span class="n">Error</span><span class="p">(</span><span class="n">expectedError</span><span class="p">,</span> <span class="n">errorResponse</span><span class="p">.</span><span class="n">ErrorMessage</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">catch</span> <span class="p">(</span><span class="n">HttpRequestException</span> <span class="n">unexpectedError</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// Unexpected error (generic request failure, or unable to read response body)</span>
+
+        <span class="n">Log</span><span class="p">.</span><span class="n">Error</span><span class="p">(</span><span class="n">unexpectedError</span><span class="p">,</span> <span class="n">unexpectedError</span><span class="p">.</span><span class="n">Message</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="i-want-to-do-it-all-myself">
+<h3>I want to do it all myself<a class="headerlink" href="#i-want-to-do-it-all-myself" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-csharp"><div class="highlight"><pre><span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span> <span class="p">{</span> <span class="n">BaseAddress</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Uri</span><span class="p">(</span><span class="s">&quot;http://localhost:1234/&quot;</span><span class="p">)</span> <span class="p">})</span>
 <span class="p">{</span>
     <span class="n">HttpRequest</span> <span class="n">request</span> <span class="p">=</span> <span class="n">HttpRequest</span><span class="p">.</span><span class="n">Factory</span><span class="p">.</span><span class="n">CreateJson</span><span class="p">(</span><span class="s">&quot;customers/1&quot;</span><span class="p">);</span>
@@ -299,46 +376,9 @@ These range from simple / low-ceremony to fully-customisable.</p>
 </pre></div>
 </div>
 </div>
-<div class="literal-block-wrapper container" id="i-want-to-handle-errors">
-<div class="code-block-caption"><span class="caption-text">I want to handle errors</span><a class="headerlink" href="#i-want-to-handle-errors" title="Permalink to this code">¶</a></div>
-<div class="highlight-csharp"><div class="highlight"><pre><span class="n">HttpRequest</span> <span class="n">request</span> <span class="p">=</span> <span class="n">HttpRequest</span><span class="p">.</span><span class="n">Factory</span><span class="p">.</span><span class="n">CreateJson</span><span class="p">(</span><span class="s">&quot;customers/1&quot;</span><span class="p">);</span>
-
-<span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span><span class="p">())</span>
-<span class="p">{</span>
-    <span class="k">try</span>
-    <span class="p">{</span>
-        <span class="c1">// If status code indicates success, read response as Customer.</span>
-        <span class="c1">// If status code indicates failure, read response as Error then throw HttpRequestException&lt;Error&gt;.</span>
-
-        <span class="n">Customer</span> <span class="n">customer</span> <span class="p">=</span>
-            <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
-                <span class="p">.</span><span class="n">ReadAsAsync</span><span class="p">&lt;</span><span class="n">Customer</span><span class="p">,</span> <span class="n">Error</span><span class="p">&gt;();</span>
-    <span class="p">}</span>
-    <span class="k">catch</span> <span class="p">(</span><span class="n">HttpRequestException</span><span class="p">&lt;</span><span class="n">Error</span><span class="p">&gt;</span> <span class="n">expectedError</span><span class="p">)</span> <span class="n">when</span> <span class="n">expectedError</span><span class="p">.</span><span class="n">StatusCode</span> <span class="p">==</span> <span class="n">HttpStatusCode</span><span class="p">.</span><span class="n">NotFound</span>
-    <span class="p">{</span>
-        <span class="n">Error</span> <span class="n">errorResponse</span> <span class="p">=</span> <span class="n">expectedError</span><span class="p">.</span><span class="n">Response</span><span class="p">;</span>
-
-        <span class="n">Log</span><span class="p">.</span><span class="n">Error</span><span class="p">(</span><span class="n">expectedError</span><span class="p">,</span> <span class="n">errorResponse</span><span class="p">.</span><span class="n">ErrorMessage</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">catch</span> <span class="p">(</span><span class="n">HttpRequestException</span><span class="p">&lt;</span><span class="n">Error</span><span class="p">&gt;</span> <span class="n">expectedError</span><span class="p">)</span> <span class="n">when</span> <span class="n">expectedError</span><span class="p">.</span><span class="n">StatusCode</span> <span class="p">==</span> <span class="n">HttpStatusCode</span><span class="p">.</span><span class="n">BadRequest</span>
-    <span class="p">{</span>
-        <span class="n">Error</span> <span class="n">errorResponse</span> <span class="p">=</span> <span class="n">expectedError</span><span class="p">.</span><span class="n">Response</span><span class="p">;</span>
-
-        <span class="n">Log</span><span class="p">.</span><span class="n">Error</span><span class="p">(</span><span class="n">expectedError</span><span class="p">,</span> <span class="n">errorResponse</span><span class="p">.</span><span class="n">ErrorMessage</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">catch</span> <span class="p">(</span><span class="n">HttpRequestException</span> <span class="n">unexpectedError</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="c1">// Unexpected error (generic request failure, or unable to read response body)</span>
-
-        <span class="n">Log</span><span class="p">.</span><span class="n">Error</span><span class="p">(</span><span class="n">unexpectedError</span><span class="p">,</span> <span class="n">unexpectedError</span><span class="p">.</span><span class="n">Message</span><span class="p">)</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</div>
-<div class="literal-block-wrapper container" id="data-types">
-<div class="code-block-caption"><span class="caption-text">Some basic data-types</span><a class="headerlink" href="#data-types" title="Permalink to this code">¶</a></div>
-<div class="highlight-csharp"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Customer</span>
+<div class="section" id="some-basic-data-types">
+<h3>Some basic data-types<a class="headerlink" href="#some-basic-data-types" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-csharp" id="data-types"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Customer</span>
 <span class="p">{</span>
     <span class="k">public</span> <span class="kt">string</span> <span class="n">FirstName</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
     <span class="k">public</span> <span class="kt">string</span> <span class="n">LastName</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Using HttpClientBuilder &mdash; HTTPlease 1.0.0-alpha1 documentation</title>
+  <title>Development &mdash; HTTPlease 1.0.0-alpha1 documentation</title>
   
 
   
@@ -31,9 +31,8 @@
 
   
     <link rel="top" title="HTTPlease 1.0.0-alpha1 documentation" href="../index.html"/>
-        <link rel="up" title="Clients" href="index.html"/>
-        <link rel="next" title="Requests" href="../requests/index.html"/>
-        <link rel="prev" title="Clients" href="index.html"/> 
+        <link rel="next" title="HTTPlease Design" href="design/index.html"/>
+        <link rel="prev" title="Extending HTTPlease" href="../extensibility/index.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -84,12 +83,15 @@
             
                 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../uri-templates/index.html">URI Templates</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">Clients</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Usage</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../clients/index.html">Clients</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../requests/index.html">Requests</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../extensibility/index.html">Extensibility</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="design/index.html">      Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing/index.html">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extensibility/index.html">Extensiblity</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -120,9 +122,7 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../index.html">Docs</a> &raquo;</li>
       
-          <li><a href="index.html">Clients</a> &raquo;</li>
-      
-    <li>Using HttpClientBuilder</li>
+    <li>Development</li>
       <li class="wy-breadcrumbs-aside">
         
           
@@ -134,25 +134,18 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="using-httpclientbuilder">
-<h1>Using HttpClientBuilder<a class="headerlink" href="#using-httpclientbuilder" title="Permalink to this headline">¶</a></h1>
-<div class="highlight-csharp"><div class="highlight"><pre><span class="k">static</span> <span class="k">readonly</span> <span class="n">HttpClientBuilder</span> <span class="n">ClientBuilder</span> <span class="p">=</span>
-        <span class="k">new</span> <span class="nf">HttpClientBuilder</span><span class="p">()</span>
-                <span class="p">.</span><span class="n">WithActivityCorrelation</span><span class="p">()</span>
-                <span class="p">.</span><span class="n">WithLogging</span><span class="p">(</span><span class="n">logger</span><span class="p">);</span>
-
-<span class="n">HttpClient</span> <span class="n">client1</span> <span class="p">=</span> <span class="n">ClientBuilder</span><span class="p">.</span><span class="n">CreateClient</span><span class="p">(</span><span class="n">baseUri</span><span class="p">:</span> <span class="s">&quot;http://foo.com/bar&quot;</span><span class="p">);</span>
-<span class="k">using</span> <span class="p">(</span><span class="n">client1</span><span class="p">)</span>
-<span class="p">{</span>
-        <span class="c1">// Use client</span>
-<span class="p">}</span>
-
-<span class="n">HttpClient</span> <span class="n">client2</span> <span class="p">=</span> <span class="n">ClientBuilder</span><span class="p">.</span><span class="n">CreateClient</span><span class="p">(</span><span class="n">baseUri</span><span class="p">:</span> <span class="s">&quot;http://baz.net/bonk&quot;</span><span class="p">);</span>
-<span class="k">using</span> <span class="p">(</span><span class="n">client2</span><span class="p">)</span>
-<span class="p">{</span>
-        <span class="c1">// Use client</span>
-<span class="p">}</span>
-</pre></div>
+  <div class="section" id="development">
+<h1>Development<a class="headerlink" href="#development" title="Permalink to this headline">¶</a></h1>
+<p>TODO: Developer guidelines, etc.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="design/index.html">      Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing/index.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="design/index.html">      Design</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../extensibility/index.html">Extensiblity</a></li>
+</ul>
 </div>
 </div>
 
@@ -163,10 +156,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../requests/index.html" class="btn btn-neutral float-right" title="Requests" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="design/index.html" class="btn btn-neutral float-right" title="HTTPlease Design" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral" title="Clients" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../extensibility/index.html" class="btn btn-neutral" title="Extending HTTPlease" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
