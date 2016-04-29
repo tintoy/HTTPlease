@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("HTTPlease.Formatters.Json")]
-[assembly: AssemblyDescription("JSON serialisation support for HTTP templates")]
+[assembly: AssemblyDescription("JSON serialisation support for HTTPlease")]
 [assembly: AssemblyProduct("HTTPlease")]
 [assembly: AssemblyCopyright("Copyright © Adam Friedman 2016")]
 

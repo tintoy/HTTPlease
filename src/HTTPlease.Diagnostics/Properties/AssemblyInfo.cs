@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("HTTPlease.Formatters")]
-[assembly: AssemblyDescription("Serialisation support for HTTPlease")]
+[assembly: AssemblyTitle("HTTPlease.Diagnostics")]
+[assembly: AssemblyDescription("Instrumentation and telemetry support for HTTPlease")]
 [assembly: AssemblyProduct("HTTPlease")]
 [assembly: AssemblyCopyright("Copyright © Adam Friedman 2016")]
 
