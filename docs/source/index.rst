@@ -1,11 +1,12 @@
 HttpClient, Improved
 ====================
 
+Shortcuts:
+
+* `Usage examples <requests/untyped/usage>`_.
+* `Source code <https://github.com/tintoy/HTTPlease>`_.
+
 HTTPlease is a framework for creating / configuring HttpClients, using them to make HTTP requests, and processing the responses.
-
-Click `here <requests/untyped/usage>`_ to jump to a usage example.
-
-Click `here <https://github.com/tintoy/HTTPlease>`_ for the source code.
 
 It is based on the concept of an immutable template (with lazily-resolved parameters) that acts as the definition for an HTTP request. Any change to this template makes a copy of it, only capturing the differences between the old and the new template. This allows you to progressively build up a hierarchy of templates that increasingly specialise requests until they refer to a specific API operation.
 
@@ -23,8 +24,6 @@ The HttpClient builder performs a similar role; it is a template describing how 
 
 This project is based on work I previously did for `Watt <https://github.com/DimensionDataCBUSydney/Watt>`_.
 
-Contents:
-
 .. toctree::
    :maxdepth: 2
 
@@ -32,6 +31,7 @@ Contents:
    clients/index
    requests/index
    Extensibility <extensibility/index>
+   Development <development/index>
 
 Indices and tables
 ==================

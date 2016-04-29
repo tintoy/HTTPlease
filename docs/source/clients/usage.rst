@@ -6,7 +6,7 @@ Using HttpClientBuilder
 	static readonly HttpClientBuilder ClientBuilder =
 		new HttpClientBuilder()
 			.WithActivityCorrelation()
-			.WithLogging();
+			.WithLogging(logger);
 
 	HttpClient client1 = ClientBuilder.CreateClient(baseUri: "http://foo.com/bar");
 	using (client1)

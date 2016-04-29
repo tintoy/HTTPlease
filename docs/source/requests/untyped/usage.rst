@@ -1,6 +1,17 @@
 Using HttpRequest
 =================
 
+* `Creating a request from a URI`_
+* `Binding request parameters`_
+* `Binding request parameters to an object's properties`_
+* `Creating a request with late-bound parameters`_
+* `Working with responses`_
+
+  * `Just give me the response`_
+  * `I want to handle specific status codes`_
+  * `I want to handle failure status codes as exceptions`_
+  * `Some basic data-types`_
+
 Creating a request from a URI
 -----------------------------
 
@@ -31,6 +42,32 @@ One way to do this is to give the parameters constant values by specialising the
                 .WithQueryParameter("sort", "name")
                 .WithTemplateParameter("variable1", 1234)
                 .WithTemplateParameter("variable2", (string)null);
+
+        using (HttpResponseMessage response = await client.GetAsync(request))
+        {
+            // Request URI will be:
+            //    http://localhost:1234/customers/1234/foo/bar?sort=name
+        }
+    }
+
+Binding request parameters to an object's properties
+----------------------------------------------------
+
+The parameters in the request URI can also be bound to the properties of an object (including anonymous types).
+If you're not using anonymous types (or other immutable object types) then you may be better off using `HttpRequest<TContext> <../typed/index>`_.
+
+.. code-block:: csharp
+
+    using (HttpClient client = new HttpClient())
+    {
+        HttpRequest request =
+            requestTemplate
+                .WithQueryParameter("sort", "name")
+                .WithTemplateParameters(new
+                {
+                    variable1 = 1234,
+                    variable2 = (string)null
+                });
 
         using (HttpResponseMessage response = await client.GetAsync(request))
         {
@@ -83,8 +120,9 @@ These range from simple / low-ceremony to fully-customisable.
 
 Click :ref:`here <data-types>` for the definitions of some basic data-types used in these examples.
 
+Just give me the response
+^^^^^^^^^^^^^^^^^^^^^^^^^
 .. code-block:: csharp
-    :caption: Just give me the response
 
     using (HttpClient client = new HttpClient { BaseAddress = new Uri("http://localhost:1234/") })
     {
@@ -96,8 +134,9 @@ Click :ref:`here <data-types>` for the definitions of some basic data-types used
                 .ReadAsAsync<Customer>();
     }
 
+I want to handle specific status codes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. code-block:: csharp
-    :caption: I want to handle specific status codes
 
     using (HttpClient client = new HttpClient { BaseAddress = new Uri("http://localhost:1234/") })
     {
@@ -127,8 +166,47 @@ Click :ref:`here <data-types>` for the definitions of some basic data-types used
         }
     }
 
+I want to handle failure status codes as exceptions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. code-block:: csharp
-    :caption: I want to do it all myself
+
+    HttpRequest request = HttpRequest.Factory.CreateJson("customers/1");
+
+    using (HttpClient client = new HttpClient())
+    {
+        try
+        {
+            // If status code indicates success, read response as Customer.
+            // If status code indicates failure, read response as Error then throw HttpRequestException<Error>.
+            // You can also pass one or more status codes to ReadAsAsync to tell it which ones indicate success.
+
+            Customer customer =
+                await client.GetAsync(request)
+                    .ReadAsAsync<Customer, Error>();
+        }
+        catch (HttpRequestException<Error> expectedError) when expectedError.StatusCode == HttpStatusCode.NotFound
+        {
+            Error errorResponse = expectedError.Response;
+
+            Log.Error(expectedError, errorResponse.ErrorMessage);
+        }
+        catch (HttpRequestException<Error> expectedError) when expectedError.StatusCode == HttpStatusCode.BadRequest
+        {
+            Error errorResponse = expectedError.Response;
+
+            Log.Error(expectedError, errorResponse.ErrorMessage);
+        }
+        catch (HttpRequestException unexpectedError)
+        {
+            // Unexpected error (generic request failure, or unable to read response body)
+
+            Log.Error(unexpectedError, unexpectedError.Message)
+        }
+    }
+
+I want to do it all myself
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. code-block:: csharp
 
     using (HttpClient client = new HttpClient { BaseAddress = new Uri("http://localhost:1234/") })
     {
@@ -160,44 +238,9 @@ Click :ref:`here <data-types>` for the definitions of some basic data-types used
         }
     }
 
+Some basic data-types
+^^^^^^^^^^^^^^^^^^^^^
 .. code-block:: csharp
-    :caption: I want to handle errors
-
-    HttpRequest request = HttpRequest.Factory.CreateJson("customers/1");
-
-    using (HttpClient client = new HttpClient())
-    {
-        try
-        {
-            // If status code indicates success, read response as Customer.
-            // If status code indicates failure, read response as Error then throw HttpRequestException<Error>.
-
-            Customer customer =
-                await client.GetAsync(request)
-                    .ReadAsAsync<Customer, Error>();
-        }
-        catch (HttpRequestException<Error> expectedError) when expectedError.StatusCode == HttpStatusCode.NotFound
-        {
-            Error errorResponse = expectedError.Response;
-
-            Log.Error(expectedError, errorResponse.ErrorMessage);
-        }
-        catch (HttpRequestException<Error> expectedError) when expectedError.StatusCode == HttpStatusCode.BadRequest
-        {
-            Error errorResponse = expectedError.Response;
-
-            Log.Error(expectedError, errorResponse.ErrorMessage);
-        }
-        catch (HttpRequestException unexpectedError)
-        {
-            // Unexpected error (generic request failure, or unable to read response body)
-
-            Log.Error(unexpectedError, unexpectedError.Message)
-        }
-    }
-
-.. code-block:: csharp
-    :caption: Some basic data-types
     :name: data-types
 
     class Customer
