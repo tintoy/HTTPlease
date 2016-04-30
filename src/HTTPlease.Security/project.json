@@ -1,8 +1,9 @@
 ﻿{
     "version": "1.0.0-*",
-    "title": "HTTPlease Testability",
-    "summary": "Testability support for HTTPlease",
-    "description": "Request / response mocking and other test-related functionality for HTTPlease Immutable HTTP templates",
+    "title": "HTTPlease Security",
+    "description": "Security features for HTTPlease",
+    "summary": "Security features (e.g. authentication) for HTTPlease",
+
     "authors": [
         "tintoy@tintoy.io"
     ],
@@ -13,14 +14,14 @@
     "tags": [
         "HTTP",
         "HTTPlease",
-        "Test",
-        "Testability"
+        "Security",
+        "Authentication"
     ],
     "projectUrl": "https://tintoy.github.io/HTTPlease/",
     "licenseUrl": "https://raw.githubusercontent.com/tintoy/HTTPlease/development/r1.0/LICENSE",
 
     "tooling": {
-        "defaultNamespace": "HTTPlease.Testability"
+        "defaultNamespace": "HTTPlease.Security"
     },
 
     "frameworks": {
@@ -39,12 +40,8 @@
 
     "dependencies": {
         "HTTPlease.Core": "1.0.0-*",
-        "HTTPlease.Formatters": "1.0.0-*",
-        "HTTPlease.Formatters.Json": "1.0.0-*",
         "System.Collections.Concurrent": "4.0.11-beta-23516",
         "System.Collections.Immutable": "1.1.37",
-        "System.Net.Http": "4.0.1-beta-23516",
-        "xunit": "2.1.0",
-        "xunit.runner.dnx": "2.1.0-rc1-build204"
+        "System.Net.Http": "4.0.1-beta-23516"
     }
 }

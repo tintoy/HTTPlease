@@ -15,12 +15,8 @@
         "HTTP",
         "HTTPlease",
         "Formatters",
-        "JSON",
         "Serialization",
-        "WebApi",
-        "Client",
-        "Template",
-        "Immutable"
+        "JSON"
     ],
     "projectUrl": "https://tintoy.github.io/HTTPlease/",
     "licenseUrl": "https://raw.githubusercontent.com/tintoy/HTTPlease/development/r1.0/LICENSE",

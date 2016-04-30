@@ -14,11 +14,7 @@
         "HTTP",
         "HTTPlease",
         "Formatters",
-        "Serialization",
-        "WebApi",
-        "Client",
-        "Template",
-        "Immutable"
+        "Serialization"
     ],
     "projectUrl": "https://tintoy.github.io/HTTPlease/",
     "licenseUrl": "https://raw.githubusercontent.com/tintoy/HTTPlease/development/r1.0/LICENSE",
@@ -31,11 +27,8 @@
         "dnxcore50": {
             "dependencies": {
                 "Microsoft.CSharp": "4.0.1-beta-23516",
-                "System.Collections": "4.0.11-beta-23516",
-                "System.Collections.Specialized": "4.0.1-beta-23516",
                 "System.Linq": "4.0.1-beta-23516",
                 "System.Runtime": "4.0.21-beta-23516",
-                "System.Text.RegularExpressions": "4.0.11-beta-23516",
                 "System.Threading": "4.0.11-beta-23516"
             }
         }
@@ -43,8 +36,11 @@
 
     "dependencies": {
         "HTTPlease.Core": "1.0.0-*",
+        "System.Collections": "4.0.11-beta-23516",
         "System.Collections.Concurrent": "4.0.11-beta-23516",
         "System.Collections.Immutable": "1.1.37",
-        "System.Net.Http": "4.0.1-beta-23516"
+        "System.Collections.Specialized": "4.0.1-beta-23516",
+        "System.Net.Http": "4.0.1-beta-23516",
+        "System.Text.RegularExpressions": "4.0.11-beta-23516"
     }
 }
