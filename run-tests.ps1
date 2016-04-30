@@ -14,7 +14,7 @@ If (!$Verbose) {
 	$quietFlag = '-quiet'
 }
 Else {
-	$quietFlag = '-appveyor'
+	$quietFlag = '-verbose'
 }
 
 $dnx = Get-Command dnx
