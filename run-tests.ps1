@@ -11,7 +11,7 @@ Else {
 }
 
 If (!$Verbose) {
-	$quietFlag = '-quiet'
+	$quietFlag = '-appveyor'
 }
 Else {
 	$quietFlag = '-verbose'

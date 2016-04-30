@@ -18,7 +18,7 @@ namespace HTTPlease
 	///		A template for an HTTP request.
 	/// </summary>
 	public sealed class HttpRequest
-		: HttpRequestBase, IHttpRequest<object>
+		: HttpRequestBase, IHttpRequest, IHttpRequest<object>
 	{
 		#region Constants
 
@@ -149,6 +149,7 @@ namespace HTTPlease
 			if (requestUri == null)
 				throw new InvalidOperationException("Cannot build a request message; the request does not have a URI.");
 
+			System.Diagnostics.Debug.WriteLine(requestUri.ToString(), "RURI");
 			if (!requestUri.IsAbsoluteUri)
 			{
 				if (baseUri == null)

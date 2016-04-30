@@ -50,12 +50,12 @@ namespace HTTPlease.Core
 		/// <summary>
 		///		The request URI.
 		/// </summary>
-		public Uri Uri => GetProperty<Uri>();
+		public Uri Uri => GetOptionalProperty<Uri>();
 
 		/// <summary>
 		///		Is the request URI a template?
 		/// </summary>
-		public bool IsUriTemplate => GetProperty<bool>();
+		public bool IsUriTemplate => GetOptionalProperty<bool>();
 
 		/// <summary>
 		///		All properties for the request.
@@ -122,8 +122,11 @@ namespace HTTPlease.Core
 		/// <param name="propertyName">
 		///		The name of the property to retrieve.
 		/// </param>
+		/// <param name="defaultValue">
+		///		The default value to return if the property is not defined.
+		/// </param>
 		/// <returns>
-		///		The property value.
+		///		The property value, or the default value if the property is not defined.
 		/// </returns>
 		/// <exception cref="ArgumentException">
 		///		<paramref name="propertyName"/> is null, empty, or entirely composed of whitespace.
@@ -131,16 +134,16 @@ namespace HTTPlease.Core
 		/// <exception cref="KeyNotFoundException">
 		///		The specified property is not defined.
 		/// </exception>
-		protected TProperty GetOptionalProperty<TProperty>([CallerMemberName] string propertyName = null)
+		protected TProperty GetOptionalProperty<TProperty>([CallerMemberName] string propertyName = null, TProperty defaultValue = default(TProperty))
 		{
 			if (String.IsNullOrWhiteSpace(propertyName))
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'propertyName'.", nameof(propertyName));
 
 			object propertyValue;
-			if (!_properties.TryGetValue(propertyName, out propertyValue))
-				propertyValue = default(TProperty);
+			if (_properties.TryGetValue(propertyName, out propertyValue))
+				return (TProperty)propertyValue;
 
-			return (TProperty)propertyValue;
+			return defaultValue;
 		}
 
 		/// <summary>

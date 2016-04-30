@@ -26,7 +26,7 @@ namespace HTTPlease.Formatters.Tests
 		[Fact]
 		public void Request_ExpectJson_Sets_AcceptHeader()
 		{
-			MessageAssert.Request(BaseRequest.ExpectJson(), HttpMethod.Get, requestMessage =>
+			MessageAssert.FromRequest(BaseRequest.ExpectJson(), HttpMethod.Get, requestMessage =>
 			{
 				MessageAssert.AcceptsMediaType(requestMessage, WellKnownMediaTypes.Json);
 			});
@@ -38,7 +38,7 @@ namespace HTTPlease.Formatters.Tests
 		[Fact]
 		public void TypedRequest_ExpectJson_Sets_AcceptHeader()
 		{
-			MessageAssert.Request(TypedBaseRequest.ExpectJson(), HttpMethod.Get, requestMessage =>
+			MessageAssert.FromRequest(TypedBaseRequest.ExpectJson(), HttpMethod.Get, requestMessage =>
 			{
 				MessageAssert.AcceptsMediaType(requestMessage, WellKnownMediaTypes.Json);
 			});
