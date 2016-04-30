@@ -21,7 +21,7 @@ namespace HTTPlease
 		/// <param name="requestUri">
 		///		The request URI.
 		/// </param>
-		static void SetRequestUri(this IDictionary<string, object> requestProperties, Uri requestUri)
+		static void SetUri(this IDictionary<string, object> requestProperties, Uri requestUri)
 		{
 			if (requestProperties == null)
 				throw new ArgumentNullException(nameof(requestProperties));
@@ -29,7 +29,7 @@ namespace HTTPlease
 			if (requestUri == null)
 				throw new ArgumentNullException(nameof(requestUri));
 
-			requestProperties[nameof(IHttpRequest.RequestUri)] = requestUri;
+			requestProperties[nameof(IHttpRequest.Uri)] = requestUri;
 			requestProperties[nameof(IHttpRequest.IsUriTemplate)] = UriTemplate.IsTemplate(requestUri);
 		}
 

@@ -39,7 +39,7 @@ namespace HTTPlease.Formatters.FunctionalTests
 			using (client)
 			{
 				HttpRequest request =
-					BaseRequest.WithRelativeRequestUri("foo/{variable}/bar")
+					BaseRequest.WithRelativeUri("foo/{variable}/bar")
 						.WithQueryParameter("diddly", "bonk")
 						.WithTemplateParameter("variable", 1234)
 						.WithTemplateParameter("diddly", "bonk")
@@ -81,7 +81,7 @@ namespace HTTPlease.Formatters.FunctionalTests
 			using (client)
 			{
 				HttpRequest request =
-					BaseRequest.WithRelativeRequestUri("foo/bar")
+					BaseRequest.WithRelativeUri("foo/bar")
 						.UseJson().ExpectJson();
 
 				HttpResponseMessage response = await
@@ -126,7 +126,7 @@ namespace HTTPlease.Formatters.FunctionalTests
 			using (client)
 			{
 				HttpRequest request =
-					BaseRequest.WithRelativeRequestUri("foo/bar")
+					BaseRequest.WithRelativeUri("foo/bar")
 						.UseJson().ExpectJson();
 
 				int responseBody = await

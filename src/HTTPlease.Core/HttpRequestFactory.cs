@@ -40,7 +40,7 @@ namespace HTTPlease
 			if (requestUri == null)
 				throw new ArgumentNullException(nameof(requestUri));
 
-			return BaseRequest.WithRequestUri(requestUri);
+			return BaseRequest.WithUri(requestUri);
 		}
     }
 
@@ -85,7 +85,7 @@ namespace HTTPlease
 			if (requestUri == null)
 				throw new ArgumentNullException(nameof(requestUri));
 
-			return BaseRequest.WithRequestUri(requestUri);
+			return BaseRequest.WithUri(requestUri);
 		}
 	}
 }

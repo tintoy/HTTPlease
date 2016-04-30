@@ -146,7 +146,10 @@ namespace HTTPlease
 				throw new ArgumentNullException(nameof(httpMethod));
 
 			// Ensure we have an absolute URI.
-			Uri requestUri = RequestUri;
+			Uri requestUri = Uri;
+			if (requestUri == null)
+				throw new InvalidOperationException("Cannot build a request message; the request does not have a URI.");
+
 			if (!requestUri.IsAbsoluteUri)
 			{
 				if (baseUri == null)

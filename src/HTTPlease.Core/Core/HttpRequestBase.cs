@@ -39,7 +39,7 @@ namespace HTTPlease.Core
 
 			_properties = properties;
 
-			EnsurePropertyType<Uri>(nameof(RequestUri));
+			EnsurePropertyType<Uri>(nameof(Uri));
 			EnsurePropertyType<bool>(nameof(IsUriTemplate));
 		}
 
@@ -50,7 +50,7 @@ namespace HTTPlease.Core
 		/// <summary>
 		///		The request URI.
 		/// </summary>
-		public Uri RequestUri => GetProperty<Uri>();
+		public Uri Uri => GetProperty<Uri>();
 
 		/// <summary>
 		///		Is the request URI a template?
@@ -251,7 +251,7 @@ namespace HTTPlease.Core
 		/// </returns>
 		public override string ToString()
 		{
-			return $"HTTP Request ({RequestUri?.ToString() ?? "empty"})";
+			return $"HTTP Request ({Uri?.ToString() ?? "empty"})";
 		}
 
 		#endregion // ToString

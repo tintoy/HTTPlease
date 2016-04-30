@@ -23,7 +23,7 @@ namespace HTTPlease
 			if (httpRequest == null)
 				throw new ArgumentNullException(nameof(httpRequest));
 
-			return httpRequest.RequestUri.IsAbsoluteUri;
+			return httpRequest.Uri.IsAbsoluteUri;
 		}
 
 		/// <summary>
@@ -40,7 +40,7 @@ namespace HTTPlease
 			if (httpRequest == null)
 				throw new ArgumentNullException(nameof(httpRequest));
 
-			Uri requestUri = httpRequest.RequestUri;
+			Uri requestUri = httpRequest.Uri;
 			if (requestUri.IsAbsoluteUri)
 				return requestUri;
 
@@ -73,13 +73,13 @@ namespace HTTPlease
 			if (!baseUri.IsAbsoluteUri)
 				throw new ArgumentException("The supplied base URI is not an absolute URI.", nameof(baseUri));
 
-			if (request.RequestUri.IsAbsoluteUri)
+			if (request.Uri.IsAbsoluteUri)
 				throw new InvalidOperationException("The request already has an absolute URI.");
 
 			return request.Clone(properties =>
 			{
-				properties.SetRequestUri(
-					baseUri.AppendRelativeUri(request.RequestUri)
+				properties.SetUri(
+					baseUri.AppendRelativeUri(request.Uri)
 				);
 			});
 		}
@@ -96,7 +96,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
 		/// </returns>
-		public static HttpRequest WithRequestUri(this HttpRequest request, Uri requestUri)
+		public static HttpRequest WithUri(this HttpRequest request, Uri requestUri)
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
@@ -106,7 +106,7 @@ namespace HTTPlease
 
 			return request.Clone(properties =>
 			{
-				properties.SetRequestUri(requestUri);
+				properties.SetUri(requestUri);
 			});
 		}
 
@@ -122,7 +122,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
 		/// </returns>
-		public static HttpRequest WithRelativeRequestUri(this HttpRequest request, string relativeUri)
+		public static HttpRequest WithRelativeUri(this HttpRequest request, string relativeUri)
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
@@ -130,7 +130,7 @@ namespace HTTPlease
 			if (String.IsNullOrWhiteSpace(relativeUri))
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'relativeUri'.", nameof(relativeUri));
 
-			return request.WithRelativeRequestUri(
+			return request.WithRelativeUri(
 				new Uri(relativeUri, UriKind.Relative)
 			);
 		}
@@ -147,7 +147,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
 		/// </returns>
-		public static HttpRequest WithRelativeRequestUri(this HttpRequest request, Uri relativeUri)
+		public static HttpRequest WithRelativeUri(this HttpRequest request, Uri relativeUri)
 		{
 			if (relativeUri == null)
 				throw new ArgumentNullException(nameof(relativeUri));
@@ -157,8 +157,8 @@ namespace HTTPlease
 
 			return request.Clone(properties =>
 			{
-				properties.SetRequestUri(
-					request.RequestUri.AppendRelativeUri(relativeUri)
+				properties.SetUri(
+					request.Uri.AppendRelativeUri(relativeUri)
 				);
 			});
 		}

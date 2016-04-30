@@ -19,7 +19,7 @@ namespace HTTPlease.Tests
 
 			HttpRequest request =
 				HttpRequest.Factory.Create(baseUri)
-					.WithRelativeRequestUri("{action}/{id}")
+					.WithRelativeUri("{action}/{id}")
 					.WithTemplateParameter("action", "foo")
 					.WithTemplateParameter("id", "bar");
 			using (HttpRequestMessage requestMessage = request.BuildRequestMessage(HttpMethod.Get))
@@ -44,7 +44,7 @@ namespace HTTPlease.Tests
 
 			HttpRequest request =
 				HttpRequest.Factory.Create(baseUri)
-					.WithRelativeRequestUri("{action}/{id}")
+					.WithRelativeUri("{action}/{id}")
 					.WithTemplateParameter("action", () => action)
 					.WithTemplateParameter("id", () => id);
 
@@ -78,7 +78,7 @@ namespace HTTPlease.Tests
 
 			HttpRequest request =
 				HttpRequest.Factory.Create(baseUri)
-					.WithRelativeRequestUri("{action}/{id}?flag={flag}")
+					.WithRelativeUri("{action}/{id}?flag={flag}")
 					.WithTemplateParameter("action", "foo")
 					.WithTemplateParameter("id", "bar")
 					.WithTemplateParameter("flag", "true");
@@ -105,7 +105,7 @@ namespace HTTPlease.Tests
 
 			HttpRequest request =
 				HttpRequest.Factory.Create(baseUri)
-					.WithRelativeRequestUri("{action}/{id}?flag={flag?}")
+					.WithRelativeUri("{action}/{id}?flag={flag?}")
 					.WithTemplateParameter("action", () => action)
 					.WithTemplateParameter("id", () => id)
 					.WithTemplateParameter("flag", () => flag);
@@ -141,7 +141,7 @@ namespace HTTPlease.Tests
 
 			HttpRequest request =
 				HttpRequest.Factory.Create(baseUri)
-					.WithRelativeRequestUri("foo/bar")
+					.WithRelativeUri("foo/bar")
 					.WithQueryParameter("flag", "true");
 			using (HttpRequestMessage requestMessage = request.BuildRequestMessage(HttpMethod.Get))
 			{
@@ -164,7 +164,7 @@ namespace HTTPlease.Tests
 
 			HttpRequest request =
 				HttpRequest.Factory.Create(baseUri)
-					.WithRelativeRequestUri("foo/bar")
+					.WithRelativeUri("foo/bar")
 					.WithQueryParameter("flag", () => flag);
 
 			using (HttpRequestMessage requestMessage = request.BuildRequestMessage(HttpMethod.Get))

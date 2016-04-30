@@ -15,7 +15,7 @@ namespace HTTPlease
 		/// <summary>
 		///		The request URI.
 		/// </summary>
-		Uri RequestUri
+		Uri Uri
 		{
 			get;
 		}
