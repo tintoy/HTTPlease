@@ -8,8 +8,8 @@ HTTPlease is a library for creating / configuring HttpClients, using them to mak
 
 It is based on the concept of an immutable template (with lazily-resolved parameters) that acts as the definition for an HTTP request. Any change to this template makes a copy of it, only capturing the differences between the old and the new template. This allows you to progressively build up a hierarchy of templates that increasingly specialise requests until they refer to a specific API operation.
 
-Skip ahead
-^^^^^^^^^^
+Getting bored? Skip ahead
+"""""""""""""""""""""""""
 
 * `Usage examples <requests/untyped/usage>`_
 * `Source code <https://github.com/tintoy/HTTPlease>`_
@@ -26,11 +26,9 @@ If the overall pattern for your API changes (e.g. ``/api/{entityVersion}`` becom
 
 Note that not all template parameter values have to be deferred (lazily evaluated). Some can be given constant values as part of the template definition. See the tests for examples of how the API can be used.
 
-What about HttpClient?
-""""""""""""""""""""""
-The HttpClient builder performs a similar role; it is a template describing how to create and configure an HttpClient (most of its power comes from the ability to define extension methods to encapsulate special configuration or custom message handlers in the pipeline). Again, see the tests for examples of how it can be used.
-
-This project is based on work I previously did for `Watt <https://github.com/DimensionDataCBUSydney/Watt>`_.
+What about clients?
+"""""""""""""""""""
+The `HttpClient builder <clients/index>`_ performs a similar role; it is a template describing how to create and configure an HttpClient (most of its power comes from the ability to define extension methods to encapsulate special configuration or custom message handlers in the pipeline). Again, see the tests for examples of how it can be used.
 
 Contents
 """"""""
@@ -43,3 +41,8 @@ Contents
    requests/index
    Extensibility <extensibility/index>
    Development <development/index>
+
+Seem familiar?
+~~~~~~~~~~~~~~
+
+This project is based on my previous work in `Watt <https://github.com/DimensionDataCBUSydney/Watt>`_.
