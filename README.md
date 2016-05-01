@@ -1,4 +1,5 @@
-# HTTPlease
+![Logo](docs/source/_static/logo-medium.gif)
+--------------------------------------------
 
 [tintoy.github.io/HTTPlease](https://tintoy.github.io/HTTPlease)
 
