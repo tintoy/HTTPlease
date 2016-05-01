@@ -23,9 +23,12 @@ You can also use relative URIs (in which case the the HttpClient's base URI will
 .. code-block:: csharp
 
     HttpRequest baseRequest = HttpRequest.Factory.Create("http://localhost:1234");
-    HttpRequest requestTemplate = baseRequest.WithRelativeRequestUri("customers/{variable1}/foo/{variable2}/bar");
+    HttpRequest requestTemplate = baseRequest.WithRelativeRequestUri(
+        "customers/{variable1}/foo/{variable2}/bar"
+    );
 
     // Full request URI is now http://localhost:1234/customers/{variable1}/foo/{variable2}/bar
+    // Note the use of parameters (the bits in braces). That means this URI is a template.
 
 Binding request parameters
 --------------------------
@@ -50,6 +53,8 @@ One way to do this is to give the parameters constant values by specialising the
         }
     }
 
+Note that while all of a request's parameters must be bound, they can be have a value of ``null`` which will result in their path segment / query parameter being omitted from the final URI.
+
 Binding request parameters to an object's properties
 ----------------------------------------------------
 
@@ -66,13 +71,13 @@ If you're not using anonymous types (or other immutable object types) then you m
                 .WithTemplateParameters(new
                 {
                     variable1 = 1234,
-                    variable2 = (string)null
+                    variable2 = "baz"
                 });
 
         using (HttpResponseMessage response = await client.GetAsync(request))
         {
             // Request URI will be:
-            //    http://localhost:1234/customers/1234/foo/bar?sort=name
+            //    http://localhost:1234/customers/1234/foo/baz/bar?sort=name
         }
     }
 
@@ -86,7 +91,7 @@ Instead of constant values, however, request parameters can also be bound to del
     using (HttpClient client = new HttpClient())
     {
         int variable1 = 1234;
-        string variable2 = null;
+        string variable2 = "hello";
 
         HttpRequest request =
             requestTemplate
@@ -97,7 +102,7 @@ Instead of constant values, however, request parameters can also be bound to del
         using (HttpResponseMessage response = await client.GetAsync(request))
         {
             // Request URI will be:
-            //    http://localhost:1234/api/1234/foo/bar?diddly=bonk
+            //    http://localhost:1234/customers/1234/foo/hello/bar?diddly=bonk
         }
 
         // Let's give "variable2" a value so that its path segment will be present in the final URI.
@@ -106,11 +111,9 @@ Instead of constant values, however, request parameters can also be bound to del
         using (HttpResponseMessage response = await client.GetAsync(request))
         {
             // Request URI will be:
-            //    http://localhost:1234/api/1234/foo/hello%20world/bar?diddly=bonk
+            //    http://localhost:1234/customers/1234/foo/hello%20world/bar?diddly=bonk
         }
     }
-
-Note that while all of a request's parameters must be bound, they can be have a value of ``null`` which will result in their path segment / query parameter being omitted from the final URI.
 
 Working with responses
 ----------------------
@@ -177,20 +180,22 @@ I want to handle failure status codes as exceptions
         try
         {
             // If status code indicates success, read response as Customer.
-            // If status code indicates failure, read response as Error then throw HttpRequestException<Error>.
-            // You can also pass one or more status codes to ReadAsAsync to tell it which ones indicate success.
+            // If status code indicates failure, read response as Error and throw.
+            // You can also tell ReadAsAsync which status code(s) indicate success.
 
             Customer customer =
                 await client.GetAsync(request)
                     .ReadAsAsync<Customer, Error>();
         }
-        catch (HttpRequestException<Error> expectedError) when expectedError.StatusCode == HttpStatusCode.NotFound
+        catch (HttpRequestException<Error> expectedError)
+          when expectedError.StatusCode == HttpStatusCode.NotFound
         {
             Error errorResponse = expectedError.Response;
 
             Log.Error(expectedError, errorResponse.ErrorMessage);
         }
-        catch (HttpRequestException<Error> expectedError) when expectedError.StatusCode == HttpStatusCode.BadRequest
+        catch (HttpRequestException<Error> expectedError)
+          when expectedError.StatusCode == HttpStatusCode.BadRequest
         {
             Error errorResponse = expectedError.Response;
 
