@@ -7,31 +7,19 @@ namespace HTTPlease.Tests.BuildMessage
 	using Testability;
 
 	/// <summary>
-	///		Message-building tests for <see cref="HttpRequest"/> (<see cref="HttpRequest.BuildRequestMessage"/> / <see cref="HttpRequest{TContext}.BuildRequestMessage"/>).
+	///		Message-building tests for <see cref="HttpRequest"/> (<see cref="HttpRequest.BuildRequestMessage"/>).
 	/// </summary>
 	public class UntypedRequest
 	{
 		/// <summary>
-		///		The default context for requests used by tests.
-		/// </summary>
-		static readonly string DefaultContext = "Hello World";
-
-		/// <summary>
-		///		An empty request.
-		/// </summary>
-		static readonly HttpRequest<string> EmptyRequest = HttpRequest<string>.Empty;
-
-		/// <summary>
 		///		A request with an absolute URI.
 		/// </summary>
-		static readonly HttpRequest<string> AbsoluteRequest = HttpRequest<string>.Create("http://localhost:1234");
+		static readonly HttpRequest AbsoluteRequest = HttpRequest.Create("http://localhost:1234");
 
 		/// <summary>
 		///		A request with a relative URI.
 		/// </summary>
-		static readonly HttpRequest<string> RelativeRequest = HttpRequest<string>.Create("foo/bar");
-		
-		#region Empty requests
+		static readonly HttpRequest RelativeRequest = HttpRequest.Create("foo/bar");
 
 		/// <summary>
 		///		An <see cref="HttpRequest"/> throws <see cref="InvalidOperationException"/>.
@@ -41,13 +29,9 @@ namespace HTTPlease.Tests.BuildMessage
 		{
 			Assert.Throws<InvalidOperationException>(() =>
 			{
-				EmptyRequest.BuildRequestMessage(HttpMethod.Get, DefaultContext);
+				HttpRequest.Empty.BuildRequestMessage(HttpMethod.Get);
 			});
 		}
-
-		#endregion Empty requests
-
-		#region Relative URIs
 
 		/// <summary>
 		///		An <see cref="HttpRequest"/> with a relative URI throws <see cref="InvalidOperationException"/> if no base URI is supplied.
@@ -57,7 +41,7 @@ namespace HTTPlease.Tests.BuildMessage
 		{
 			Assert.Throws<InvalidOperationException>(() =>
 			{
-				RelativeRequest.BuildRequestMessage(HttpMethod.Get, DefaultContext);
+				RelativeRequest.BuildRequestMessage(HttpMethod.Get);
 			});
 		}
 
@@ -68,18 +52,11 @@ namespace HTTPlease.Tests.BuildMessage
 		public void RelativeUri_BaseUri_PrependsBaseUri()
 		{
 			Uri baseUri = new Uri("http://tintoy.io:5678/");
-			Uri expectedUri = new Uri(baseUri, RelativeRequest.Uri);
 
-			MessageAssert.FromRequest(RelativeRequest, HttpMethod.Get, DefaultContext, baseUri, requestMessage =>
-			{
-				Assert.NotEqual(RelativeRequest.Uri, requestMessage.RequestUri);
-				Assert.Equal(expectedUri, requestMessage.RequestUri);
-			});
+			RequestAssert.MessageHasUri(RelativeRequest, baseUri,
+				expectedUri: new Uri(baseUri, RelativeRequest.Uri)
+			);
 		}
-
-		#endregion // Relative URIs
-
-		#region Absolute URIs
 
 		/// <summary>
 		///		An <see cref="HttpRequest"/> with an absolute URI ignores the lack of a base URI and uses the request URI.
@@ -87,10 +64,9 @@ namespace HTTPlease.Tests.BuildMessage
 		[Fact]
 		public void AbsoluteUri_NoBaseUri_UsesRequestUri()
 		{
-			MessageAssert.FromRequest(AbsoluteRequest, HttpMethod.Get, DefaultContext, requestMessage =>
-			{
-				Assert.Equal(AbsoluteRequest.Uri, requestMessage.RequestUri);
-			});
+			RequestAssert.MessageHasUri(AbsoluteRequest,
+				expectedUri: AbsoluteRequest.Uri
+			);
 		}
 
 		/// <summary>
@@ -101,14 +77,10 @@ namespace HTTPlease.Tests.BuildMessage
 		{
 			Uri baseUri = new Uri("http://tintoy.io:5678/");
 
-			MessageAssert.FromRequest(AbsoluteRequest, HttpMethod.Get, DefaultContext, baseUri, requestMessage =>
-			{
-				Assert.NotEqual(baseUri, requestMessage.RequestUri);
-				Assert.Equal(AbsoluteRequest.Uri, requestMessage.RequestUri);
-			});
+			RequestAssert.MessageHasUri(AbsoluteRequest, baseUri,
+				expectedUri: AbsoluteRequest.Uri
+			);
 		}
-
-		#endregion // Absolute URIs
 
 		#region Template URIs
 
@@ -123,12 +95,9 @@ namespace HTTPlease.Tests.BuildMessage
 					.WithTemplateParameter("action", "foo")
 					.WithTemplateParameter("id", "bar");
 
-			MessageAssert.FromRequest(request, HttpMethod.Get, requestMessage =>
-			{
-				Assert.Equal("http://localhost:1234/foo/bar",
-					requestMessage.RequestUri.AbsoluteUri
-				);
-			});
+			RequestAssert.MessageHasUri(request,
+				expectedUri: "http://localhost:1234/foo/bar"
+			);
 		}
 
 		/// <summary>
@@ -145,22 +114,16 @@ namespace HTTPlease.Tests.BuildMessage
 					.WithTemplateParameter("action", () => action)
 					.WithTemplateParameter("id", () => id);
 
-			MessageAssert.FromRequest(request, HttpMethod.Get, requestMessage =>
-			{
-				Assert.Equal("http://localhost:1234/foo/bar",
-					requestMessage.RequestUri.AbsoluteUri
-				);
-			});
-
+			RequestAssert.MessageHasUri(request,
+				expectedUri: "http://localhost:1234/foo/bar"
+			);
+			
 			action = "diddly";
 			id = "dee";
 
-			MessageAssert.FromRequest(request, HttpMethod.Get, requestMessage =>
-			{
-				Assert.Equal("http://localhost:1234/diddly/dee",
-					requestMessage.RequestUri.AbsoluteUri
-				);
-			});
+			RequestAssert.MessageHasUri(request,
+				expectedUri: "http://localhost:1234/diddly/dee"
+			);
 		}
 
 		/// <summary>
@@ -175,13 +138,9 @@ namespace HTTPlease.Tests.BuildMessage
 					.WithTemplateParameter("id", "bar")
 					.WithTemplateParameter("flag", true);
 
-			MessageAssert.FromRequest(request, HttpMethod.Get, requestMessage =>
-			{
-				Assert.Equal(
-					"http://localhost:1234/foo/bar?flag=True",
-					requestMessage.RequestUri.AbsoluteUri
-				);
-			});
+			RequestAssert.MessageHasUri(request,
+				expectedUri: "http://localhost:1234/foo/bar?flag=True"
+			);
 		}
 
 		/// <summary>
@@ -192,7 +151,7 @@ namespace HTTPlease.Tests.BuildMessage
 		{
 			string action = "foo";
 			string id = "bar";
-			string flag = "true";
+			bool? flag = true;
 
 			HttpRequest request =
 				HttpRequest.Factory.Create("http://localhost:1234/")
@@ -201,24 +160,17 @@ namespace HTTPlease.Tests.BuildMessage
 					.WithTemplateParameter("id", () => id)
 					.WithTemplateParameter("flag", () => flag);
 
-			MessageAssert.FromRequest(request, HttpMethod.Get, requestMessage =>
-			{
-				Assert.Equal("http://localhost:1234/foo/bar?flag=true",
-					requestMessage.RequestUri.AbsoluteUri
-				);
-			});
+			RequestAssert.MessageHasUri(request,
+				expectedUri: "http://localhost:1234/foo/bar?flag=True"
+			);
 
 			action = "diddly";
 			id = "dee";
 			flag = null;
 
-			MessageAssert.FromRequest(request, HttpMethod.Get, requestMessage =>
-			{
-				Assert.Equal(
-					"http://localhost:1234/diddly/dee",
-					requestMessage.RequestUri.AbsoluteUri
-				);
-			});
+			RequestAssert.MessageHasUri(request,
+				expectedUri: "http://localhost:1234/diddly/dee"
+			);
 		}
 
 		#endregion // Template URIs
@@ -235,12 +187,9 @@ namespace HTTPlease.Tests.BuildMessage
 				HttpRequest.Factory.Create("http://localhost:1234/foo/bar")
 					.WithQueryParameter("flag", true);
 
-			MessageAssert.FromRequest(request, HttpMethod.Get, requestMessage =>
-			{
-				Assert.Equal("http://localhost:1234/foo/bar?flag=True",
-					requestMessage.RequestUri.AbsoluteUri
-				);
-			});
+			RequestAssert.MessageHasUri(request,
+				expectedUri: "http://localhost:1234/foo/bar?flag=True"
+			);
 		}
 
 		/// <summary>
@@ -255,21 +204,15 @@ namespace HTTPlease.Tests.BuildMessage
 				HttpRequest.Factory.Create("http://localhost:1234/foo/bar")
 					.WithQueryParameter("flag", () => flag);
 
-			MessageAssert.FromRequest(request, HttpMethod.Get, requestMessage =>
-			{
-				Assert.Equal("http://localhost:1234/foo/bar?flag=True",
-					requestMessage.RequestUri.AbsoluteUri
-				);
-			});
-
+			RequestAssert.MessageHasUri(request,
+				expectedUri: "http://localhost:1234/foo/bar?flag=True"
+			);
+			
 			flag = null;
 
-			MessageAssert.FromRequest(request, HttpMethod.Get, requestMessage =>
-			{
-				Assert.Equal("http://localhost:1234/foo/bar",
-					requestMessage.RequestUri.AbsoluteUri
-				);
-			});
+			RequestAssert.MessageHasUri(request,
+				expectedUri: "http://localhost:1234/foo/bar"
+			);
 		}
 
 		#endregion // Query parameters
