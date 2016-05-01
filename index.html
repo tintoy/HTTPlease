@@ -135,13 +135,13 @@
 <h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
 <p>HTTPlease is a library for creating / configuring HttpClients, using them to make HTTP requests, and processing the responses.</p>
 <p>It is based on the concept of an immutable template (with lazily-resolved parameters) that acts as the definition for an HTTP request. Any change to this template makes a copy of it, only capturing the differences between the old and the new template. This allows you to progressively build up a hierarchy of templates that increasingly specialise requests until they refer to a specific API operation.</p>
-</div>
-<div class="section" id="skip-ahead">
-<h1>Skip ahead<a class="headerlink" href="#skip-ahead" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="getting-bored-skip-ahead">
+<h2>Getting bored? Skip ahead<a class="headerlink" href="#getting-bored-skip-ahead" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><a class="reference external" href="requests/untyped/usage">Usage examples</a></li>
 <li><a class="reference external" href="https://github.com/tintoy/HTTPlease">Source code</a></li>
 </ul>
+</div>
 <div class="section" id="request-templates">
 <h2>Request templates...?<a class="headerlink" href="#request-templates" title="Permalink to this headline">¶</a></h2>
 <p>For example, you might have a base request with a URL of <code class="docutils literal"><span class="pre">/api</span></code>, and then extend that with a relative URI <code class="docutils literal"><span class="pre">{apiVersion}</span></code>, which would effectively be <code class="docutils literal"><span class="pre">/api/{apiVersion}</span></code>.</p>
@@ -150,10 +150,9 @@
 <p>If the overall pattern for your API changes (e.g. <code class="docutils literal"><span class="pre">/api/{entityVersion}</span></code> becomes <code class="docutils literal"><span class="pre">/api/public/versions/{entityVersion}</span></code>) then you simply modify the base template definition.</p>
 <p>Note that not all template parameter values have to be deferred (lazily evaluated). Some can be given constant values as part of the template definition. See the tests for examples of how the API can be used.</p>
 </div>
-<div class="section" id="what-about-httpclient">
-<h2>What about HttpClient?<a class="headerlink" href="#what-about-httpclient" title="Permalink to this headline">¶</a></h2>
-<p>The HttpClient builder performs a similar role; it is a template describing how to create and configure an HttpClient (most of its power comes from the ability to define extension methods to encapsulate special configuration or custom message handlers in the pipeline). Again, see the tests for examples of how it can be used.</p>
-<p>This project is based on work I previously did for <a class="reference external" href="https://github.com/DimensionDataCBUSydney/Watt">Watt</a>.</p>
+<div class="section" id="what-about-clients">
+<h2>What about clients?<a class="headerlink" href="#what-about-clients" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="clients/index">HttpClient builder</a> performs a similar role; it is a template describing how to create and configure an HttpClient (most of its power comes from the ability to define extension methods to encapsulate special configuration or custom message handlers in the pipeline). Again, see the tests for examples of how it can be used.</p>
 </div>
 <div class="section" id="contents">
 <h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
@@ -184,6 +183,10 @@
 </ul>
 </li>
 </ul>
+</div>
+<div class="section" id="seem-familiar">
+<h3>Seem familiar?<a class="headerlink" href="#seem-familiar" title="Permalink to this headline">¶</a></h3>
+<p>This project is based on my previous work in <a class="reference external" href="https://github.com/DimensionDataCBUSydney/Watt">Watt</a>.</p>
 </div>
 </div>
 </div>
