@@ -83,6 +83,7 @@
             
             
                 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../uri-templates/index.html">URI Templates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../clients/index.html">Clients</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Requests</a><ul class="current">
@@ -169,9 +170,12 @@
 <p>Note that, if you prefer, you don&#8217;t have to do this separately (you can declare the full URI in-place where you use it).
 You can also use relative URIs (in which case the the HttpClient&#8217;s base URI will be used).</p>
 <div class="highlight-csharp"><div class="highlight"><pre><span class="n">HttpRequest</span> <span class="n">baseRequest</span> <span class="p">=</span> <span class="n">HttpRequest</span><span class="p">.</span><span class="n">Factory</span><span class="p">.</span><span class="n">Create</span><span class="p">(</span><span class="s">&quot;http://localhost:1234&quot;</span><span class="p">);</span>
-<span class="n">HttpRequest</span> <span class="n">requestTemplate</span> <span class="p">=</span> <span class="n">baseRequest</span><span class="p">.</span><span class="n">WithRelativeRequestUri</span><span class="p">(</span><span class="s">&quot;customers/{variable1}/foo/{variable2}/bar&quot;</span><span class="p">);</span>
+<span class="n">HttpRequest</span> <span class="n">requestTemplate</span> <span class="p">=</span> <span class="n">baseRequest</span><span class="p">.</span><span class="n">WithRelativeRequestUri</span><span class="p">(</span>
+    <span class="s">&quot;customers/{variable1}/foo/{variable2}/bar&quot;</span>
+<span class="p">);</span>
 
 <span class="c1">// Full request URI is now http://localhost:1234/customers/{variable1}/foo/{variable2}/bar</span>
+<span class="c1">// Note the use of parameters (the bits in braces). That means this URI is a template.</span>
 </pre></div>
 </div>
 </div>
@@ -195,6 +199,7 @@ One way to do this is to give the parameters constant values by specialising the
 <span class="p">}</span>
 </pre></div>
 </div>
+<p>Note that while all of a request&#8217;s parameters must be bound, they can be have a value of <code class="docutils literal"><span class="pre">null</span></code> which will result in their path segment / query parameter being omitted from the final URI.</p>
 </div>
 <div class="section" id="binding-request-parameters-to-an-object-s-properties">
 <h2>Binding request parameters to an object&#8217;s properties<a class="headerlink" href="#binding-request-parameters-to-an-object-s-properties" title="Permalink to this headline">¶</a></h2>
@@ -208,13 +213,13 @@ If you&#8217;re not using anonymous types (or other immutable object types) then
             <span class="p">.</span><span class="n">WithTemplateParameters</span><span class="p">(</span><span class="k">new</span>
             <span class="p">{</span>
                 <span class="n">variable1</span> <span class="p">=</span> <span class="m">1234</span><span class="p">,</span>
-                <span class="n">variable2</span> <span class="p">=</span> <span class="p">(</span><span class="kt">string</span><span class="p">)</span><span class="k">null</span>
+                <span class="n">variable2</span> <span class="p">=</span> <span class="s">&quot;baz&quot;</span>
             <span class="p">});</span>
 
     <span class="k">using</span> <span class="p">(</span><span class="n">HttpResponseMessage</span> <span class="n">response</span> <span class="p">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
     <span class="p">{</span>
         <span class="c1">// Request URI will be:</span>
-        <span class="c1">//    http://localhost:1234/customers/1234/foo/bar?sort=name</span>
+        <span class="c1">//    http://localhost:1234/customers/1234/foo/baz/bar?sort=name</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
@@ -226,7 +231,7 @@ If you&#8217;re not using anonymous types (or other immutable object types) then
 <div class="highlight-csharp"><div class="highlight"><pre><span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span><span class="p">())</span>
 <span class="p">{</span>
     <span class="kt">int</span> <span class="n">variable1</span> <span class="p">=</span> <span class="m">1234</span><span class="p">;</span>
-    <span class="kt">string</span> <span class="n">variable2</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="n">variable2</span> <span class="p">=</span> <span class="s">&quot;hello&quot;</span><span class="p">;</span>
 
     <span class="n">HttpRequest</span> <span class="n">request</span> <span class="p">=</span>
         <span class="n">requestTemplate</span>
@@ -237,7 +242,7 @@ If you&#8217;re not using anonymous types (or other immutable object types) then
     <span class="k">using</span> <span class="p">(</span><span class="n">HttpResponseMessage</span> <span class="n">response</span> <span class="p">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
     <span class="p">{</span>
         <span class="c1">// Request URI will be:</span>
-        <span class="c1">//    http://localhost:1234/api/1234/foo/bar?diddly=bonk</span>
+        <span class="c1">//    http://localhost:1234/customers/1234/foo/hello/bar?diddly=bonk</span>
     <span class="p">}</span>
 
     <span class="c1">// Let&#39;s give &quot;variable2&quot; a value so that its path segment will be present in the final URI.</span>
@@ -246,12 +251,11 @@ If you&#8217;re not using anonymous types (or other immutable object types) then
     <span class="k">using</span> <span class="p">(</span><span class="n">HttpResponseMessage</span> <span class="n">response</span> <span class="p">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
     <span class="p">{</span>
         <span class="c1">// Request URI will be:</span>
-        <span class="c1">//    http://localhost:1234/api/1234/foo/hello%20world/bar?diddly=bonk</span>
+        <span class="c1">//    http://localhost:1234/customers/1234/foo/hello%20world/bar?diddly=bonk</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Note that while all of a request&#8217;s parameters must be bound, they can be have a value of <code class="docutils literal"><span class="pre">null</span></code> which will result in their path segment / query parameter being omitted from the final URI.</p>
 </div>
 <div class="section" id="working-with-responses">
 <h2>Working with responses<a class="headerlink" href="#working-with-responses" title="Permalink to this headline">¶</a></h2>
@@ -313,20 +317,22 @@ These range from simple / low-ceremony to fully-customisable.</p>
     <span class="k">try</span>
     <span class="p">{</span>
         <span class="c1">// If status code indicates success, read response as Customer.</span>
-        <span class="c1">// If status code indicates failure, read response as Error then throw HttpRequestException&lt;Error&gt;.</span>
-        <span class="c1">// You can also pass one or more status codes to ReadAsAsync to tell it which ones indicate success.</span>
+        <span class="c1">// If status code indicates failure, read response as Error and throw.</span>
+        <span class="c1">// You can also tell ReadAsAsync which status code(s) indicate success.</span>
 
         <span class="n">Customer</span> <span class="n">customer</span> <span class="p">=</span>
             <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
                 <span class="p">.</span><span class="n">ReadAsAsync</span><span class="p">&lt;</span><span class="n">Customer</span><span class="p">,</span> <span class="n">Error</span><span class="p">&gt;();</span>
     <span class="p">}</span>
-    <span class="k">catch</span> <span class="p">(</span><span class="n">HttpRequestException</span><span class="p">&lt;</span><span class="n">Error</span><span class="p">&gt;</span> <span class="n">expectedError</span><span class="p">)</span> <span class="n">when</span> <span class="n">expectedError</span><span class="p">.</span><span class="n">StatusCode</span> <span class="p">==</span> <span class="n">HttpStatusCode</span><span class="p">.</span><span class="n">NotFound</span>
+    <span class="k">catch</span> <span class="p">(</span><span class="n">HttpRequestException</span><span class="p">&lt;</span><span class="n">Error</span><span class="p">&gt;</span> <span class="n">expectedError</span><span class="p">)</span>
+      <span class="n">when</span> <span class="n">expectedError</span><span class="p">.</span><span class="n">StatusCode</span> <span class="p">==</span> <span class="n">HttpStatusCode</span><span class="p">.</span><span class="n">NotFound</span>
     <span class="p">{</span>
         <span class="n">Error</span> <span class="n">errorResponse</span> <span class="p">=</span> <span class="n">expectedError</span><span class="p">.</span><span class="n">Response</span><span class="p">;</span>
 
         <span class="n">Log</span><span class="p">.</span><span class="n">Error</span><span class="p">(</span><span class="n">expectedError</span><span class="p">,</span> <span class="n">errorResponse</span><span class="p">.</span><span class="n">ErrorMessage</span><span class="p">);</span>
     <span class="p">}</span>
-    <span class="k">catch</span> <span class="p">(</span><span class="n">HttpRequestException</span><span class="p">&lt;</span><span class="n">Error</span><span class="p">&gt;</span> <span class="n">expectedError</span><span class="p">)</span> <span class="n">when</span> <span class="n">expectedError</span><span class="p">.</span><span class="n">StatusCode</span> <span class="p">==</span> <span class="n">HttpStatusCode</span><span class="p">.</span><span class="n">BadRequest</span>
+    <span class="k">catch</span> <span class="p">(</span><span class="n">HttpRequestException</span><span class="p">&lt;</span><span class="n">Error</span><span class="p">&gt;</span> <span class="n">expectedError</span><span class="p">)</span>
+      <span class="n">when</span> <span class="n">expectedError</span><span class="p">.</span><span class="n">StatusCode</span> <span class="p">==</span> <span class="n">HttpStatusCode</span><span class="p">.</span><span class="n">BadRequest</span>
     <span class="p">{</span>
         <span class="n">Error</span> <span class="n">errorResponse</span> <span class="p">=</span> <span class="n">expectedError</span><span class="p">.</span><span class="n">Response</span><span class="p">;</span>
 
