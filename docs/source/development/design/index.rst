@@ -22,5 +22,5 @@ For example:
 		});
 	}
 
-Note that the ``Clone`` method takes an ``Action<IDictionary<string, object>>`` delegate. This ``IDictionary`` is a mutable version of the ``ImmutableDictionary`` that acts as a backing store for the original request's properties.
+Note that the ``Clone`` method takes an ``Action<IDictionary<string, object>>`` delegate. This delegate makes changes to an ``IDictionary`` that represents a mutable (change-tracking) version of the ``ImmutableDictionary`` that acts as a backing store for the original request's properties.
 Any changes you make to this dictionary will be applied as deltas to the original ``ImmutableDictionary`` to produce a new ``ImmutableDictionary`` that only contains the differences from the original.
