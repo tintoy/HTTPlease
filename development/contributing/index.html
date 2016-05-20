@@ -91,7 +91,11 @@
 <li class="toctree-l2"><a class="reference internal" href="../design/index.html">      Design</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../building/index.html">Building</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Contributing</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../design/index.html">      Design</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pull-requests">Pull requests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#code-style">Code Style</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../design/index.html">      Design</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../extensibility/index.html">Extensiblity</a></li>
@@ -143,11 +147,46 @@
             
   <div class="section" id="contributing-to-httplease">
 <h1>Contributing to HTTPlease<a class="headerlink" href="#contributing-to-httplease" title="Permalink to this headline">¶</a></h1>
-<p>TODO: Contributor guidelines, etc.</p>
+<p>All contributors are welcome.</p>
+<p>HTTPlease is designed to be extensible (so you can create your own libraries that extend its functionality) but, if you have an idea or feature request for something that you feel belongs in the core libraries (or have found a bug) please feel free to create a pull request.</p>
+<div class="section" id="pull-requests">
+<h2>Pull requests<a class="headerlink" href="#pull-requests" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>First, create an issue describing the nature of the change. Let&#8217;s have a conversation about it :)</li>
+<li>Then, fork the repository and create a feature branch with a descriptive name (e.g. <code class="docutils literal"><span class="pre">feature/my-feature</span></code>).</li>
+<li>Finally create a pull request that describes the nature of the change (including the issue number).</li>
+</ul>
+</div>
+<div class="section" id="code-style">
+<h2>Code Style<a class="headerlink" href="#code-style" title="Permalink to this headline">¶</a></h2>
+<p>The golden rule:</p>
+<blockquote>
+<div>If you&#8217;re not sure what style to use, look at the surrounding code and match that.</div></blockquote>
+<p>Some basic guidelines:</p>
+<ul class="simple">
+<li>The purpose of code is to communicate - use descriptive names for all members (this includes loop variables and lambda parameters)<ul>
+<li>For example, <code class="docutils literal"><span class="pre">customers.Where(customer</span> <span class="pre">=&gt;</span> <span class="pre">customer.Name</span> <span class="pre">==</span> <span class="pre">name)</span></code> is OK, but <code class="docutils literal"><span class="pre">customers.Where(c</span> <span class="pre">=&gt;</span> <span class="pre">c.Name</span> <span class="pre">==</span> <span class="pre">name)</span></code> is not</li>
+</ul>
+</li>
+<li>All code, public or private, needs XML doc comments (you know what you mean but others may not)<ul>
+<li>Please don&#8217;t use auto-generated comments - all this does is make it harder to know what members actually have meaningful comments.</li>
+<li>If you really object to adding doc comments, make a note in the pull request and we&#8217;ll try to add them for you</li>
+</ul>
+</li>
+<li>Tabs, not spaces</li>
+<li>Please don&#8217;t use the <code class="docutils literal"><span class="pre">var</span></code> keyword unless:<ul>
+<li>There is a type on the right-hand side of the expression (e.g. <code class="docutils literal"><span class="pre">new</span> <span class="pre">Foo()</span></code>)</li>
+<li>You&#8217;re working with an anonymous type</li>
+<li>You&#8217;re working with a LINQ expression whose type is obvious (e.g. a grouping)</li>
+<li>You&#8217;re calling a generic method whose sole type parameter determines the return type (e.g. <code class="docutils literal"><span class="pre">container.Resolve&lt;MyEntities&gt;()</span></code>)</li>
+</ul>
+</li>
+</ul>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../design/index.html">      Design</a></li>
 </ul>
+</div>
 </div>
 </div>
 

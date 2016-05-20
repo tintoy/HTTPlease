@@ -159,7 +159,7 @@ Normally, this mutate-by-cloning operation is implemented as an extension method
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Note that the <code class="docutils literal"><span class="pre">Clone</span></code> method takes an <code class="docutils literal"><span class="pre">Action&lt;IDictionary&lt;string,</span> <span class="pre">object&gt;&gt;</span></code> delegate. This <code class="docutils literal"><span class="pre">IDictionary</span></code> is a mutable version of the <code class="docutils literal"><span class="pre">ImmutableDictionary</span></code> that acts as a backing store for the original request&#8217;s properties.
+<p>Note that the <code class="docutils literal"><span class="pre">Clone</span></code> method takes an <code class="docutils literal"><span class="pre">Action&lt;IDictionary&lt;string,</span> <span class="pre">object&gt;&gt;</span></code> delegate. This delegate makes changes to an <code class="docutils literal"><span class="pre">IDictionary</span></code> that represents a mutable (change-tracking) version of the <code class="docutils literal"><span class="pre">ImmutableDictionary</span></code> that acts as a backing store for the original request&#8217;s properties.
 Any changes you make to this dictionary will be applied as deltas to the original <code class="docutils literal"><span class="pre">ImmutableDictionary</span></code> to produce a new <code class="docutils literal"><span class="pre">ImmutableDictionary</span></code> that only contains the differences from the original.</p>
 </div>
 

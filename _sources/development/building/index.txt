@@ -9,7 +9,7 @@ Prerequisites
 Steps
 """""
 
-* Fork and clone `the repository <https://github.com/tintoy/HTTPlease>`_:
+* Clone `the HTTPlease repository <https://github.com/tintoy/HTTPlease>`_:
   ``git clone https://github.com/tintoy/HTTPlease.git HTTPlease``
 * Call the .NET Version Manager (dnvm) to use the correct runtime:
   ``dnvm use 1.0.0-rc1-update2 -r coreclr -arch x64``
