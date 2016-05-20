@@ -1,7 +1,7 @@
 Development
 ===========
 
-TODO: Developer guidelines, etc.
+Want to build / work on HTTPlease (or just know how it works)?
 
 .. toctree::
    :maxdepth: 2
