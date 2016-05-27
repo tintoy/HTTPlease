@@ -154,6 +154,33 @@
 <h2>What about clients?<a class="headerlink" href="#what-about-clients" title="Permalink to this headline">¶</a></h2>
 <p>The <a class="reference external" href="clients/index">HttpClient builder</a> performs a similar role; it is a template describing how to create and configure an HttpClient (most of its power comes from the ability to define extension methods to encapsulate special configuration or custom message handlers in the pipeline). Again, see the tests for examples of how it can be used.</p>
 </div>
+<div class="section" id="how-does-this-compare-to">
+<h2>How does this compare to...?<a class="headerlink" href="#how-does-this-compare-to" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><dl class="first docutils">
+<dt>Microsoft.AspNet.WebApi.Client</dt>
+<dd><ul class="first last simple">
+<li>HTTPlease is definitely inspired by ASP.NET WebAPI (especially regarding the use of extension methods)</li>
+<li>However, it seems to me that ASP.NET WebAPI is being superceded by ASP.NET MVC Core (and, therefore, a gap now exists regarding client functionality)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>RestSharp - similar facilities, but an emphasis on:</dt>
+<dd><ul class="first last simple">
+<li>Testability (and repeatability) of requests</li>
+<li>Support for URI templates</li>
+<li>Composability</li>
+<li>Extensibility</li>
+<li>Pay-for-play (only pull in the dependencies that you need)</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Honestly, if you use either of these frameworks to make one-off web requests, they&#8217;re totally fit-for-purpose; where HTTPlease really excels is in building client libraries to wrap web APIs.</p>
+</div>
 <div class="section" id="contents">
 <h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
@@ -186,7 +213,7 @@
 </div>
 <div class="section" id="seem-familiar">
 <h3>Seem familiar?<a class="headerlink" href="#seem-familiar" title="Permalink to this headline">¶</a></h3>
-<p>This project is based on my previous work in <a class="reference external" href="https://github.com/DimensionDataCBUSydney/Watt">Watt</a>.</p>
+<p>This project is a reimagining of my previous work in the <a class="reference external" href="https://github.com/DimensionDataCBUSydney/Watt">WebAPI Template Toolkit (Watt)</a>.</p>
 </div>
 </div>
 </div>

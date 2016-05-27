@@ -30,6 +30,22 @@ What about clients?
 """""""""""""""""""
 The `HttpClient builder <clients/index>`_ performs a similar role; it is a template describing how to create and configure an HttpClient (most of its power comes from the ability to define extension methods to encapsulate special configuration or custom message handlers in the pipeline). Again, see the tests for examples of how it can be used.
 
+How does this compare to...?
+""""""""""""""""""""""""""""
+
+* Microsoft.AspNet.WebApi.Client
+    * HTTPlease is definitely inspired by ASP.NET WebAPI (especially regarding the use of extension methods)
+    * However, it seems to me that ASP.NET WebAPI is being superceded by ASP.NET MVC Core (and, therefore, a gap now exists regarding client functionality)
+* RestSharp - similar facilities, but an emphasis on:
+    * Testability (and repeatability) of requests
+    * Support for URI templates
+    * Composability
+    * Extensibility
+    * Pay-for-play (only pull in the dependencies that you need)
+
+Honestly, if you use either of these frameworks to make one-off web requests, they're totally fit-for-purpose; where HTTPlease really excels is in building client libraries to wrap web APIs. 
+
+
 Contents
 """"""""
 .. toctree::
@@ -45,4 +61,4 @@ Contents
 Seem familiar?
 ~~~~~~~~~~~~~~
 
-This project is based on my previous work in `Watt <https://github.com/DimensionDataCBUSydney/Watt>`_.
+This project is a reimagining of my previous work in the `WebAPI Template Toolkit (Watt) <https://github.com/DimensionDataCBUSydney/Watt>`_.
