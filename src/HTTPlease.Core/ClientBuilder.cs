@@ -313,7 +313,7 @@ namespace HTTPlease
 				Func<DelegatingHandler> factory = _handlerFactories[handlerIndex];
 				Type factoryDelegateType = factory.GetType();
 
-				yield return factoryDelegateType.GetGenericArguments()[0];
+				yield return factoryDelegateType.GenericTypeArguments[0];
 			}
 		}
 

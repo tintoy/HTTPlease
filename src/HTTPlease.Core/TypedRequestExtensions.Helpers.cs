@@ -84,11 +84,17 @@ namespace HTTPlease
 			if (parameters == null)
 				throw new ArgumentNullException(nameof(parameters));
 
+			// TODO: Refactor PropertyInfo retrieval logic (move it out to an extension method).
+
 			// Yes yes yes, reflection might be "slow", but it's still blazingly fast compared to making a request over the network.
-			foreach (PropertyInfo property in typeof(TParameters).GetProperties(BindingFlags.Instance | BindingFlags.Public))
+			foreach (PropertyInfo property in typeof(TParameters).GetTypeInfo().DeclaredProperties)
 			{
 				// Ignore write-only properties.
 				if (!property.CanRead)
+					continue;
+					
+				// Public instance properties only.
+				if (!property.GetMethod.IsPublic || property.GetMethod.IsStatic)
 					continue;
 
 				yield return new KeyValuePair<string, IValueProvider<TContext, string>>(

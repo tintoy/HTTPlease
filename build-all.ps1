@@ -1,21 +1,10 @@
 Param(
-	[string] $BuildVersion,
-    [switch] $Verbose
+	[string] $BuildVersion
 )
 
-If ($BuildVersion) {
-	$env:DNX_BUILD_VERSION = $BuildVersion
-}
-Else {
-	$env:DNX_BUILD_VERSION = 'dev'
+If (!$BuildVersion) {
+	$BuildVersion = 'dev'
 }
 
-If ($Verbose) {
-    $quietSwitch += ''
-}
-Else {
-    $quietSwitch += '--quiet'
-}
-
-$dnu = Get-Command dnu
-& $dnu build '.\src\HTTPlease*' '.\test\HTTPlease*' "$quietSwitch"
+$dotnet = Get-Command dotnet
+& $dotnet build '.\src\HTTPlease*' '.\test\HTTPlease*' --version-suffix $BuildVersion

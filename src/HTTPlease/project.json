@@ -1,28 +1,37 @@
 {
 	"version": "1.0.0-*",
-	"title": "HTTPlease",
-	"summary": "HTTPlease",
-	"description": "Immutable HTTP templates",
-	"authors": [
-		"tintoy@tintoy.io"
-	],
-	"copyright": "Copyright © Adam Friedman 2016",
-	"owners": [
-		"tintoy@tintoy.io"
-	],
-	"tags": [
-		"HTTP",
-		"HTTPlease",
-		"WebApi",
-		"Client",
-		"Template",
-		"Immutable"
-	],
-	"projectUrl": "https://tintoy.github.io/HTTPlease/",
-	"licenseUrl": "https://raw.githubusercontent.com/tintoy/HTTPlease/development/r1.0/LICENSE",
+	
+	"packOptions": {
+		"title": "HTTPlease",
+		"summary": "HTTPlease",
+		"description": "Immutable HTTP templates",
+		"authors": [
+			"tintoy@tintoy.io"
+		],
+		"copyright": "Copyright © Adam Friedman 2016",
+		"owners": [
+			"tintoy@tintoy.io"
+		],
+		"tags": [
+			"HTTP",
+			"HTTPlease",
+			"WebApi",
+			"Client",
+			"Template",
+			"Immutable"
+		],
+		"projectUrl": "https://tintoy.github.io/HTTPlease/",
+		"licenseUrl": "https://raw.githubusercontent.com/tintoy/HTTPlease/development/r1.0/LICENSE"
+	},
 
 	"frameworks": {
-		"dnxcore50": {}
+		"netcoreapp1.0": { 
+            "imports": [
+				"dotnet5.6",
+				"dnxcore50",
+				"portable-net45+win8"
+			]
+		}
 	},
 
 	"dependencies": {

@@ -1,20 +1,9 @@
 Param(
-	[string] $BuildVersion,
-    [switch] $Verbose
+	[string] $BuildVersion
 )
 
-If ($BuildVersion) {
-	$env:DNX_BUILD_VERSION = $BuildVersion
-}
-Else {
-	$env:DNX_BUILD_VERSION = 'dev'
-}
-
-If ($Verbose) {
-    $quietSwitch += ''
-}
-Else {
-    $quietSwitch += '--quiet'
+If (!$BuildVersion) {
+	$BuildVersion = 'dev'
 }
 
 $outputFolderPath = '.\src\artifacts\packages'
@@ -23,8 +12,8 @@ If (!$outputFolder) {
     $outputFolder = MkDir $outputFolderPath
 }
 
-$dnu = Get-Command dnu
+$dotnet = Get-Command dotnet
 $projectDirectories = Dir -Directory 'src\HTTPlease*'
 ForEach ($projectDirectory in $projectDirectories) {
-    & $dnu pack "$projectDirectory" --out "$outputFolder" "$quietSwitch"
+    & dotnet pack "$projectDirectory" -o "$outputFolder" --version-suffix $BuildVersion
 }

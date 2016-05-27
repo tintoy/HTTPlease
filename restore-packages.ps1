@@ -1,6 +1,5 @@
 Param(
-	[string] $BuildVersion,
-    [switch] $Verbose
+	[string] $BuildVersion
 )
 
 If ($BuildVersion) {
@@ -10,12 +9,5 @@ Else {
 	$env:DNX_BUILD_VERSION = 'dev'
 }
 
-If ($Verbose) {
-    $quietSwitch += ''
-}
-Else {
-    $quietSwitch += '--quiet'
-}
-
-$dnu = Get-Command dnu
-& $dnu restore "$quietSwitch"
+$dotnet = Get-Command dotnet
+& $dotnet restore

@@ -8,4 +8,4 @@ fi
 
 echo "Restoring packages with build version '${DNX_BUILD_VERSION}'."
 
-dnu restore
+dotnet restore

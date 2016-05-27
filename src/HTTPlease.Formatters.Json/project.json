@@ -1,49 +1,56 @@
-﻿
-{
+﻿{
     "version": "1.0.0-*",
-    "title": "HTTPlease JSON Formatter",
-    "summary": "JSON content formatter (serialisation) support for HTTPlease",
-    "description": "JSON content formatter (serialisation) functionality for HTTPlease Immutable HTTP templates",
-    "authors": [
-        "tintoy@tintoy.io"
-    ],
-    "copyright": "Copyright © Adam Friedman 2016",
-    "owners": [
-        "tintoy@tintoy.io"
-    ],
-    "tags": [
-        "HTTP",
-        "HTTPlease",
-        "Formatters",
-        "Serialization",
-        "JSON"
-    ],
-    "projectUrl": "https://tintoy.github.io/HTTPlease/",
-    "licenseUrl": "https://raw.githubusercontent.com/tintoy/HTTPlease/development/r1.0/LICENSE",
+    
+    "packOptions": {
+        "title": "HTTPlease JSON Formatter",
+        "summary": "JSON content formatter (serialisation) support for HTTPlease",
+        "description": "JSON content formatter (serialisation) functionality for HTTPlease Immutable HTTP templates",
+        "authors": [
+            "tintoy@tintoy.io"
+        ],
+        "copyright": "Copyright © Adam Friedman 2016",
+        "owners": [
+            "tintoy@tintoy.io"
+        ],
+        "tags": [
+            "HTTP",
+            "HTTPlease",
+            "Formatters",
+            "Serialization",
+            "JSON"
+        ],
+        "projectUrl": "https://tintoy.github.io/HTTPlease/",
+        "licenseUrl": "https://raw.githubusercontent.com/tintoy/HTTPlease/development/r1.0/LICENSE"
+    },
 
     "tooling": {
         "defaultNamespace": "HTTPlease.Formatters.Json"
     },
 
     "frameworks": {
-        "dnxcore50": {
-            "dependencies": {
-                "Microsoft.CSharp": "4.0.1-beta-23516",
-                "System.Collections": "4.0.11-beta-23516",
-                "System.Collections.Specialized": "4.0.1-beta-23516",
-                "System.Linq": "4.0.1-beta-23516",
-                "System.Runtime": "4.0.21-beta-23516",
-                "System.Text.RegularExpressions": "4.0.11-beta-23516",
-                "System.Threading": "4.0.11-beta-23516"
-            }
+        "netcoreapp1.0": { 
+            "imports": [
+				"dotnet5.6",
+				"dnxcore50",
+				"portable-net45+win8"
+			],
+			"dependencies": {
+				"Microsoft.CSharp": "4.0.1-rc2-24027",
+				"System.Collections": "4.0.11-rc2-24027",
+                "System.Collections.Specialized": "4.0.1-rc2-24027",
+				"System.Linq": "4.1.0-rc2-24027",
+                "System.Runtime": "4.1.0-rc2-24027",
+                "System.Text.RegularExpressions": "4.0.12-rc2-24027",
+				"System.Threading": "4.0.11-rc2-24027"
+			}
         }
     },
 
     "dependencies": {
         "HTTPlease.Formatters": "1.0.0-*",
         "Newtonsoft.Json": "8.0.3",
-        "System.Collections.Concurrent": "4.0.11-beta-23516",
-        "System.Collections.Immutable": "1.1.37",
-        "System.Net.Http": "4.0.1-beta-23516"
+        "System.Collections.Concurrent": "4.0.12-rc2-24027",
+        "System.Collections.Immutable": "1.2.0-rc2-24027",
+        "System.Net.Http": "4.0.1-rc2-24027"
     }
 }

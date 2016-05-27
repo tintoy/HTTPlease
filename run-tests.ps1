@@ -1,6 +1,5 @@
 Param(
-    [string] $BuildVersion,
-	[switch] $Verbose
+    [string] $BuildVersion
 )
 
 If ($BuildVersion) {
@@ -10,17 +9,10 @@ Else {
     $env:DNX_BUILD_VERSION = 'dev'
 }
 
-If (!$Verbose) {
-	$quietFlag = '-appveyor'
-}
-Else {
-	$quietFlag = '-verbose'
-}
-
-$dnx = Get-Command dnx
+$dotnet = Get-Command dotnet
 
 Function Invoke-DnxTests([string] $ProjectName) {
-	& $dnx -p ".\test\$ProjectName" test $quietFlag
+	& $dotnet test ".\test\$ProjectName"
 }
 
 Invoke-DnxTests -ProjectName HTTPlease.Core.Tests

@@ -1,11 +1,11 @@
 #!/bin/bash
 
 if [ "$TRAVIS_BUILD_NUMBER" != "" ] && [ "$HTTPLEASE_BUILD_VERSION" != "" ]; then
-	DNX_BUILD_VERSION="${HTTPLEASE_BUILD_VERSION}-${TRAVIS_BUILD_NUMBER}"
+	BuildVersion="${HTTPLEASE_BUILD_VERSION}-${TRAVIS_BUILD_NUMBER}"
 else
-	DNX_BUILD_VERSION="dev"
+	BuildVersion="dev"
 fi
 
-echo "Building all projects with build version '${DNX_BUILD_VERSION}'."
+echo "Building all projects with build version '${BuildVersion}'."
 
-dnu build ./src/HTTPlease* ./test/HTTPlease* --quiet
+dotnet build ./src/HTTPlease* ./test/HTTPlease* --version-suffix $BuildVersion

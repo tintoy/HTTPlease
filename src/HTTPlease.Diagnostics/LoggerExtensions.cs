@@ -13,12 +13,12 @@ namespace HTTPlease.Diagnostics.MessageHandlers
 		/// <summary>
 		///		Delegate used to write the <see cref="LogEventIds.BeginRequest"/> event to an <see cref="ILogger"/>.
 		/// </summary>
-		static readonly Action<ILogger, string, Uri, Exception> _beginRequest = LoggerMessage.Define<string, Uri>(LogLevel.Verbose, LogEventIds.BeginRequest, "Performing {Method} request to '{RequestUri}.");
+		static readonly Action<ILogger, string, Uri, Exception> _beginRequest = LoggerMessage.Define<string, Uri>(LogLevel.Debug, LogEventIds.BeginRequest, "Performing {Method} request to '{RequestUri}.");
 
 		/// <summary>
 		///		Delegate used to write the <see cref="LogEventIds.EndRequest"/> event to an <see cref="ILogger"/>.
 		/// </summary>
-		static readonly Action<ILogger, string, Uri, HttpStatusCode, Exception> _endRequest = LoggerMessage.Define<string, Uri, HttpStatusCode>(LogLevel.Verbose, LogEventIds.BeginRequest, "Completed {Method} request to '{RequestUri} ({StatusCode}).");
+		static readonly Action<ILogger, string, Uri, HttpStatusCode, Exception> _endRequest = LoggerMessage.Define<string, Uri, HttpStatusCode>(LogLevel.Debug, LogEventIds.BeginRequest, "Completed {Method} request to '{RequestUri} ({StatusCode}).");
 	
 		/// <summary>
 		///		Delegate used to write the <see cref="LogEventIds.RequestError"/> event to an <see cref="ILogger"/>.
