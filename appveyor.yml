@@ -5,26 +5,23 @@ branches:
   - release/r1.0
 image: Visual Studio 2015
 install:
-- cmd: >-
-    set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
-    
-    dnvm install 1.0.0-rc1-update2 -r coreclr -arch x64 -nonative
-cache: C:\Users\appveyor\.dnx\packages
+- ps: Start-FileDownload 'https://dotnetcli.blob.core.windows.net/dotnet/beta/Installers/Latest/dotnet-dev-win-x64.latest.exe'
+- cmd: dotnet-dev-win-x64.latest.exe /quiet
+environment:
+  PATH: $(PATH);$(PROGRAMFILES)\dotnet\
+cache:
+- '%USERPROFILE%\.nuget\packages'
 build_script:
 - ps: >-
-    dnvm use 1.0.0-rc1-update2 -r coreclr -arch x64
-    
+    .\restore-packages.ps1
+
     $buildVersion = "alpha1-$env:APPVEYOR_BUILD_NUMBER"
+    
+    .\build-all.ps1 -BuildVersion $buildVersion
 
-    .\restore-packages.ps1 -BuildVersion $buildVersion -Verbose
-
-    .\build-all.ps1 -BuildVersion $buildVersion -Verbose
-
-    .\package-all.ps1 -BuildVersion $buildVersion -Verbose
+    .\package-all.ps1 -BuildVersion $buildVersion
 artifacts:
 - path: src\artifacts\packages\Debug\*.nupkg
 test_script:
 - ps: >-
-    $buildVersion = "alpha1-$env:APPVEYOR_BUILD_NUMBER"
-
-    .\run-tests.ps1 -BuildVersion $buildVersion -Verbose
+    .\run-tests.ps1 -BuildVersion
