@@ -3,6 +3,7 @@ branches:
   only:
   - development/r1.0
   - release/r1.0
+  - feature/netcore-rc2
 image: Visual Studio 2015
 install:
 - ps: Start-FileDownload 'https://dotnetcli.blob.core.windows.net/dotnet/beta/Installers/Latest/dotnet-dev-win-x64.latest.exe'
