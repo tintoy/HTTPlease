@@ -29,7 +29,7 @@
 	},
 
 	"frameworks": {
-		"netcoreapp1.0": { 
+		"netstandard1.5": {
             "imports": [
 				"dotnet5.6",
 				"dnxcore50",
