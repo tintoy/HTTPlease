@@ -1,25 +1,47 @@
-language: csharp
-mono:
-  - beta
-sudo: required
-dist: trusty
-env:
-  - HTTPLEASE_BUILD_VERSION="alpha1"
-addons:
-  apt:
-    packages:
-    - libunwind8
-install:
-  - uname -a
-  - curl -sSL https://raw.githubusercontent.com/aspnet/Home/dev/dnvminstall.sh | sh
-  - source ~/.dnx/dnvm/dnvm.sh
-  - dnvm install 1.0.0-rc1-update2 -r coreclr -arch x64
-script:
-  - ./restore-packages.sh
-  - ./build-all.sh
-  - ./run-tests.sh
-  - ./package-all.sh
 branches:
   only:
     - development/r1.0
     - release/r1.0
+
+language: generic
+
+addons:
+  apt:
+    packages:
+    - gettext
+    - libcurl4-openssl-dev
+    - libicu-dev
+    - libssl-dev
+    - libunwind8
+    - zlib1g
+
+matrix:
+  include:
+    - os: linux # Ubuntu 14.04
+      dist: trusty
+      sudo: required
+      env: DOTNET_SDK_URL=https://go.microsoft.com/fwlink/?LinkID=798405 # v1.0.0-preview1
+    - os: osx # OSX 10.11
+      osx_image: xcode7.2
+      env: DOTNET_SDK_URL=https://go.microsoft.com/fwlink/?LinkID=798404 # v1.0.0-preview1
+
+before install:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update               ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install openssl      ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew link --force openssl ; fi
+
+install:
+  - export DOTNET_INSTALL_DIR="$PWD/.dotnetsdk"
+  - mkdir -p "$DOTNET_INSTALL_DIR"
+  - curl -L "$DOTNET_SDK_URL" | tar -xzv -C "$DOTNET_INSTALL_DIR"
+  - export PATH="$DOTNET_INSTALL_DIR:$PATH"  
+
+env:
+  - HTTPLEASE_BUILD_VERSION="alpha1"
+
+script:
+  - dotnet --info
+  - ./restore-packages.sh
+  - ./build-all.sh
+  - ./run-tests.sh
+  - ./package-all.sh
