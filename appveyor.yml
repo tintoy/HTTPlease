@@ -20,3 +20,12 @@ artifacts:
 test_script:
 - ps: >-
     .\run-tests.ps1 -BuildVersion
+deploy:
+  provider: NuGet
+  on:
+    branch: release/r1.0
+  api_key:
+    secure: ljl/r7XeQm+KBzR7pm1OOW4+YcDUsYiWlr9jWFztMh/8/orG4V9ylTi+P1jGME7g
+  skip_symbols: false
+  symbol_server:
+  artifact: src\artifacts\packages\Debug\*.nupkg
