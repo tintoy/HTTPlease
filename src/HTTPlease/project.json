@@ -20,6 +20,7 @@
 			"Template",
 			"Immutable"
 		],
+		"iconUrl": "https://tintoy.github.io/HTTPlease/_static/logo-nuget.png",
 		"projectUrl": "https://tintoy.github.io/HTTPlease/",
 		"licenseUrl": "https://raw.githubusercontent.com/tintoy/HTTPlease/development/r1.0/LICENSE"
 	},

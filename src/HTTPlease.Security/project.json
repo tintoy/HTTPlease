@@ -19,6 +19,7 @@
             "Security",
             "Authentication"
         ],
+        "iconUrl": "https://tintoy.github.io/HTTPlease/_static/logo-nuget.png",
         "projectUrl": "https://tintoy.github.io/HTTPlease/",
         "repository": {
             "type": "git",
