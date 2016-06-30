@@ -2,7 +2,7 @@
     "version": "1.0.0-*",
     
     "packOptions": {
-        "title": "HTTPlease Diagnostics",
+        "title": "HTTPlease.Diagnostics",
         "summary": "Instrumentation and telemetry support for HTTPlease",
         "description": "Diagnostic support (including instrumentation and telemetry) for HTTPlease",
         "authors": [

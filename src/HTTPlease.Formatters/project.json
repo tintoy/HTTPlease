@@ -1,7 +1,7 @@
 ﻿{
     "version": "1.0.0-*",
     "packOptions": {
-        "title": "HTTPlease Formatters",
+        "title": "HTTPlease.Formatters",
         "summary": "Content formatter (serialisation) support for HTTPlease",
         "description": "Content formatter (serialisation) functionality for HTTPlease Immutable HTTP templates",
         "authors": [

@@ -2,7 +2,7 @@
 	"version": "1.0.0-*",
 	
 	"packOptions": {
-		"title": "HTTPlease Core",
+		"title": "HTTPlease.Core",
 		"summary": "HTTPlease Core",
 		"description": "Core functionality for HTTPlease Immutable HTTP templates",
 		"authors": [

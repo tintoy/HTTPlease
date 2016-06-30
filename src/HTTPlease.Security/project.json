@@ -2,7 +2,7 @@
     "version": "1.0.0-*",
     
     "packOptions": {
-        "title": "HTTPlease Security",
+        "title": "HTTPlease.Security",
         "description": "Security features for HTTPlease",
         "summary": "Security features (e.g. authentication) for HTTPlease",
 

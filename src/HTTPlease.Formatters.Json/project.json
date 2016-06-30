@@ -2,7 +2,7 @@
     "version": "1.0.0-*",
     
     "packOptions": {
-        "title": "HTTPlease JSON Formatter",
+        "title": "HTTPlease.Formatters.Json",
         "summary": "JSON content formatter (serialisation) support for HTTPlease",
         "description": "JSON content formatter (serialisation) functionality for HTTPlease Immutable HTTP templates",
         "authors": [

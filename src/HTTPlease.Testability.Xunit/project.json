@@ -2,7 +2,7 @@
     "version": "1.0.0-*",
     
     "packOptions": {
-        "title": "HTTPlease Testability (Xunit)",
+        "title": "HTTPlease.Testability.Xunit",
         "summary": "Testability support for HTTPlease",
         "description": "Request / response mocking and other test-related functionality for HTTPlease Immutable HTTP templates",
         "authors": [
