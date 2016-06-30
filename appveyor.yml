@@ -10,7 +10,7 @@ build_script:
 - ps: >-
     .\restore-packages.ps1
 
-    $buildVersion = "alpha2-$($env:APPVEYOR_BUILD_NUMBER.PadLeft(4, '0'))"
+    $buildVersion = "beta1-$($env:APPVEYOR_BUILD_NUMBER.PadLeft(4, '0'))"
     
     .\build-all.ps1 -BuildVersion $buildVersion
 

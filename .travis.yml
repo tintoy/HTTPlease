@@ -25,7 +25,7 @@ matrix:
       dist: trusty
       sudo: required
       env:
-        - HTTPLEASE_BUILD_VERSION="alpha2"
+        - HTTPLEASE_BUILD_VERSION="beta1"
       install:
         - sudo sh -c 'echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet/ trusty main" > /etc/apt/sources.list.d/dotnetdev.list'
         - sudo apt-key adv --keyserver apt-mo.trafficmanager.net --recv-keys 417A0893
@@ -35,7 +35,7 @@ matrix:
     - os: osx # OSX 10.11
       osx_image: xcode7.2
       env:
-        - HTTPLEASE_BUILD_VERSION="alpha2"
+        - HTTPLEASE_BUILD_VERSION="beta1"
         - DOTNET_SDK_URL=https://go.microsoft.com/fwlink/?LinkID=809124 # .NET SDK for OSX (v1.0.0-preview2)
       install:
         - export DOTNET_INSTALL_DIR="$PWD/.dotnetsdk"
