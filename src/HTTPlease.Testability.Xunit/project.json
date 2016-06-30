@@ -2,7 +2,7 @@
     "version": "1.0.0-*",
     
     "packOptions": {
-        "title": "HTTPlease Testability",
+        "title": "HTTPlease Testability (Xunit)",
         "summary": "Testability support for HTTPlease",
         "description": "Request / response mocking and other test-related functionality for HTTPlease Immutable HTTP templates",
         "authors": [
@@ -19,6 +19,10 @@
             "Testability"
         ],
         "projectUrl": "https://tintoy.github.io/HTTPlease/",
+        "repository": {
+            "type": "git",
+            "url": "https://github.com/tintoy/HTTPlease"
+        },
         "licenseUrl": "https://raw.githubusercontent.com/tintoy/HTTPlease/development/r1.0/LICENSE"
     },
 

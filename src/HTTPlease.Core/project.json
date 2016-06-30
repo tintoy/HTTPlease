@@ -21,7 +21,11 @@
 			"Immutable"
 		],
 		"projectUrl": "https://tintoy.github.io/HTTPlease/",
-		"licenseUrl": "https://raw.githubusercontent.com/tintoy/HTTPlease/development/r1.0/LICENSE"		
+		"repository": {
+            "type": "git",
+            "url": "https://github.com/tintoy/HTTPlease"
+        },
+        "licenseUrl": "https://raw.githubusercontent.com/tintoy/HTTPlease/development/r1.0/LICENSE"		
 	},
 
 	"tooling": {

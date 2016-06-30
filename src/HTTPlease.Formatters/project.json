@@ -3,7 +3,7 @@
     "packOptions": {
         "title": "HTTPlease Formatters",
         "summary": "Content formatter (serialisation) support for HTTPlease",
-        "description": "content formatter (serialisation) functionality for HTTPlease Immutable HTTP templates",
+        "description": "Content formatter (serialisation) functionality for HTTPlease Immutable HTTP templates",
         "authors": [
             "tintoy@tintoy.io"
         ],
@@ -18,6 +18,10 @@
             "Serialization"
         ],
         "projectUrl": "https://tintoy.github.io/HTTPlease/",
+        "repository": {
+            "type": "git",
+            "url": "https://github.com/tintoy/HTTPlease"
+        },
         "licenseUrl": "https://raw.githubusercontent.com/tintoy/HTTPlease/development/r1.0/LICENSE"
     },
 
