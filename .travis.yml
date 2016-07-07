@@ -30,8 +30,7 @@ matrix:
         - export DOTNET_INSTALL_DIR="$PWD/.dotnetsdk"
         - echo "$DOTNET_INSTALL_DIR"
         - mkdir -p "$DOTNET_INSTALL_DIR"
-        - curl -L "$DOTNET_SDK_URL" -o ./dotnet-install
-        - bash ./dotnet-install
+        - curl -L "$DOTNET_SDK_URL" | bash
         - export PATH="$DOTNET_INSTALL_DIR:$PATH"
 
     - os: osx # OSX 10.11
