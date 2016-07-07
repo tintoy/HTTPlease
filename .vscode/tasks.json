@@ -9,24 +9,29 @@
 	"tasks": [
 		{
 			"taskName": "build",
-			"args": [ "dnu build ./src/HTTPlease.* ./test/HTTPlease.*.Tests --quiet" ],
+			"args": [ "dotnet build ./src/HTTPlease* ./test/HTTPlease* --version-suffix dev" ],
 			"isBuildCommand": true,
 			"showOutput": "always",
 			"problemMatcher": "$msCompile"
 		},
 		{
 			"taskName": "restore",
-			"args": [ "dnu restore ./src/HTTPlease.* ./test/HTTPlease.*.Tests --quiet" ],
+			"args": [ "dotnet restore" ],
 			"showOutput": "always"
 		},
 		{
 			"taskName": "test-core",
-			"args": [ "dnx -p ./test/HTTPlease.Core.Tests test" ],
+			"args": [ "dotnet test ./test/HTTPlease.Core.Tests" ],
 			"showOutput": "always"
 		},
 		{
 			"taskName": "test-formatters",
-			"args": [ "dnx -p ./test/HTTPlease.Formatters.Tests test" ],
+			"args": [ "dotnet test ./test/HTTPlease.Formatters.Tests" ],
+			"showOutput": "always"
+		},
+		{
+			"taskName": "testfunctional-formatters",
+			"args": [ "dotnet test ./test/HTTPlease.Formatters.FunctionalTests" ],
 			"showOutput": "always"
 		}
 	]

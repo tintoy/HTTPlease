@@ -1,12 +1,11 @@
 ﻿using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace HTTPlease.Security.Abstractions
 {
-	using System.Net.Http;
-	using System.Net.Http.Headers;
-	using System.Threading;
-
 	/// <summary>
 	///		The base class for authentication using the HTTP "Authorization" header.
 	/// </summary>
