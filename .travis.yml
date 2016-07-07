@@ -17,7 +17,6 @@ addons:
     - libssl-dev
     - libunwind8
     - zlib1g
-    - dotnet-dev-1.0.0-preview2-003121 # .NET SDK for Linux (v1.0.0-preview2)
 
 matrix:
   include:
@@ -26,11 +25,14 @@ matrix:
       sudo: required
       env:
         - HTTPLEASE_BUILD_VERSION="beta1"
+        - DOTNET_SDK_URL=https://raw.githubusercontent.com/dotnet/cli/rel/1.0.0-preview2/scripts/obtain/dotnet-install.sh
       install:
-        - sudo sh -c 'echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet/ trusty main" > /etc/apt/sources.list.d/dotnetdev.list'
-        - sudo apt-key adv --keyserver apt-mo.trafficmanager.net --recv-keys 417A0893
-        - sudo apt-get update
-        - sudo apt-get install dotnet-dev-1.0.0-preview2-003121
+        - export DOTNET_INSTALL_DIR="$PWD/.dotnetsdk"
+        - echo "$DOTNET_INSTALL_DIR"
+        - mkdir -p "$DOTNET_INSTALL_DIR"
+        - curl -L "$DOTNET_SDK_URL" -o ./dotnet-install
+        - bash ./dotnet-install
+        - export PATH="$DOTNET_INSTALL_DIR:$PATH"
 
     - os: osx # OSX 10.11
       osx_image: xcode7.2
@@ -44,7 +46,7 @@ matrix:
         - export DOTNET_INSTALL_DIR="$PWD/.dotnetsdk"
         - echo "$DOTNET_INSTALL_DIR"
         - mkdir -p "$DOTNET_INSTALL_DIR"
-        - curl -L "$DOTNET_SDK_URL" | sh
+        - curl -L "$DOTNET_SDK_URL" | bash
         - export PATH="$DOTNET_INSTALL_DIR:$PATH"
 
 script:
