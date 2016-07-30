@@ -7,19 +7,28 @@ image: Visual Studio 2015
 cache:
 - '%USERPROFILE%\.nuget\packages'
 build_script:
-- ps: >-
-    .\restore-packages.ps1
+- ps:
+    dotnet restore
 
     $buildVersion = "beta1-$($env:APPVEYOR_BUILD_NUMBER.PadLeft(4, '0'))"
     
-    .\build-all.ps1 -BuildVersion $buildVersion
+    dotnet build --version-suffix $buildVersion "src/HTTPlease*" "test/HTTPlease*"
 
-    .\package-all.ps1 -BuildVersion $buildVersion
-artifacts:
-- path: src\artifacts\packages\*.nupkg
+    Dir src/HTTPlease* -Directory | % { dotnet pack --version-suffix $buildVersion $_ }
+
 test_script:
 - ps: >-
-    .\run-tests.ps1 -BuildVersion
+    Dir test/HTTPlease* -Directory | % { dotnet test $_ }
+
+deploy_script:
+- ps: >-
+    $buildVersion = "beta1-$($env:APPVEYOR_BUILD_NUMBER.PadLeft(4, '0'))"
+
+    Dir src/VersionManagement* -Directory | % { dotnet pack --version-suffix $buildVersion $_ }
+
+artifacts:
+- path: src\artifacts\packages\*.nupkg
+
 deploy:
   provider: NuGet
   on:

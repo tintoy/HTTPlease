@@ -38,10 +38,15 @@ matrix:
       env:
         - HTTPLEASE_BUILD_VERSION="beta1"
         - DOTNET_SDK_URL=https://raw.githubusercontent.com/dotnet/cli/rel/1.0.0-preview2/scripts/obtain/dotnet-install.sh
-      install:
+      before_install:
         - brew update
+
+        # Hack for Homebrew since it now refuses to link OpenSSL for us.
+        - cp ./build-support/homebrew-hack/link.rb /usr/local/Library/Homebrew/cmd
+        
         - brew install openssl
         - brew link --force openssl
+      install:
         - export DOTNET_INSTALL_DIR="$PWD/.dotnetsdk"
         - echo "$DOTNET_INSTALL_DIR"
         - mkdir -p "$DOTNET_INSTALL_DIR"
@@ -51,12 +56,14 @@ matrix:
 script:
   - dotnet --info
   - echo 'dotnet restore' && echo -en 'travis_fold:start:dotnet_restore'
-  - ./restore-packages.sh
+  - dotnet restore
   - echo -en 'travis_fold:end:dotnet_restore'
   - echo 'dotnet build' && echo -en 'travis_fold:start:dotnet_build'
-  - ./build-all.sh
+  - dotnet build src/HTTPlease* test/HTTPlease.*Tests*
   - echo -en 'travis_fold:end:dotnet_build'
   - echo 'dotnet build' && echo -en 'travis_fold:start:dotnet_test'
-  - ./run-tests.sh
+  - for PRJ in $(ls -d test/HTTPlease.*Tests); do dotnet test $PRJ; done
   - echo -en 'travis_fold:end:dotnet_test'
-  - ./package-all.sh
+  - echo 'dotnet pack' && echo -en 'travis_fold:start:dotnet_pack'
+  - for PRJ in $(ls -d test/HTTPlease.*Tests); do dotnet pack $PRJ; done
+  - echo -en 'travis_fold:end:dotnet_pack'
