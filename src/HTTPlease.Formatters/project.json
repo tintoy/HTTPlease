@@ -1,5 +1,10 @@
 ﻿{
     "version": "1.0.0-*",
+
+    "buildOptions": {
+        "xmlDoc": true
+    },
+    
     "packOptions": {
         "title": "HTTPlease.Formatters",
         "summary": "Content formatter (serialisation) support for HTTPlease",

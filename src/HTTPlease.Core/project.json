@@ -1,5 +1,9 @@
 ﻿{
 	"version": "1.0.0-*",
+
+	"buildOptions": {
+		"xmlDoc": true
+	},
 	
 	"packOptions": {
 		"title": "HTTPlease.Core",
