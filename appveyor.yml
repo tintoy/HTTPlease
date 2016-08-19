@@ -22,7 +22,9 @@ deploy_script:
 - ps: >-
     $buildVersion = "beta2-$($env:APPVEYOR_BUILD_NUMBER.PadLeft(4, '0'))"
 
-    Dir src/VersionManagement* -Directory | % { dotnet pack --version-suffix $buildVersion $_ }
+    MkDir .\src\artifacts\packages -EA SilentlyContinue
+
+    Dir src/VersionManagement* -Directory | % { dotnet pack --version-suffix $buildVersion -o src/artifacts/packages $_ }
 
 artifacts:
 - path: src\artifacts\packages\*.nupkg
