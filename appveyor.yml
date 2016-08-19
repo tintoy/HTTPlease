@@ -12,9 +12,7 @@ build_script:
 
     $buildVersion = "beta2-$($env:APPVEYOR_BUILD_NUMBER.PadLeft(4, '0'))"
     
-    dotnet build --version-suffix $buildVersion "src/HTTPlease*" "test/HTTPlease*"
-
-    Dir src/HTTPlease* -Directory | % { dotnet pack --version-suffix $buildVersion $_ }
+    dotnet build --version-suffix $buildVersion "src/HTTPlease*/project.json" "test/HTTPlease*/project.json"
 
 test_script:
 - ps: >-

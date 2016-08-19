@@ -59,7 +59,7 @@ script:
   - dotnet restore
   - echo -en 'travis_fold:end:dotnet_restore'
   - echo 'dotnet build' && echo -en 'travis_fold:start:dotnet_build'
-  - dotnet build src/HTTPlease* test/HTTPlease.*Tests*
+  - dotnet build "src/HTTPlease*/project.json" "test/HTTPlease.*Tests*/project.json"
   - echo -en 'travis_fold:end:dotnet_build'
   - echo 'dotnet build' && echo -en 'travis_fold:start:dotnet_test'
   - for PRJ in $(ls -d test/HTTPlease.*Tests); do dotnet test $PRJ; done
