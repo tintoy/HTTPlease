@@ -1,33 +1,32 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using System.Xml;
 
-namespace HTTPlease.Formatters.Json
+namespace HTTPlease.Formatters.Xml
 {
 	/// <summary>
-	///		Content formatter for JSON.
+	///		Content formatter for XML.
 	/// </summary>
-	public class JsonFormatter
+	/// <remarks>
+	///		Uses <see cref="DataContractSerializer"/>, so for CoreCLR you'll need to reference System.Runtime.Serialization.Primitives.
+	/// </remarks>
+	public class XmlFormatter
 		: IInputFormatter, IOutputFormatter
 	{
 		/// <summary>
-		///		Create a new <see cref="JsonFormatter"/>.
+		///		Create a new <see cref="XmlFormatter"/>.
 		/// </summary>
-		public JsonFormatter()
+		public XmlFormatter()
 		{
 		}
 
 		/// <summary>
-		///		Settings for the JSON serialiser.
-		/// </summary>
-		public JsonSerializerSettings SerializerSettings { get; set; }
-
-		/// <summary>
 		///		Content types supported by the formatter.
 		/// </summary>
-		public ISet<string> SupportedMediaTypes { get; } = new HashSet<string> { WellKnownMediaTypes.Json };
+		public ISet<string> SupportedMediaTypes { get; } = new HashSet<string> { WellKnownMediaTypes.Xml };
 
 		/// <summary>
 		///		Determine whether the formatter can deserialise the specified data.
@@ -83,10 +82,10 @@ namespace HTTPlease.Formatters.Json
 			if (stream == null)
 				throw new ArgumentNullException(nameof(stream));
 
-			using (TextReader reader = context.CreateReader(stream))
+			using (XmlReader reader = XmlReader.Create(stream))
 			{
-				JsonSerializer serializer = JsonSerializer.Create(SerializerSettings);
-				object data = serializer.Deserialize(reader, context.DataType);
+				DataContractSerializer serializer = new DataContractSerializer(context.DataType);
+				object data = serializer.ReadObject(reader);
 
 				return Task.FromResult(data);
 			}
@@ -113,15 +112,15 @@ namespace HTTPlease.Formatters.Json
 				throw new ArgumentNullException(nameof(stream));
 
 			if (!SupportedMediaTypes.Contains(context.MediaType))
-				throw new NotSupportedException($"The {nameof(JsonFormatter)} cannot write content of type '{context.MediaType}'.");
+				throw new NotSupportedException($"The {nameof(XmlFormatter)} cannot write content of type '{context.MediaType}'.");
 
-			using (TextWriter writer = context.CreateWriter(stream))
+			using (XmlWriter writer = XmlWriter.Create(stream))
 			{
-				JsonSerializer serializer = JsonSerializer.Create(SerializerSettings);
-				serializer.Serialize(writer, context.Data, context.DataType);
-			}
+				DataContractSerializer serializer = new DataContractSerializer(context.DataType);
+				serializer.WriteObject(writer, context.Data);
 
-			return Task.CompletedTask;
+				return Task.CompletedTask;
+			}
 		}
 	}
 }

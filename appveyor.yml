@@ -10,7 +10,7 @@ build_script:
 - ps:
     dotnet restore
 
-    $buildVersion = "beta1-$($env:APPVEYOR_BUILD_NUMBER.PadLeft(4, '0'))"
+    $buildVersion = "beta2-$($env:APPVEYOR_BUILD_NUMBER.PadLeft(4, '0'))"
     
     dotnet build --version-suffix $buildVersion "src/HTTPlease*" "test/HTTPlease*"
 
@@ -22,7 +22,7 @@ test_script:
 
 deploy_script:
 - ps: >-
-    $buildVersion = "beta1-$($env:APPVEYOR_BUILD_NUMBER.PadLeft(4, '0'))"
+    $buildVersion = "beta2-$($env:APPVEYOR_BUILD_NUMBER.PadLeft(4, '0'))"
 
     Dir src/VersionManagement* -Directory | % { dotnet pack --version-suffix $buildVersion $_ }
 
