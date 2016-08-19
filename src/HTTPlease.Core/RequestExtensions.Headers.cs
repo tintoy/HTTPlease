@@ -86,14 +86,11 @@ namespace HTTPlease
 		/// <param name="request">
 		///		The HTTP request.
 		/// </param>
-		/// <param name="headerName">
-		///		The header name.
+		/// <param name="mediaType">
+		///		The media-type name.
 		/// </param>
-		/// <param name="getValue">
-		///		A delegate that returns the header value for each request.
-		/// </param>
-		/// <param name="ensureQuoted">
-		///		Ensure that the header value is quoted?
+		/// <param name="quality">
+		///		An optional media-type quality.
 		/// </param>
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
@@ -123,15 +120,6 @@ namespace HTTPlease
 		/// </summary>
 		/// <param name="request">
 		///		The HTTP request.
-		/// </param>
-		/// <param name="headerName">
-		///		The header name.
-		/// </param>
-		/// <param name="getValue">
-		///		A delegate that returns the header value for each request.
-		/// </param>
-		/// <param name="ensureQuoted">
-		///		Ensure that the header value is quoted?
 		/// </param>
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.

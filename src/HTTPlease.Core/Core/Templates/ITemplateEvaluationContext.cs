@@ -1,4 +1,7 @@
-﻿namespace HTTPlease.Core.Templates
+﻿using System;
+using System.Collections.Generic;
+
+namespace HTTPlease.Core.Templates
 {
 	/// <summary>
 	///		Represents the evaluation context for a URI template.

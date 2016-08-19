@@ -6,7 +6,7 @@ namespace HTTPlease
 	using Core;
 
 	/// <summary>
-	///		<see cref="HttpRequest<TContext>{TContext}"/> / <see cref="IHttpRequest<TContext>{TContext}"/> extension methods for request-configuration actions.
+	///		<see cref="HttpRequest{TContext}"/> / <see cref="IHttpRequest{TContext}"/> extension methods for request-configuration actions.
 	/// </summary>
 	public static partial class TypedRequestExtensions
     {
@@ -23,7 +23,7 @@ namespace HTTPlease
 		///		A delegate that configures outgoing request messages.
 		/// </param>
 		/// <returns>
-		///		The new <see cref="HttpRequest<TContext>{TContext}"/>.
+		///		The new <see cref="HttpRequest{TContext}"/>.
 		/// </returns>
 		public static HttpRequest<TContext> WithRequestAction<TContext>(this HttpRequest<TContext> request, RequestAction requestAction)
 		{
@@ -54,7 +54,7 @@ namespace HTTPlease
 		///		A delegate that configures outgoing request messages.
 		/// </param>
 		/// <returns>
-		///		The new <see cref="HttpRequest<TContext>{TContext}"/>.
+		///		The new <see cref="HttpRequest{TContext}"/>.
 		/// </returns>
 		public static HttpRequest<TContext> WithRequestAction<TContext>(this HttpRequest<TContext> request, RequestAction<TContext> requestAction)
 		{
@@ -83,7 +83,7 @@ namespace HTTPlease
 		///		A delegate that configures outgoing request messages.
 		/// </param>
 		/// <returns>
-		///		The new <see cref="HttpRequest<TContext>{TContext}"/>.
+		///		The new <see cref="HttpRequest{TContext}"/>.
 		/// </returns>
 		public static HttpRequest<TContext> WithRequestAction<TContext>(this HttpRequest<TContext> request, params RequestAction[] requestActions)
 		{
@@ -122,7 +122,7 @@ namespace HTTPlease
 		///		A delegate that configures outgoing request messages.
 		/// </param>
 		/// <returns>
-		///		The new <see cref="HttpRequest<TContext>{TContext}"/>.
+		///		The new <see cref="HttpRequest{TContext}"/>.
 		/// </returns>
 		public static HttpRequest<TContext> WithRequestAction<TContext>(this HttpRequest<TContext> request, params RequestAction<TContext>[] requestActions)
 		{

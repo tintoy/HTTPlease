@@ -16,6 +16,9 @@ namespace HTTPlease.Formatters
 		/// <param name="request">
 		///		The <see cref="HttpRequest"/>.
 		/// </param>
+		/// <param name="serializerSettings">
+		///		<see cref="JsonSerializerSettings"/> used to configure the formatter's behaviour.
+		/// </param>
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
 		/// </returns>
@@ -40,6 +43,9 @@ namespace HTTPlease.Formatters
 		/// </typeparam>
 		/// <param name="request">
 		///		The <see cref="HttpRequest{TContext}"/>.
+		/// </param>
+		/// <param name="serializerSettings">
+		///		<see cref="JsonSerializerSettings"/> used to configure the formatter's behaviour.
 		/// </param>
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.

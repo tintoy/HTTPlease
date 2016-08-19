@@ -9,7 +9,7 @@ namespace HTTPlease
 	using Core;
 
 	/// <summary>
-	///		Invocation-related extension methods for <see cref="HttpClient{TContext}"/>s that use an <see cref="HttpRequest"/>.
+	///		Invocation-related extension methods for <see cref="HttpClient"/>s that use an <see cref="HttpRequest"/>.
 	/// </summary>
 	public static class TypedClientExtensions
     {
@@ -19,7 +19,7 @@ namespace HTTPlease
 		///		Asynchronously execute a request as an HTTP HEAD.
 		/// </summary>
 		/// <param name="httpClient">
-		///		The <see cref="HttpClient{TContext}"/> used to execute the request.
+		///		The <see cref="HttpClient"/> used to execute the request.
 		/// </param>
 		/// <param name="request">
 		///		The HTTP request.
@@ -48,7 +48,7 @@ namespace HTTPlease
 		///		Asynchronously execute a request as an HTTP GET.
 		/// </summary>
 		/// <param name="httpClient">
-		///		The <see cref="HttpClient{TContext}"/> used to execute the request.
+		///		The <see cref="HttpClient"/> used to execute the request.
 		/// </param>
 		/// <param name="request">
 		///		The HTTP request.
@@ -77,7 +77,7 @@ namespace HTTPlease
 		///		Asynchronously execute a request as an HTTP POST.
 		/// </summary>
 		/// <param name="httpClient">
-		///		The <see cref="HttpClient{TContext}"/> used to execute the request.
+		///		The <see cref="HttpClient"/> used to execute the request.
 		/// </param>
 		/// <param name="request">
 		///		The HTTP request.
@@ -109,7 +109,7 @@ namespace HTTPlease
 		///		Asynchronously execute a request as an HTTP PUT.
 		/// </summary>
 		/// <param name="httpClient">
-		///		The <see cref="HttpClient{TContext}"/> used to execute the request.
+		///		The <see cref="HttpClient"/> used to execute the request.
 		/// </param>
 		/// <param name="request">
 		///		The HTTP request.
@@ -144,7 +144,7 @@ namespace HTTPlease
 		///		Asynchronously execute a request as an HTTP PATCH.
 		/// </summary>
 		/// <param name="httpClient">
-		///		The <see cref="HttpClient{TContext}"/> used to execute the request.
+		///		The <see cref="HttpClient"/> used to execute the request.
 		/// </param>
 		/// <param name="request">
 		///		The HTTP request.
@@ -176,7 +176,7 @@ namespace HTTPlease
 		///		Asynchronously execute a request as an HTTP DELETE.
 		/// </summary>
 		/// <param name="httpClient">
-		///		The <see cref="HttpClient{TContext}"/> used to execute the request.
+		///		The <see cref="HttpClient"/> used to execute the request.
 		/// </param>
 		/// <param name="request">
 		///		The HTTP request.
@@ -202,7 +202,7 @@ namespace HTTPlease
 		///		Asynchronously execute the request using the specified HTTP method.
 		/// </summary>
 		/// <param name="httpClient">
-		///		The <see cref="HttpClient{TContext}"/> used to execute the request.
+		///		The <see cref="HttpClient"/> used to execute the request.
 		/// </param>
 		/// <param name="request">
 		///		The HTTP request.
@@ -259,6 +259,9 @@ namespace HTTPlease
 		/// <param name="responseMessage">
 		///		The HTTP response message.
 		/// </param>
+        /// <param name="context">
+        /// 	The <typeparamref name="TContext"/> used as a context for resolving deferred values.
+        /// </param>
 		static void ExecuteResponseActions<TContext>(this HttpRequest<TContext> request, HttpResponseMessage responseMessage, TContext context)
 		{
 			if (request == null)

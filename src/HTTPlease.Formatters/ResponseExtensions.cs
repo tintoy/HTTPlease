@@ -270,9 +270,6 @@ namespace HTTPlease.Formatters
 		/// <param name="response">
 		///		The asynchronous response.
 		/// </param>
-		/// <param name="onFailureResponse">
-		///		A delegate that is called to get a <typeparamref name="TError"/> in the event that the response status code is unexpected or does not represent success.
-		/// </param>
 		/// <param name="successStatusCodes">
 		///		Optional <see cref="HttpStatusCode"/>s that should be treated as representing a successful response.
 		/// </param>

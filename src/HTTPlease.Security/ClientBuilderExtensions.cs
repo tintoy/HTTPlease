@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Net.Http;
 
 namespace HTTPlease.Security
 {
-	using Abstractions;
-	using MessageHandlers;
+    using Abstractions;
+    using MessageHandlers;
 
-	/// <summary>
-	///		Security-related extension methods for the <see cref="ClientBuilder">HTTP client builder</see>.
-	/// </summary>
+    /// <summary>
+    ///		Security-related extension methods for the <see cref="ClientBuilder">HTTP client builder</see>.
+    /// </summary>
     public static class ClientBuilderExtensions
     {
 		/// <summary>
@@ -44,7 +45,7 @@ namespace HTTPlease.Security
 		///		The HTTP client builder.
 		/// </param>
 		/// <param name="authenticationProviderFactory">
-		///		A delegate that creates a new <see cref="IHttpRequestAuthenticationProvider"/> for each <see cref="HttpClient"/> produced by the <see cref="ClientBuilder"/>.
+		///		A///  delegate that creates a new <see cref="IHttpRequestAuthenticationProvider"/> for each <see cref="HttpClient"/> produced by the <see cref="ClientBuilder"/>.
 		/// </param>
 		/// <returns>
 		///		The new HTTP client builder.

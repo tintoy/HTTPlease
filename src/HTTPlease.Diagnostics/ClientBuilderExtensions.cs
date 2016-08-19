@@ -13,6 +13,9 @@ namespace HTTPlease.Diagnostics
 		/// <summary>
 		/// 	Create a copy of the HTTP client builder whose clients will log requests and responses to the specified logger.
 		/// </summary>
+		/// <param name="clientBuilder">
+		///		The HTTP client builder.
+		/// </param>
 		/// <param name="logger">
 		///		The logger used to log the event.
 		/// </param>
@@ -30,6 +33,9 @@ namespace HTTPlease.Diagnostics
 		/// <summary>
 		/// 	Create a copy of the HTTP client builder whose clients will log requests and responses to the specified logger.
 		/// </summary>
+		/// <param name="clientBuilder">
+		///		The HTTP client builder.
+		/// </param>
 		/// <param name="loggerFactory">
 		///		A delegate that produces the logger for each client.
 		/// </param>

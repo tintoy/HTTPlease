@@ -17,7 +17,7 @@ namespace HTTPlease
 		/// <typeparam name="TContext">
 		///		The type of object used by the request when resolving deferred template parameters.
 		/// </typeparam>
-		/// <typeparam name="TParameter">
+		/// <typeparam name="TValue">
 		///		The parameter data-type.
 		/// </typeparam>
 		/// <param name="request">
@@ -54,9 +54,6 @@ namespace HTTPlease
 		/// <param name="request">
 		///		The HTTP request.
 		/// </param>
-		/// <typeparam name="TParameter">
-		///		The parameter data-type.
-		/// </typeparam>
 		/// <param name="name">
 		///		The parameter name.
 		/// </param>

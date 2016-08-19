@@ -17,7 +17,7 @@ namespace HTTPlease
 		/// <typeparam name="TContext">
 		///		The type of object used as a context for resolving deferred parameters.
 		/// </typeparam>
-		/// <typeparam name="TParameter">
+		/// <typeparam name="TValue">
 		///		The parameter data-type.
 		/// </typeparam>
 		/// <param name="request">
