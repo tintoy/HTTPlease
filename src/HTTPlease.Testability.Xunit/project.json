@@ -2,7 +2,9 @@
     "version": "1.0.0-*",
 
     "buildOptions": {
-        "xmlDoc": true
+        "xmlDoc": true,
+        "publicSign": true,
+		"keyFile": "../../HTTPlease.snk"
     },
     
     "packOptions": {
