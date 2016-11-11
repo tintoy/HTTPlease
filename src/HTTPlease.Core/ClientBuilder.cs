@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 #if DNXCORE50
 using System.Reflection;
@@ -8,15 +9,15 @@ using System.Net.Http;
 
 namespace HTTPlease
 {
-	using Core.Utilities;
+    using Core.Utilities;
 
-	/// <summary>
-	///		Builds <see cref="HttpClient"/>s with pipelines of <see cref="DelegatingHandler">HTTP message handler</see>s.
-	/// </summary>
-	/// <remarks>
-	///		Be aware that, if you return singleton instances of message handlers from factory delegates, those handlers will be disposed if the factory encounters any exception while creating a client.
-	/// </remarks>
-	public sealed class ClientBuilder
+    /// <summary>
+    ///		Builds <see cref="HttpClient"/>s with pipelines of <see cref="DelegatingHandler">HTTP message handler</see>s.
+    /// </summary>
+    /// <remarks>
+    ///		Be aware that, if you return singleton instances of message handlers from factory delegates, those handlers will be disposed if the factory encounters any exception while creating a client.
+    /// </remarks>
+    public sealed class ClientBuilder
 	{
 		/// <summary>
 		///		The default factory for message-pipeline terminus handlers.
@@ -26,11 +27,14 @@ namespace HTTPlease
 		/// <summary>
 		///		Factory delegates used to produce the HTTP message handlers that comprise client pipelines.
 		/// </summary>
-		readonly List<Func<DelegatingHandler>> _handlerFactories = new List<Func<DelegatingHandler>>();
+		ImmutableList<Func<DelegatingHandler>> _handlerFactories = ImmutableList<Func<DelegatingHandler>>.Empty;
 
 		/// <summary>
-		///		The factory for message-handlers that act as the message-pipeline terminus.
-		/// </summary>
+        ///		 A delegate that creates the <see cref="HttpMessageHandler"/> that will form the message pipeline terminus.
+        /// </summary>
+		/// <remarks>
+        /// 	Can be overridden by the value passed to CreateClient.
+        /// </remarks>
 		Func<HttpMessageHandler> _messagePipelineTerminus = DefaultMessagePipelineTerminus;
 
 		/// <summary>
@@ -41,18 +45,18 @@ namespace HTTPlease
 		}
 
 		/// <summary>
-		///		The factory for message-handlers that act as the message-pipeline terminus.
+		///		Create a new HTTP client builder.
 		/// </summary>
-		public Func<HttpMessageHandler> MessagePipelineTerminus
+		/// <param name="copyFrom">
+		/// 	The HTTP client buider to copy configuration from.
+		/// </param>
+		ClientBuilder(ClientBuilder copyFrom)
 		{
-			get
-			{
-				return _messagePipelineTerminus;
-			}
-			set
-			{
-				_messagePipelineTerminus = value ?? DefaultMessagePipelineTerminus;
-			}
+			if (copyFrom == null)
+				throw new ArgumentNullException(nameof(copyFrom));
+
+			_handlerFactories = copyFrom._handlerFactories;
+			_messagePipelineTerminus = copyFrom._messagePipelineTerminus;
 		}
 
 		/// <summary>
@@ -61,10 +65,15 @@ namespace HTTPlease
 		/// <param name="baseUri">
 		///		An optional base URI for the <see cref="HttpClient"/>.
 		/// </param>
+		/// <param name="messagePipelineTerminus">
+		///		An optional <see cref="HttpMessageHandler"/> that will form the message pipeline terminus.
+		/// 
+		/// 	If not specified, the pre-configured message pipeline terminus is used.
+		/// </param>
 		/// <returns>
 		///		The new <see cref="HttpClient"/>.
 		/// </returns>
-		public HttpClient CreateClient(Uri baseUri = null)
+		public HttpClient CreateClient(Uri baseUri = null, HttpMessageHandler messagePipelineTerminus = null)
 		{
 			HttpMessageHandler pipelineTerminus = null;
 			List<DelegatingHandler> pipelineHandlers = new List<DelegatingHandler>();
@@ -73,7 +82,10 @@ namespace HTTPlease
 
 			try
 			{
-				pipelineTerminus = MessagePipelineTerminus();
+				pipelineTerminus =
+					messagePipelineTerminus
+					??
+					_messagePipelineTerminus.Invoke();
 
 				foreach (Func<DelegatingHandler> handlerFactory in _handlerFactories)
 				{
@@ -111,7 +123,29 @@ namespace HTTPlease
 		}
 
 		/// <summary>
-		///		Add an HTTP message-handler factory to the end of the pipeline.
+        ///		Create a copy of the <see cref="ClientBuilder"/>, but with the specified message pipeline terminus.
+        /// </summary>
+        /// <param name="messagePipelineTerminus">
+		/// 	A delegate that creates the <see cref="HttpMessageHandler"/> for each <see cref="HttpClient"/> that will form its message pipeline terminus.
+		/// 
+		/// 	If <c>null</c>, the default message handler pipeline terminus will be used.
+		/// </param>
+        /// <returns>
+		/// 	The configured <see cref="ClientBuilder"/>.
+		/// </returns>
+		public ClientBuilder WithMessagePipelineTerminus(Func<HttpMessageHandler> messagePipelineTerminus)
+		{
+			if (ReferenceEquals(_messagePipelineTerminus, messagePipelineTerminus))
+				return this;
+
+			return new ClientBuilder(this)
+			{
+				_messagePipelineTerminus = messagePipelineTerminus ?? DefaultMessagePipelineTerminus
+			};
+		}
+
+		/// <summary>
+		///		Create a copy of the <see cref="ClientBuilder"/>, adding an HTTP message-handler factory to the end of the pipeline.
 		/// </summary>
 		/// <typeparam name="THandler">
 		///		The handler type.
@@ -144,13 +178,14 @@ namespace HTTPlease
 				);
 			}
 
-			_handlerFactories.Add(handlerFactory);
-
-			return this;
+			return new ClientBuilder(this)
+			{
+				_handlerFactories = _handlerFactories.Add(handlerFactory)
+			};
 		}
 
 		/// <summary>
-		///		Insert an HTTP message-handler factory to the pipeline before the factory that produces handlers of the specified type.
+		///		Create a copy of the <see cref="ClientBuilder"/>, inserting an HTTP message-handler factory to the pipeline before the factory that produces handlers of the specified type.
 		/// </summary>
 		/// <typeparam name="THandler">
 		///		The handler type.
@@ -200,9 +235,10 @@ namespace HTTPlease
 			{
 				if (_handlerFactories[handlerIndex].GetType() == beforeHandlerFactoryType)
 				{
-					_handlerFactories.Insert(handlerIndex, handlerFactory);
-
-					return this;
+					return new ClientBuilder(this)
+					{
+						_handlerFactories = _handlerFactories.Insert(handlerIndex, handlerFactory)
+					};
 				}
 			}
 
@@ -218,13 +254,14 @@ namespace HTTPlease
 			}
 
 			// TBefore is not present, so just append to the end of the pipeline.
-			_handlerFactories.Add(handlerFactory);
-
-			return this;
+			return new ClientBuilder(this)
+			{
+				_handlerFactories = _handlerFactories.Add(handlerFactory)
+			};
 		}
 
 		/// <summary>
-		///		Insert an HTTP message-handler factory to the pipeline after the factory that produces handlers of the specified type.
+		///		Create a copy of the <see cref="ClientBuilder"/>, inserting an HTTP message-handler factory to the pipeline after the factory that produces handlers of the specified type.
 		/// </summary>
 		/// <typeparam name="THandler">
 		///		The handler type.
@@ -274,9 +311,10 @@ namespace HTTPlease
 			{
 				if (_handlerFactories[handlerIndex].GetType() == afterHandlerFactoryType)
 				{
-					_handlerFactories.Insert(handlerIndex + 1, handlerFactory);
-
-					return this;
+					return new ClientBuilder(this)
+					{
+						_handlerFactories = _handlerFactories.Insert(handlerIndex + 1, handlerFactory)
+					};
 				}
 			}
 
@@ -292,9 +330,10 @@ namespace HTTPlease
 			}
 
 			// TAfter is not present, so just append to the end of the pipeline.
-			_handlerFactories.Add(handlerFactory);
-
-			return this;
+			return new ClientBuilder(this)
+			{
+				_handlerFactories = _handlerFactories.Add(handlerFactory)
+			};
 		}
 
 		/// <summary>

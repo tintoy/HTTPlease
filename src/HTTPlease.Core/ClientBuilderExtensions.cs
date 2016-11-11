@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 
 namespace HTTPlease
@@ -22,10 +23,87 @@ namespace HTTPlease
 		/// <param name="baseUri">
 		///		The base URI for the HTTP client.
 		/// </param>
+		/// <param name="credentials">
+		///		The client credentials used for authentication.
+		/// </param>
 		/// <returns>
 		///		The new <see cref="HttpClient"/>.
 		/// </returns>
-		public static HttpClient CreateClient(this ClientBuilder clientBuilder, string baseUri)
+		public static HttpClient CreateClient(this ClientBuilder clientBuilder, Uri baseUri, ICredentials credentials)
+		{
+			HttpClientHandler clientHandler = null;
+			try
+			{
+				clientHandler = new HttpClientHandler
+				{
+					Credentials = credentials
+				};
+
+				return clientBuilder.CreateClient(baseUri, clientHandler);
+			}
+			catch (Exception)
+			{
+				using (clientHandler)
+				{
+					throw;
+				}
+			}
+		}
+
+		/// <summary>
+		///		Create a new <see cref="HttpClient"/>.
+		/// </summary>
+		/// <param name="clientBuilder">
+		///		The HTTP client builder.
+		/// </param>
+		/// <param name="baseUri">
+		///		The base URI for the HTTP client.
+		/// </param>
+		/// <param name="credentials">
+		///		The client credentials used for authentication.
+		/// </param>
+		/// <returns>
+		///		The new <see cref="HttpClient"/>.
+		/// </returns>
+		public static HttpClient CreateClient(this ClientBuilder clientBuilder, string baseUri, ICredentials credentials)
+		{
+			HttpClientHandler clientHandler = null;
+			try
+			{
+				clientHandler = new HttpClientHandler
+				{
+					Credentials = credentials
+				};
+
+				return clientBuilder.CreateClient(baseUri, clientHandler);
+			}
+			catch (Exception)
+			{
+				using (clientHandler)
+				{
+					throw;
+				}
+			}
+		}
+
+		/// <summary>
+		///		Create a new <see cref="HttpClient"/>.
+		/// </summary>
+		/// <param name="clientBuilder">
+		///		The HTTP client builder.
+		/// </param>
+		/// <param name="baseUri">
+		///		The base URI for the HTTP client.
+		/// </param>
+		/// <param name="messagePipelineTerminus">
+		///		An optional <see cref="HttpMessageHandler"/> that will form the message pipeline terminus.
+		/// 
+		/// 	If not specified, a new <see cref="HttpClientHandler"/> is used.
+		/// </param>
+		/// <returns>
+		///		The new <see cref="HttpClient"/>.
+		/// </returns>
+		public static HttpClient CreateClient(this ClientBuilder clientBuilder, string baseUri, HttpMessageHandler messagePipelineTerminus = null)
 		{
 			if (clientBuilder == null)
 				throw new ArgumentNullException(nameof(clientBuilder));
@@ -34,7 +112,8 @@ namespace HTTPlease
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'baseUri'.", nameof(baseUri));
 
 			return clientBuilder.CreateClient(
-				new Uri(baseUri, UriKind.Absolute)
+				new Uri(baseUri, UriKind.Absolute),
+				messagePipelineTerminus
 			);
 		}
 

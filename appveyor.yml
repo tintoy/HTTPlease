@@ -10,7 +10,7 @@ build_script:
 - ps:
     dotnet restore
 
-    $buildVersion = "beta2-$($env:APPVEYOR_BUILD_NUMBER.PadLeft(4, '0'))"
+    $buildVersion = "beta3-$($env:APPVEYOR_BUILD_NUMBER.PadLeft(4, '0'))"
     
     dotnet build --version-suffix $buildVersion "src/HTTPlease*/project.json" "test/HTTPlease*/project.json"
 
