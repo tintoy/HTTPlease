@@ -49,42 +49,5 @@ namespace HTTPlease.Formatters
 
 			return request.WithFormatter(new XmlFormatter());
 		}
-
-		/// <summary>
-		///		Create a copy of the <see cref="HttpRequest"/>, configuring it to accept the XML ("application/json") media type.
-		/// </summary>
-		/// <param name="request">
-		///		The <see cref="HttpRequest"/>.
-		/// </param>
-		/// <returns>
-		///		The new <see cref="HttpRequest"/>.
-		/// </returns>
-		public static HttpRequest ExpectXml(this HttpRequest request)
-		{
-			if (request == null)
-				throw new ArgumentNullException(nameof(request));
-
-			return request.AcceptMediaType(WellKnownMediaTypes.Xml);
-		}
-
-		/// <summary>
-		///		Create a copy of the <see cref="HttpRequest"/>, configuring it to accept the XML ("application/json") media type.
-		/// </summary>
-		/// <typeparam name="TContext">
-		///		The type of object used as a context for resolving deferred parameters.
-		/// </typeparam>
-		/// <param name="request">
-		///		The <see cref="HttpRequest"/>.
-		/// </param>
-		/// <returns>
-		///		The new <see cref="HttpRequest"/>.
-		/// </returns>
-		public static HttpRequest<TContext> ExpectXml<TContext>(this HttpRequest<TContext> request)
-		{
-			if (request == null)
-				throw new ArgumentNullException(nameof(request));
-
-			return request.AcceptMediaType(WellKnownMediaTypes.Xml);
-		}
 	}
 }

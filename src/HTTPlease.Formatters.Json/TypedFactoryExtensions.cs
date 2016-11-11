@@ -22,7 +22,7 @@ namespace HTTPlease.Formatters.Json
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
 		/// </returns>
-		public static HttpRequest<TContext> CreateJson<TContext>(this HttpRequestFactory<TContext> requestFactory, string requestUri)
+		public static HttpRequest<TContext> Json<TContext>(this HttpRequestFactory<TContext> requestFactory, string requestUri)
 		{
 			if (requestFactory == null)
 				throw new ArgumentNullException(nameof(requestFactory));
@@ -51,7 +51,7 @@ namespace HTTPlease.Formatters.Json
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
 		/// </returns>
-		public static HttpRequest<TContext> CreateJson<TContext>(this HttpRequestFactory<TContext> requestFactory, Uri requestUri)
+		public static HttpRequest<TContext> Json<TContext>(this HttpRequestFactory<TContext> requestFactory, Uri requestUri)
 		{
 			if (requestFactory == null)
 				throw new ArgumentNullException(nameof(requestFactory));

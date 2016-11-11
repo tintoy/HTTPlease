@@ -20,12 +20,12 @@ namespace HTTPlease.Formatters.Json
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
 		/// </returns>
-		public static HttpRequest JsonFromUri(this HttpRequestFactory requestFactory, string requestUri)
+		public static HttpRequest Json(this HttpRequestFactory requestFactory, string requestUri)
 		{
 			if (requestFactory == null)
 				throw new ArgumentNullException(nameof(requestFactory));
 
-			return requestFactory.JsonFromUri(requestUri, null);
+			return requestFactory.Json(requestUri, null);
 		}
 
 		/// <summary>
@@ -43,7 +43,7 @@ namespace HTTPlease.Formatters.Json
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
 		/// </returns>
-		public static HttpRequest JsonFromUri(this HttpRequestFactory requestFactory, string requestUri, JsonSerializerSettings serializerSettings)
+		public static HttpRequest Json(this HttpRequestFactory requestFactory, string requestUri, JsonSerializerSettings serializerSettings)
 		{
 			if (requestFactory == null)
 				throw new ArgumentNullException(nameof(requestFactory));
@@ -69,12 +69,12 @@ namespace HTTPlease.Formatters.Json
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
 		/// </returns>
-		public static HttpRequest JsonFromUri(this HttpRequestFactory requestFactory, Uri requestUri)
+		public static HttpRequest Json(this HttpRequestFactory requestFactory, Uri requestUri)
 		{
 			if (requestFactory == null)
 				throw new ArgumentNullException(nameof(requestFactory));
 
-			return requestFactory.JsonFromUri(requestUri, null);
+			return requestFactory.Json(requestUri, null);
 		}
 
 		/// <summary>
@@ -92,7 +92,7 @@ namespace HTTPlease.Formatters.Json
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
 		/// </returns>
-		public static HttpRequest JsonFromUri(this HttpRequestFactory requestFactory, Uri requestUri, JsonSerializerSettings serializerSettings)
+		public static HttpRequest Json(this HttpRequestFactory requestFactory, Uri requestUri, JsonSerializerSettings serializerSettings)
 		{
 			if (requestFactory == null)
 				throw new ArgumentNullException(nameof(requestFactory));

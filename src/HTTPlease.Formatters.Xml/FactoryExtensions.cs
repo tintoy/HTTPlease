@@ -19,7 +19,7 @@ namespace HTTPlease.Formatters.Xml
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
 		/// </returns>
-		public static HttpRequest XmlFromUri(this HttpRequestFactory requestFactory, string requestUri)
+		public static HttpRequest Xml(this HttpRequestFactory requestFactory, string requestUri)
 		{
 			if (requestFactory == null)
 				throw new ArgumentNullException(nameof(requestFactory));
@@ -45,7 +45,7 @@ namespace HTTPlease.Formatters.Xml
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
 		/// </returns>
-		public static HttpRequest XmlFromUri(this HttpRequestFactory requestFactory, Uri requestUri)
+		public static HttpRequest Xml(this HttpRequestFactory requestFactory, Uri requestUri)
 		{
 			if (requestFactory == null)
 				throw new ArgumentNullException(nameof(requestFactory));
