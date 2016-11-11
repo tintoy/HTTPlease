@@ -1,6 +1,12 @@
 ﻿{
     "version": "1.0.0-*",
 
+    "buildOptions": {
+        "xmlDoc": true,
+        "publicSign": true,
+		"keyFile": "../../HTTPlease.snk"
+    },
+
     "packOptions": {
         "title": "HTTPlease.Formatters.Xml",
         "summary": "XML content formatter (serialisation) support for HTTPlease",
