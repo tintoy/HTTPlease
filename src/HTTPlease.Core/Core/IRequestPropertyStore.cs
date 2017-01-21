@@ -7,15 +7,8 @@ namespace HTTPlease.Core
     /// 	An abstraction of the mutable or immutable backing store for <see cref="IHttpRequest"/> / <see cref="IHttpRequest{TContext}"/> properties.
     /// </summary>
 	public interface IRequestPropertyStore
+		: IStore
 	{
-		/// <summary>
-        /// 	An object that can be used to synchronise access to the property store.
-        /// </summary>
-		/// <remarks>
-        /// 	Mainly useful for mutable property stores.
-        /// </remarks>
-		object SyncRoot { get; }
-
 		/// <summary>
         /// 	Determine whether the store contains the specified property.
         /// </summary>
@@ -25,7 +18,7 @@ namespace HTTPlease.Core
         /// <returns>
 		/// 	<c>true</c>, if the store contains the property; otherwise, <c>false</c>.
 		/// </returns>
-		bool Contains(string name);
+		bool ContainsKey(string name);
 
 		/// <summary>
         /// 	Get the value of the specified property.
