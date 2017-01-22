@@ -9,7 +9,7 @@ namespace HTTPlease.Core
 	/// <typeparam name="TItem">
 	/// 	The type of item contained in the list.
 	/// </typeparam>
-	public interface IListStore<TItem>
+	public interface IListProperty<TItem>
 		: IStore, IReadOnlyList<TItem>
 	{
 		/// <summary>
@@ -19,9 +19,9 @@ namespace HTTPlease.Core
 		/// 	The item to append.
 		/// </param>
         /// <returns>
-		/// 	The updated list store. May or may not be the same instance that <see cref="Add"/> was called on.
+		/// 	The updated list property. May or may not be the same instance that <see cref="Add"/> was called on.
 		/// </returns>
-		IListStore<TItem> Add(TItem item);
+		IListProperty<TItem> Add(TItem item);
 
 		/// <summary>
         /// 	Insert an item into the list.
@@ -33,12 +33,12 @@ namespace HTTPlease.Core
 		/// 	The item to insert.
 		/// </param>
         /// <returns>
-		/// 	The updated list store. May or may not be the same instance that <see cref="Insert"/> was called on.
+		/// 	The updated list property. May or may not be the same instance that <see cref="Insert"/> was called on.
 		/// </returns>
 		/// <exception cref="ArgumentOutOfRangeException">
 		///		<paramref name="index"/> is greater than the number of items in the list.
 		/// </exception>
-		IListStore<TItem> Insert(int index,  TItem item);
+		IListProperty<TItem> Insert(int index,  TItem item);
 
 		/// <summary>
         /// 	Remove an item from the list.
@@ -47,9 +47,9 @@ namespace HTTPlease.Core
 		/// 	The item to remove (only the first occurrence is remove).
 		/// </param>
         /// <returns>
-		/// 	The updated list store. May or may not be the same instance that <see cref="Remove"/> was called on.
+		/// 	The updated list property. May or may not be the same instance that <see cref="Remove"/> was called on.
 		/// </returns>
-		IListStore<TItem> Remove(TItem item);
+		IListProperty<TItem> Remove(TItem item);
 
 		/// <summary>
         /// 	Remove the item at the specified index.
@@ -58,19 +58,30 @@ namespace HTTPlease.Core
 		/// 	The index of the item to be removed.
 		/// </param>
         /// <returns>
-		/// 	The updated list store. May or may not be the same instance that <see cref="RemoveAt"/> was called on.
+		/// 	The updated list property. May or may not be the same instance that <see cref="RemoveAt"/> was called on.
 		/// </returns>
 		/// <exception cref="ArgumentOutOfRangeException">
 		///		<paramref name="index"/> is greater than or equal to the number of items in the list.
 		/// </exception>
-		IListStore<TItem> RemoveAt(int index);
+		IListProperty<TItem> RemoveAt(int index);
+
+		/// <summary>
+		/// 	Perform a batched edit of the list.
+		/// </summary>
+		/// <param name="editAction">
+		/// 	A delegate that performs the edit.
+		/// </param>
+		/// <returns>
+		/// 	The updated list property. May or may not be the same instance that <see cref="BatchEdit"/> was called on.
+		/// </returns>
+		IListProperty<TItem> BatchEdit(Action<IList<TItem>> editAction);
 
 		/// <summary>
         /// 	Remove all items from the list.
         /// </summary>
         /// <returns>
-		/// 	The updated list store. May or may not be the same instance that <see cref="Clear"/> was called on.
+		/// 	The updated list property. May or may not be the same instance that <see cref="Clear"/> was called on.
 		/// </returns>
-		IListStore<TItem> Clear();
+		IListProperty<TItem> Clear();
 	}
 }

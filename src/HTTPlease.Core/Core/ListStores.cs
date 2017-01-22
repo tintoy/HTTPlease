@@ -1,7 +1,7 @@
 namespace HTTPlease.Core
 {
 	/// <summary>
-    /// 	Factories for <see cref="IListStore{TItem}"/>s.
+    /// 	Factories for <see cref="IListProperty{TItem}"/>s.
     /// </summary>
 	public static class ListPropertyStores
 	{
@@ -14,7 +14,7 @@ namespace HTTPlease.Core
 		/// <returns>
 		/// 	The list store.
 		/// </returns>
-		public static IListStore<TItem> Mutable<TItem>() => new MutableListStore<TItem>();
+		public static IListProperty<TItem> Mutable<TItem>() => new MutableListProperty<TItem>();
 
 		/// <summary>
         /// 	Create a new immutable list store.
@@ -25,6 +25,6 @@ namespace HTTPlease.Core
 		/// <returns>
 		/// 	The list store.
 		/// </returns>
-		public static IListStore<TItem> Immutable<TItem>() => new ImmutableListStore<TItem>();
+		public static IListProperty<TItem> Immutable<TItem>() => new ImmutableListProperty<TItem>();
 	}
 }

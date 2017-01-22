@@ -6,13 +6,13 @@ using System.Collections.Immutable;
 namespace HTTPlease.Core
 {
 	/// <summary>
-    /// 	An immutable list that uses a <see cref="ImmutableList{TItem}"/> as the backing store.
+    /// 	A list that uses a <see cref="ImmutableList{TItem}"/> as the backing store.
     /// </summary>
 	/// <typeparam name="TItem">
 	/// 	The type of item contained in the list.
 	/// </typeparam>
-	sealed class ImmutableListStore<TItem>
-		: IListStore<TItem>
+	sealed class ImmutableListProperty<TItem>
+		: IListProperty<TItem>
 	{
 		/// <summary>
         /// 	The <see cref="ImmutableList{TItem}"/> used as a backing store.
@@ -20,26 +20,31 @@ namespace HTTPlease.Core
 		readonly ImmutableList<TItem> _list;
 
 		/// <summary>
-        ///		Create a new <see cref="ImmutableListStore{TItem}"/>.
+        ///		Create a new <see cref="ImmutableListProperty{TItem}"/>.
         /// </summary>
-		public ImmutableListStore()
+		public ImmutableListProperty()
 			: this(list: ImmutableList<TItem>.Empty)
 		{
 		}
 
 		/// <summary>
-        ///		Create a new <see cref="ImmutableListStore{TItem}"/>.
+        ///		Create a new <see cref="ImmutableListProperty{TItem}"/>.
         /// </summary>
         /// <param name="list">
 		/// 	The <see cref="ImmutableList{TItem}"/> to use as a backing store.
 		/// </param>
-		public ImmutableListStore(ImmutableList<TItem> list)
+		public ImmutableListProperty(ImmutableList<TItem> list)
 		{
 			if (list == null)
 				throw new ArgumentNullException(nameof(list));
 
 			_list = list;
 		}
+
+		/// <summary>
+        ///		Is the collection mutable?
+        /// </summary>
+        public bool Mutable => false;
 
 		/// <summary>
         /// 	Get the item at the specified index.
@@ -55,11 +60,6 @@ namespace HTTPlease.Core
         public int Count => _list.Count;
 
 		/// <summary>
-        ///		Is the collection mutable?
-        /// </summary>
-        public bool Mutable => false;
-
-		/// <summary>
         ///		An object used to synchronise access to the list.
         /// </summary>
         public object SyncRoot => this;
@@ -73,9 +73,9 @@ namespace HTTPlease.Core
         /// <returns>
 		/// 	The updated list store.
 		/// </returns>
-        public IListStore<TItem> Add(TItem item)
+        public IListProperty<TItem> Add(TItem item)
         {
-			return new ImmutableListStore<TItem>(
+			return new ImmutableListProperty<TItem>(
 				_list.Add(item)
 			);
         }
@@ -95,9 +95,9 @@ namespace HTTPlease.Core
 		/// <exception cref="ArgumentOutOfRangeException">
 		///		<paramref name="index"/> is greater than the number of items in the list.
 		/// </exception>
-        public IListStore<TItem> Insert(int index, TItem item)
+        public IListProperty<TItem> Insert(int index, TItem item)
         {
-            return new ImmutableListStore<TItem>(
+            return new ImmutableListProperty<TItem>(
 				_list.Insert(index, item)
 			);
         }
@@ -111,12 +111,12 @@ namespace HTTPlease.Core
         /// <returns>
 		/// 	The updated list store.
 		/// </returns>
-        public IListStore<TItem> Remove(TItem item)
+        public IListProperty<TItem> Remove(TItem item)
         {
 			if (!_list.Contains(item))
 				return this;
 
-            return new ImmutableListStore<TItem>(
+            return new ImmutableListProperty<TItem>(
 				_list.Remove(item)
 			);
         }
@@ -133,12 +133,34 @@ namespace HTTPlease.Core
 		/// <exception cref="ArgumentOutOfRangeException">
 		///		<paramref name="index"/> is greater than or equal to the number of items in the list.
 		/// </exception>
-        public IListStore<TItem> RemoveAt(int index)
+        public IListProperty<TItem> RemoveAt(int index)
         {
-            return new ImmutableListStore<TItem>(
+            return new ImmutableListProperty<TItem>(
 				_list.RemoveAt(index)
 			);
         }
+
+		/// <summary>
+		/// 	Perform a batched edit of the list.
+		/// </summary>
+		/// <param name="editAction">
+		/// 	A delegate that performs the edit.
+		/// </param>
+		/// <returns>
+		/// 	The updated list property.
+		/// </returns>
+		public IListProperty<TItem> BatchEdit(Action<IList<TItem>> editAction)
+		{
+			if (editAction == null)
+				throw new ArgumentNullException(nameof(editAction));
+
+			ImmutableList<TItem>.Builder editor = _list.ToBuilder();
+			editAction(editor);
+
+			return new ImmutableListProperty<TItem>(
+				editor.ToImmutable()
+			);
+		}
 
 		/// <summary>
         /// 	Remove all items from the list.
@@ -146,9 +168,9 @@ namespace HTTPlease.Core
         /// <returns>
 		/// 	The updated list store.
 		/// </returns>
-		public IListStore<TItem> Clear()
+		public IListProperty<TItem> Clear()
         {
-            return new ImmutableListStore<TItem>(
+            return new ImmutableListProperty<TItem>(
 				ImmutableList<TItem>.Empty
 			);
         }

@@ -10,8 +10,8 @@ namespace HTTPlease.Core
 	/// <typeparam name="TItem">
 	/// 	The type of item contained in the list.
 	/// </typeparam>
-	sealed class MutableListStore<TItem>
-		: IListStore<TItem>
+	sealed class MutableListProperty<TItem>
+		: IListProperty<TItem>
 	{
 		/// <summary>
         ///		The <see cref="List{TItem}"/> used as a backing store.
@@ -19,20 +19,20 @@ namespace HTTPlease.Core
 		readonly List<TItem> _list;
 
 		/// <summary>
-        ///		Create a new <see cref="MutableListStore{TItem}"/>.
+        ///		Create a new <see cref="MutableListProperty{TItem}"/>.
         /// </summary>
-		public MutableListStore()
+		public MutableListProperty()
 			: this(list: new List<TItem>())
 		{
 		}
 
 		/// <summary>
-        ///		Create a new <see cref="MutableListStore{TItem}"/>.
+        ///		Create a new <see cref="MutableListProperty{TItem}"/>.
         /// </summary>
         /// <param name="list">
 		/// 	The <see cref="List{TItem}"/> to use as a backing store.
 		/// </param>
-		public MutableListStore(List<TItem> list)
+		public MutableListProperty(List<TItem> list)
 		{
 			if (list == null)
 				throw new ArgumentNullException(nameof(list));
@@ -72,7 +72,7 @@ namespace HTTPlease.Core
         /// <returns>
 		/// 	The updated list store.
 		/// </returns>
-        public IListStore<TItem> Add(TItem item)
+        public IListProperty<TItem> Add(TItem item)
         {
             _list.Add(item);
 
@@ -94,7 +94,7 @@ namespace HTTPlease.Core
 		/// <exception cref="ArgumentOutOfRangeException">
 		///		<paramref name="index"/> is greater than the number of items in the list.
 		/// </exception>
-        public IListStore<TItem> Insert(int index, TItem item)
+        public IListProperty<TItem> Insert(int index, TItem item)
         {
 			_list.Insert(index, item);
 
@@ -110,7 +110,7 @@ namespace HTTPlease.Core
         /// <returns>
 		/// 	The updated list store.
 		/// </returns>
-        public IListStore<TItem> Remove(TItem item)
+        public IListProperty<TItem> Remove(TItem item)
         {
             _list.Remove(item);
 
@@ -129,7 +129,7 @@ namespace HTTPlease.Core
 		/// <exception cref="ArgumentOutOfRangeException">
 		///		<paramref name="index"/> is greater than or equal to the number of items in the list.
 		/// </exception>
-        public IListStore<TItem> RemoveAt(int index)
+        public IListProperty<TItem> RemoveAt(int index)
         {
             _list.RemoveAt(index);
 
@@ -137,12 +137,34 @@ namespace HTTPlease.Core
         }
 
 		/// <summary>
+		/// 	Perform a batched edit of the list.
+		/// </summary>
+		/// <param name="editAction">
+		/// 	A delegate that performs the edit.
+		/// </param>
+		/// <returns>
+		/// 	The updated list property.
+		/// </returns>
+		public IListProperty<TItem> BatchEdit(Action<IList<TItem>> editAction)
+		{
+			if (editAction == null)
+				throw new ArgumentNullException(nameof(editAction));
+
+			lock(SyncRoot)
+			{
+				editAction(_list);
+			}
+
+			return this;
+		}
+
+		/// <summary>
         /// 	Remove all items from the list.
         /// </summary>
         /// <returns>
 		/// 	The updated list store.
 		/// </returns>
-		public IListStore<TItem> Clear()
+		public IListProperty<TItem> Clear()
         {
             _list.Clear();
 
