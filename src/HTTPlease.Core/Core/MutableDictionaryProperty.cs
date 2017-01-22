@@ -18,6 +18,14 @@ namespace HTTPlease.Core
 		/// <summary>
 		/// 	Create a new <see cref="MutableDictionaryProperty{TKey, TValue}"/>.
 		/// </summary>
+		public MutableDictionaryProperty()
+			: this(dictionary: new Dictionary<TKey, TValue>())
+		{
+		}
+
+		/// <summary>
+		/// 	Create a new <see cref="MutableDictionaryProperty{TKey, TValue}"/>.
+		/// </summary>
 		/// <param name="dictionary">
 		/// 	The <see cref="Dictionary{TKey, TValue}"/> that will act as the backing store.
 		/// </param>

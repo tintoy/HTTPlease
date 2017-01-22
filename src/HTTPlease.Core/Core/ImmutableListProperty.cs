@@ -15,6 +15,11 @@ namespace HTTPlease.Core
 		: IListProperty<TItem>
 	{
 		/// <summary>
+		/// 	The empty list.
+		/// </summary>
+		public static readonly ImmutableListProperty<TItem> Empty = new ImmutableListProperty<TItem>(ImmutableList<TItem>.Empty);
+
+		/// <summary>
         /// 	The <see cref="ImmutableList{TItem}"/> used as a backing store.
         /// </summary>
 		readonly ImmutableList<TItem> _list;
