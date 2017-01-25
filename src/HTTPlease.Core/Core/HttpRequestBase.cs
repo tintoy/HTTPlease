@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 
 namespace HTTPlease.Core
 {
 	using Utilities;
-
-	using RequestProperties = ImmutableDictionary<string, object>;
 
 	/// <summary>
 	///		The base class for HTTP request templates.
@@ -20,7 +17,7 @@ namespace HTTPlease.Core
 		/// <summary>
 		///		The request properties.
 		/// </summary>
-		readonly RequestProperties _properties;
+		readonly IRequestPropertyStore _properties;
 
 		#endregion // Instance data
 
@@ -32,7 +29,7 @@ namespace HTTPlease.Core
 		/// <param name="properties">
 		///		The request properties.
 		/// </param>
-		protected HttpRequestBase(ImmutableDictionary<string, object> properties)
+		protected HttpRequestBase(IRequestPropertyStore properties)
 		{
 			if (properties == null)
 				throw new ArgumentNullException(nameof(properties));
@@ -58,9 +55,9 @@ namespace HTTPlease.Core
 		public bool IsUriTemplate => GetOptionalProperty<bool>();
 
 		/// <summary>
-		///		All properties for the request.
+		///		All properties for the request (read-only).
 		/// </summary>
-		public ImmutableDictionary<string, object> Properties => _properties;
+		public IReadOnlyRequestPropertyStore Properties => _properties;
 
 		#endregion // IHttpRequest
 
@@ -107,10 +104,59 @@ namespace HTTPlease.Core
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'propertyName'.", nameof(propertyName));
 			
 			object propertyValue;
-			if (!_properties.TryGetValue(propertyName, out propertyValue))
+			if (!_properties.TryGet(propertyName, out propertyValue))
 				throw new KeyNotFoundException($"Property '{propertyName}' is not defined.");
 
 			return (TProperty)propertyValue;
+		}
+
+		/// <summary>
+		///		Get the specified request property, as a list property.
+		/// </summary>
+		/// <typeparam name="TItem">
+		///		The type of item contained in the list.
+		/// </typeparam>
+		/// <param name="propertyName">
+		///		The name of the property to retrieve.
+		/// </param>
+		/// <returns>
+		///		The property value.
+		/// </returns>
+		/// <exception cref="ArgumentException">
+		///		<paramref name="propertyName"/> is null, empty, or entirely composed of whitespace.
+		/// </exception>
+		/// <exception cref="KeyNotFoundException">
+		///		The specified property is not defined.
+		/// </exception>
+		protected IListProperty<TItem> GetListProperty<TItem>([CallerMemberName] string propertyName = null)
+		{
+			return GetProperty<IListProperty<TItem>>(propertyName);
+		}
+
+		/// <summary>
+		///		Get the specified request property, as a list property.
+		/// </summary>
+		/// <typeparam name="TKey">
+		///		The type of object that uniquely identifies values in the dictionary.
+		/// </typeparam>
+		/// <typeparam name="TValue">
+		///		The type of value contained in the dictionary.
+		/// </typeparam>
+		/// <param name="propertyName">
+		///		The name of the property to retrieve.
+		/// </param>
+		/// <returns>
+		///		The property value.
+		/// </returns>
+		/// <exception cref="ArgumentException">
+		///		<paramref name="propertyName"/> is null, empty, or entirely composed of whitespace.
+		/// </exception>
+		/// <exception cref="KeyNotFoundException">
+		///		The specified property is not defined.
+		/// </exception>
+		protected IDictionaryProperty<TKey, TValue> GetDictionaryProperty<TKey, TValue>([CallerMemberName] string propertyName = null)
+		{
+			return GetProperty<IDictionaryProperty<TKey, TValue>>(propertyName);
 		}
 
 		/// <summary>
@@ -140,7 +186,7 @@ namespace HTTPlease.Core
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'propertyName'.", nameof(propertyName));
 
 			object propertyValue;
-			if (_properties.TryGetValue(propertyName, out propertyValue))
+			if (_properties.TryGet(propertyName, out propertyValue))
 				return (TProperty)propertyValue;
 
 			return defaultValue;
@@ -164,7 +210,7 @@ namespace HTTPlease.Core
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'propertyName'.", nameof(propertyName));
 
 			object propertyValue;
-			if (!_properties.TryGetValue(propertyName, out propertyValue))
+			if (!_properties.TryGet(propertyName, out propertyValue))
 				return;
 
 			if (propertyValue is TProperty)
@@ -175,7 +221,7 @@ namespace HTTPlease.Core
 			if (propertyValue != null)
 			{
 				throw new InvalidOperationException(
-					$"Value for property '{propertyName}' has unexpected type '{propertyType.FullName}' (should be '{propertyValue.GetType().FullName}')."
+					$"Value for property '{propertyName}' has unexpected type '{propertyValue.GetType().FullName}' (should be '{propertyType.FullName}')."
 				);
 			}
 
@@ -197,15 +243,12 @@ namespace HTTPlease.Core
 		/// <returns>
 		///		The cloned request properties.
 		/// </returns>
-		protected ImmutableDictionary<string, object> CloneProperties(Action<RequestProperties.Builder> modifications)
+		protected IRequestPropertyStore CloneProperties(Action<IDictionary<string, object>> modifications)
 		{
 			if (modifications == null)
 				throw new ArgumentNullException(nameof(modifications));
 
-			RequestProperties.Builder requestProperties = _properties.ToBuilder();
-			modifications(requestProperties);
-
-			return requestProperties.ToImmutable();
+			return _properties.BatchEdit(modifications);
 		}
 
 		#endregion // Request properties
@@ -240,7 +283,7 @@ namespace HTTPlease.Core
 		/// <returns>
 		///		The new HTTP request instance.
 		/// </returns>
-		protected abstract HttpRequestBase CreateInstance(ImmutableDictionary<string, object> requestProperties);
+		protected abstract HttpRequestBase CreateInstance(IRequestPropertyStore requestProperties);
 
 		#endregion // Cloning
 

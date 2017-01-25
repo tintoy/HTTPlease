@@ -42,12 +42,12 @@ namespace HTTPlease.Core
 		/// 	The value to add.
 		/// </param>
         /// <returns>
-		/// 	The updated dictionary property. May or may not be the same instance that <see cref="Set"/> was called on.
+		/// 	The updated dictionary property. May or may not be the same instance that <see cref="SetItem"/> was called on.
 		/// </returns>
 		/// <exception cref="ArgumentNullException">
 		///		<paramref name="key"/> is <c>null</c>.
 		/// </exception>
-		IDictionaryProperty<TKey, TValue> Set(TKey key, TValue value);
+		IDictionaryProperty<TKey, TValue> SetItem(TKey key, TValue value);
 
 		/// <summary>
         /// 	Remove a value from the dictionary.

@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 
 namespace HTTPlease
 {
+	using Core;
 	using Core.ValueProviders;
 
-	/// <summary>
-	///		<see cref="HttpRequest{TContext}"/> / <see cref="IHttpRequest{TContext}"/> extension methods for query parameters.
-	/// </summary>
-	public static partial class TypedRequestExtensions
+    /// <summary>
+    ///		<see cref="HttpRequest{TContext}"/> / <see cref="IHttpRequest{TContext}"/> extension methods for query parameters.
+    /// </summary>
+    public static partial class TypedRequestExtensions
     {
 		/// <summary>
 		///		Create a copy of the request builder with the specified request URI query parameter.
@@ -173,30 +173,34 @@ namespace HTTPlease
 				throw new ArgumentNullException(nameof(queryParameters));
 
 			bool modified = false;
-			ImmutableDictionary<string, IValueProvider<TContext, string>>.Builder queryParametersBuilder = request.QueryParameters.ToBuilder();
-			foreach (KeyValuePair<string, IValueProvider<TContext, string>> queryParameter in queryParameters)
-			{
-				if (queryParameter.Value == null)
-				{
-					throw new ArgumentException(
-						String.Format(
-							"Query parameter '{0}' has a null getter; this is not supported.",
-							queryParameter.Key
-						),
-						nameof(queryParameters)
-					);
-				}
+			var updatedQueryParameters =
+				request.Properties.Get<IDictionaryProperty<string, IValueProvider<TContext, string>>>(nameof(HttpRequest<TContext>.QueryParameters))
+					.BatchEdit(editor =>
+					{
+						foreach (KeyValuePair<string, IValueProvider<TContext, string>> queryParameter in queryParameters)
+						{
+							if (queryParameter.Value == null)
+							{
+								throw new ArgumentException(
+									String.Format(
+										"Query parameter '{0}' has a null getter; this is not supported.",
+										queryParameter.Key
+									),
+									nameof(queryParameters)
+								);
+							}
 
-				queryParametersBuilder[queryParameter.Key] = queryParameter.Value;
-				modified = true;
-			}
+							editor[queryParameter.Key] = queryParameter.Value;
+							modified = true;
+						}
+					});
 
 			if (!modified)
 				return request;
 
 			return request.Clone(properties =>
 			{
-				properties[nameof(HttpRequest.QueryParameters)] = queryParametersBuilder.ToImmutable();
+				properties[nameof(HttpRequest.QueryParameters)] = updatedQueryParameters;
 			});
 		}
 

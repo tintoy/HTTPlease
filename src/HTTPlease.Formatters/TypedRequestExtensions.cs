@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Collections.Immutable;
 using System.Net.Http;
 using System.Text;
 
 namespace HTTPlease.Formatters
 {
+	using Core;
+
 	/// <summary>
 	///		Extension methods for working with <see cref="HttpRequest"/>s.
 	/// </summary>
@@ -120,7 +121,7 @@ namespace HTTPlease.Formatters
 
 			return request.Clone(properties =>
 			{
-				ImmutableDictionary<Type, IFormatter> formatters = request.GetFormatters();
+				IDictionaryProperty<Type, IFormatter> formatters = request.GetFormatters();
 
 				// If this is the first formatter we're adding, then make sure that we'll populate the formatter collection for each outgoing request.
 				if (formatters.Count == 0)
@@ -158,7 +159,7 @@ namespace HTTPlease.Formatters
 			if (formatterType == null)
 				throw new ArgumentNullException(nameof(formatterType));
 
-			ImmutableDictionary<Type, IFormatter> formatters = request.GetFormatters();
+			IDictionaryProperty<Type, IFormatter> formatters = request.GetFormatters();
 			if (formatters == null)
 				return request;
 
@@ -183,16 +184,19 @@ namespace HTTPlease.Formatters
 		/// <returns>
 		///		An immutable dictionary of formatters, keyed by type.
 		/// </returns>
-		public static ImmutableDictionary<Type, IFormatter> GetFormatters<TContext>(this HttpRequest<TContext> request)
+		public static IDictionaryProperty<Type, IFormatter> GetFormatters<TContext>(this HttpRequest<TContext> request)
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
-			object formatters;
-			if (request.Properties.TryGetValue(MessageProperties.ContentFormatters, out formatters))
-				return (ImmutableDictionary<Type, IFormatter>)formatters;
+			IDictionaryProperty<Type, IFormatter> formatters;
+			if (request.Properties.TryGet(MessageProperties.ContentFormatters, out formatters))
+				return (IDictionaryProperty<Type, IFormatter>)formatters;
 
-			return ImmutableDictionary<Type, IFormatter>.Empty;
+			return request.Properties.Mutable ?
+				DictionaryPropertyStores.Mutable<Type, IFormatter>()
+				:
+				DictionaryPropertyStores.Immutable<Type, IFormatter>();
 		}
 
 		/// <summary>

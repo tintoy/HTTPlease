@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
@@ -11,8 +10,6 @@ namespace HTTPlease
 	using Core;
 	using Core.Utilities;
 	using Core.ValueProviders;
-
-	using RequestProperties	= ImmutableDictionary<string, object>;
 
 	/// <summary>
 	///		A template for an HTTP request.
@@ -28,22 +25,9 @@ namespace HTTPlease
 		internal static readonly object DefaultContext = new object();
 
 		/// <summary>
-		///		The base properties for <see cref="HttpRequest"/>s.
-		/// </summary>
-		static readonly RequestProperties BaseProperties =
-			new Dictionary<string, object>
-			{
-				[nameof(RequestActions)] = ImmutableList<RequestAction<object>>.Empty,
-				[nameof(ResponseActions)] = ImmutableList<ResponseAction<object>>.Empty,
-				[nameof(TemplateParameters)] = ImmutableDictionary<string, IValueProvider<object, string>>.Empty,
-				[nameof(QueryParameters)] = ImmutableDictionary<string, IValueProvider<object, string>>.Empty
-			}
-			.ToImmutableDictionary();
-
-		/// <summary>
 		///		An empty <see cref="HttpRequest"/>.
 		/// </summary>
-		public static readonly HttpRequest Empty = new HttpRequest(BaseProperties);
+		public static readonly HttpRequest Empty = new HttpRequest(RequestPropertyStores.Immutable<object>());
 
 		/// <summary>
 		///		The default factory for <see cref="HttpRequest"/>s.
@@ -60,16 +44,16 @@ namespace HTTPlease
 		/// <param name="properties">
 		///		The request properties.
 		/// </param>
-		HttpRequest(ImmutableDictionary<string, object> properties)
+		HttpRequest(IRequestPropertyStore properties)
 			: base(properties)
 		{
-			EnsurePropertyType<ImmutableList<RequestAction<object>>>(
+			EnsurePropertyType<IListProperty<RequestAction<object>>>(
 				propertyName: nameof(RequestActions)
 			);
-			EnsurePropertyType<ImmutableDictionary<string, IValueProvider<object, string>>>(
+			EnsurePropertyType<IDictionaryProperty<string, IValueProvider<object, string>>>(
 				propertyName: nameof(TemplateParameters)
 			);
-			EnsurePropertyType<ImmutableDictionary<string, IValueProvider<object, string>>>(
+			EnsurePropertyType<IDictionaryProperty<string, IValueProvider<object, string>>>(
 				propertyName: nameof(QueryParameters)
 			);
 		}
@@ -103,22 +87,22 @@ namespace HTTPlease
 		/// <summary>
 		///		Actions (if any) to perform on the outgoing request message.
 		/// </summary>
-		public ImmutableList<RequestAction<object>> RequestActions => GetProperty<ImmutableList<RequestAction<object>>>();
+		public IListProperty<RequestAction<object>> RequestActions => GetListProperty<RequestAction<object>>();
 
 		/// <summary>
 		///		Actions (if any) to perform on the incoming response message.
 		/// </summary>
-		public ImmutableList<ResponseAction<object>> ResponseActions => GetProperty<ImmutableList<ResponseAction<object>>>();
+		public IListProperty<ResponseAction<object>> ResponseActions => GetListProperty<ResponseAction<object>>();
 
 		/// <summary>
 		///     The request's URI template parameters (if any).
 		/// </summary>
-		public ImmutableDictionary<string, IValueProvider<object, string>> TemplateParameters => GetProperty<ImmutableDictionary<string, IValueProvider<object, string>>>();
+		public IDictionaryProperty<string, IValueProvider<object, string>> TemplateParameters => GetDictionaryProperty<string, IValueProvider<object, string>>();
 
 		/// <summary>
 		///     The request's query parameters (if any).
 		/// </summary>
-		public ImmutableDictionary<string, IValueProvider<object, string>> QueryParameters => GetProperty<ImmutableDictionary<string, IValueProvider<object, string>>>();
+		public IDictionaryProperty<string, IValueProvider<object, string>> QueryParameters => GetDictionaryProperty<string, IValueProvider<object, string>>();
 
 		#endregion // Properties
 
@@ -304,7 +288,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The new HTTP request instance.
 		/// </returns>
-		protected override HttpRequestBase CreateInstance(ImmutableDictionary<string, object> requestProperties)
+		protected override HttpRequestBase CreateInstance(IRequestPropertyStore requestProperties)
 		{
 			return new HttpRequest(requestProperties);
 		}

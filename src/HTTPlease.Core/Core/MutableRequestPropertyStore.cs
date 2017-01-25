@@ -8,7 +8,10 @@ namespace HTTPlease.Core
 	/// <summary>
     /// 	A request property store that uses a <see cref="Dictionary{TKey, TValue}"/> as the backing store.
     /// </summary>
-	sealed class MutableRequestPropertyStore
+	/// <typeparam name="TContext">
+	/// 	The type of object used as a context for resolving deferred values.
+	/// </typeparam>
+	sealed class MutableRequestPropertyStore<TContext>
 		: IRequestPropertyStore
 	{
 		/// <summary>
@@ -16,10 +19,10 @@ namespace HTTPlease.Core
         /// </summary>
 		public static Dictionary<string, object> CreateDefaultProperties() => new Dictionary<string, object>
 		{
-			[nameof(HttpRequest.RequestActions)] = new MutableListProperty<RequestAction<object>>(),
-			[nameof(HttpRequest.ResponseActions)] = new MutableListProperty<ResponseAction<object>>(),
-			[nameof(HttpRequest.TemplateParameters)] = new MutableDictionaryProperty<string, IValueProvider<object, string>>(),
-			[nameof(HttpRequest.QueryParameters)] = new MutableDictionaryProperty<string, IValueProvider<object, string>>()
+			[nameof(HttpRequest.RequestActions)] = new MutableListProperty<RequestAction<TContext>>(),
+			[nameof(HttpRequest.ResponseActions)] = new MutableListProperty<ResponseAction<TContext>>(),
+			[nameof(HttpRequest.TemplateParameters)] = new MutableDictionaryProperty<string, IValueProvider<TContext, string>>(),
+			[nameof(HttpRequest.QueryParameters)] = new MutableDictionaryProperty<string, IValueProvider<TContext, string>>()
 		};
 
 		readonly object						_syncRoot = new object();
@@ -30,7 +33,7 @@ namespace HTTPlease.Core
 		readonly Dictionary<string, object>	_properties;
 
 		/// <summary>
-        /// 	Create a new <see cref="MutableRequestPropertyStore"/>.
+        /// 	Create a new <see cref="MutableRequestPropertyStore{TContext}"/>.
         /// </summary>
 		public MutableRequestPropertyStore()
 			: this(properties: CreateDefaultProperties())
@@ -38,7 +41,7 @@ namespace HTTPlease.Core
 		}
 
 		/// <summary>
-        /// 	Create a new <see cref="MutableRequestPropertyStore"/>.
+        /// 	Create a new <see cref="MutableRequestPropertyStore{TContext}"/>.
         /// </summary>
         /// <param name="properties">
 		/// 	The <see cref="Dictionary{TKey, TValue}"/> that acts as the backing store.
@@ -60,6 +63,11 @@ namespace HTTPlease.Core
 		/// 	An object used to synchronise access to the property store.
 		/// </summary>
         public object SyncRoot => _syncRoot;
+
+		/// <summary>
+		/// 	The names of properties that are defined in the store.
+		/// </summary>
+		public IEnumerable<string> DefinedProperties => _properties.Keys;
 
 		/// <summary>
 		/// 	Determine whether the specified property is present in the store.

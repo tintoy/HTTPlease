@@ -9,7 +9,10 @@ namespace HTTPlease.Core
 	/// <summary>
     /// 	A request property store that uses an <see cref="ImmutableDictionary{TKey, TValue}"/> as the backing store.
     /// </summary>
-	sealed class ImmutableRequestPropertyStore
+	/// <typeparam name="TContext">
+	/// 	The type of object used as a context for resolving deferred values.
+	/// </typeparam>
+	sealed class ImmutableRequestPropertyStore<TContext>
 		: IRequestPropertyStore
 	{
 		/// <summary>
@@ -18,17 +21,17 @@ namespace HTTPlease.Core
 		public static readonly ImmutableDictionary<string, object> DefaultProperties =
 			new Dictionary<string, object>
 			{
-				[nameof(HttpRequest.RequestActions)] = ImmutableListProperty<RequestAction<object>>.Empty,
-				[nameof(HttpRequest.ResponseActions)] = ImmutableListProperty<ResponseAction<object>>.Empty,
-				[nameof(HttpRequest.TemplateParameters)] = ImmutableDictionaryProperty<string, IValueProvider<object, string>>.Empty,
-				[nameof(HttpRequest.QueryParameters)] = ImmutableDictionaryProperty<string, IValueProvider<object, string>>.Empty
+				[nameof(HttpRequest.RequestActions)] = ImmutableListProperty<RequestAction<TContext>>.Empty,
+				[nameof(HttpRequest.ResponseActions)] = ImmutableListProperty<ResponseAction<TContext>>.Empty,
+				[nameof(HttpRequest.TemplateParameters)] = ImmutableDictionaryProperty<string, IValueProvider<TContext, string>>.Empty,
+				[nameof(HttpRequest.QueryParameters)] = ImmutableDictionaryProperty<string, IValueProvider<TContext, string>>.Empty
 			}
 			.ToImmutableDictionary();
 
 		/// <summary>
 		/// 	The empty request property store.
 		/// </summary>
-		public static readonly ImmutableRequestPropertyStore Empty = new ImmutableRequestPropertyStore(DefaultProperties);
+		public static readonly ImmutableRequestPropertyStore<TContext> Empty = new ImmutableRequestPropertyStore<TContext>(DefaultProperties);
 
 		/// <summary>
         /// 	The <see cref="ImmutableDictionary{TKey, TValue}"/> that acts as the backing store.
@@ -41,15 +44,7 @@ namespace HTTPlease.Core
 		readonly object _syncRoot;
 
 		/// <summary>
-        /// 	Create a new <see cref="ImmutableRequestPropertyStore"/>.
-        /// </summary>
-		public ImmutableRequestPropertyStore()
-			: this(properties: ImmutableDictionary<string, object>.Empty)
-		{
-		}
-
-		/// <summary>
-        /// 	Create a new <see cref="ImmutableRequestPropertyStore"/>.
+        /// 	Create a new <see cref="ImmutableRequestPropertyStore{TContext}"/>.
         /// </summary>
         /// <param name="properties">
 		/// 	The <see cref="ImmutableDictionary{TKey, TValue}"/> that acts as the backing store.
@@ -60,7 +55,7 @@ namespace HTTPlease.Core
 		}
 
 		/// <summary>
-        /// 	Create a new <see cref="ImmutableRequestPropertyStore"/>.
+        /// 	Create a new <see cref="ImmutableRequestPropertyStore{TContext}"/>.
         /// </summary>
         /// <param name="properties">
 		/// 	The <see cref="ImmutableDictionary{TKey, TValue}"/> that acts as the backing store.
@@ -89,6 +84,11 @@ namespace HTTPlease.Core
 		/// 	An object used to synchronise access to the property store.
 		/// </summary>
         public object SyncRoot => _syncRoot;
+
+		/// <summary>
+		/// 	The names of properties that are defined in the store.
+		/// </summary>
+		public IEnumerable<string> DefinedProperties => _properties.Keys;
 
 		/// <summary>
 		/// 	Determine whether the specified property is present in the store.
@@ -166,7 +166,7 @@ namespace HTTPlease.Core
 			if (_properties.TryGetValue(name, out existingValue) && Equals(existingValue, value))
 				return this;
 
-			return new ImmutableRequestPropertyStore(
+			return new ImmutableRequestPropertyStore<TContext>(
 				_properties.SetItem(name, value)
 			);
         }
@@ -188,7 +188,7 @@ namespace HTTPlease.Core
             ImmutableDictionary<string, object>.Builder editor = _properties.ToBuilder();
 			editAction(editor);
 
-			return new ImmutableRequestPropertyStore(
+			return new ImmutableRequestPropertyStore<TContext>(
 				editor.ToImmutable()
 			);
         }
@@ -210,7 +210,7 @@ namespace HTTPlease.Core
 			if (!_properties.ContainsKey(name))
 				return this;
 
-			return new ImmutableRequestPropertyStore(
+			return new ImmutableRequestPropertyStore<TContext>(
 				_properties.Remove(name)
 			);
         }

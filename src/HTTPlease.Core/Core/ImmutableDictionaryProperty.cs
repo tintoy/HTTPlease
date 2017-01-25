@@ -105,7 +105,7 @@ namespace HTTPlease.Core
 		/// <exception cref="ArgumentNullException">
 		///		<paramref name="key"/> is <c>null</c>.
 		/// </exception>
-		public IDictionaryProperty<TKey, TValue> Set(TKey key, TValue value)
+		public IDictionaryProperty<TKey, TValue> SetItem(TKey key, TValue value)
         {
             return new ImmutableDictionaryProperty<TKey, TValue>(
 				_dictionary.SetItem(key, value)

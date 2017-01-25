@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 
 namespace HTTPlease
 {
+	using Core;
 	using Core.ValueProviders;
 
 	/// <summary>
@@ -164,30 +164,35 @@ namespace HTTPlease
 				throw new ArgumentNullException(nameof(queryParameters));
 
 			bool modified = false;
-			ImmutableDictionary<string, IValueProvider<object, string>>.Builder queryParametersBuilder = request.QueryParameters.ToBuilder();
-			foreach (KeyValuePair<string, IValueProvider<object, string>> queryParameter in queryParameters)
-			{
-				if (queryParameter.Value == null)
+			var updatedQueryParameters =
+				request.Properties.GetQueryParameters().BatchEdit(editor =>
 				{
-					throw new ArgumentException(
-						String.Format(
-							"Query parameter '{0}' has a null getter; this is not supported.",
-							queryParameter.Key
-						),
-						nameof(queryParameters)
-					);
-				}
+					foreach (KeyValuePair<string, IValueProvider<object, string>> queryParameter in queryParameters)
+					{
+						if (queryParameter.Value == null)
+						{
+							throw new ArgumentException(
+								String.Format(
+									"Query parameter '{0}' has a null getter; this is not supported.",
+									queryParameter.Key
+								),
+								nameof(queryParameters)
+							);
+						}
 
-				queryParametersBuilder[queryParameter.Key] = queryParameter.Value;
-				modified = true;
-			}
+						editor[queryParameter.Key] = queryParameter.Value;
+						modified = true;
+					}
+				});
+			
+			
 
 			if (!modified)
 				return request;
 
 			return request.Clone(properties =>
 			{
-				properties[nameof(HttpRequest.QueryParameters)] = queryParametersBuilder.ToImmutable();
+				properties[nameof(HttpRequest.QueryParameters)] = updatedQueryParameters;
 			});
 		}
 
@@ -239,7 +244,11 @@ namespace HTTPlease
 
 			return request.Clone(properties =>
 			{
-				properties[nameof(HttpRequest.QueryParameters)] = request.QueryParameters.RemoveRange(names);
+				properties[nameof(HttpRequest.QueryParameters)] = request.QueryParameters.BatchEdit(queryParametersEditor =>
+				{
+					foreach (string name in names)
+						queryParametersEditor.Remove(name);
+				});
 			});
 		}
 	}

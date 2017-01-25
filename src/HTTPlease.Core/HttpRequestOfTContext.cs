@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
@@ -11,8 +10,6 @@ namespace HTTPlease
 	using Core;
 	using Core.Utilities;
 	using Core.ValueProviders;
-
-	using RequestProperties = ImmutableDictionary<string, object>;
 
 	/// <summary>
 	///		A template for an HTTP request that resolves deferred values from an instance of <typeparamref name="TContext"/>.
@@ -26,22 +23,9 @@ namespace HTTPlease
 		#region Constants
 
 		/// <summary>
-		///		The base properties for <see cref="HttpRequest"/>s.
-		/// </summary>
-		static readonly RequestProperties BaseProperties =
-			new Dictionary<string, object>
-			{
-				[nameof(RequestActions)] = ImmutableList<RequestAction<TContext>>.Empty,
-				[nameof(ResponseActions)] = ImmutableList<ResponseAction<TContext>>.Empty,
-				[nameof(TemplateParameters)] = ImmutableDictionary<string, IValueProvider<TContext, string>>.Empty,
-				[nameof(QueryParameters)] = ImmutableDictionary<string, IValueProvider<TContext, string>>.Empty
-			}
-			.ToImmutableDictionary();
-
-		/// <summary>
 		///		An empty <see cref="HttpRequest{TContext}"/>.
 		/// </summary>
-		public static HttpRequest<TContext> Empty = new HttpRequest<TContext>(BaseProperties);
+		public static HttpRequest<TContext> Empty = new HttpRequest<TContext>(RequestPropertyStores.Immutable<TContext>());
 
 		/// <summary>
 		///		The default factory for <see cref="HttpRequest{TContext}"/>s.
@@ -58,16 +42,16 @@ namespace HTTPlease
 		/// <param name="properties">
 		///		The request properties.
 		/// </param>
-		HttpRequest(ImmutableDictionary<string, object> properties)
+		HttpRequest(IRequestPropertyStore properties)
 			: base(properties)
 		{
-			EnsurePropertyType<ImmutableList<RequestAction<TContext>>>(
+			EnsurePropertyType<IListProperty<RequestAction<TContext>>>(
 				propertyName: nameof(RequestActions)
 			);
-			EnsurePropertyType<ImmutableDictionary<string, IValueProvider<TContext, string>>>(
+			EnsurePropertyType<IDictionaryProperty<string, IValueProvider<TContext, string>>>(
 				propertyName: nameof(TemplateParameters)
 			);
-			EnsurePropertyType<ImmutableDictionary<string, IValueProvider<TContext, string>>>(
+			EnsurePropertyType<IDictionaryProperty<string, IValueProvider<TContext, string>>>(
 				propertyName: nameof(QueryParameters)
 			);
 		}
@@ -101,22 +85,22 @@ namespace HTTPlease
 		/// <summary>
 		///		Actions (if any) to perform on the outgoing request message.
 		/// </summary>
-		public ImmutableList<RequestAction<TContext>> RequestActions => GetProperty<ImmutableList<RequestAction<TContext>>>();
+		public IListProperty<RequestAction<TContext>> RequestActions => GetListProperty<RequestAction<TContext>>();
 
 		/// <summary>
 		///		Actions (if any) to perform on the incoming response message.
 		/// </summary>
-		public ImmutableList<ResponseAction<TContext>> ResponseActions => GetProperty<ImmutableList<ResponseAction<TContext>>>();
+		public IListProperty<ResponseAction<TContext>> ResponseActions => GetListProperty<ResponseAction<TContext>>();
 
 		/// <summary>
 		///     The request's URI template parameters (if any).
 		/// </summary>
-		public ImmutableDictionary<string, IValueProvider<TContext, string>> TemplateParameters => GetProperty<ImmutableDictionary<string, IValueProvider<TContext, string>>>();
+		public IDictionaryProperty<string, IValueProvider<TContext, string>> TemplateParameters => GetDictionaryProperty<string, IValueProvider<TContext, string>>();
 
 		/// <summary>
 		///     The request's query parameters (if any).
 		/// </summary>
-		public ImmutableDictionary<string, IValueProvider<TContext, string>> QueryParameters => GetProperty<ImmutableDictionary<string, IValueProvider<TContext, string>>>();
+		public IDictionaryProperty<string, IValueProvider<TContext, string>> QueryParameters => GetDictionaryProperty<string, IValueProvider<TContext, string>>();
 
 		#endregion // Properties
 
@@ -251,7 +235,7 @@ namespace HTTPlease
 		/// </summary>
 		IReadOnlyDictionary<string, IValueProvider<TContext, string>> IHttpRequestProperties<TContext>.QueryParameters => QueryParameters;
 
-		#endregion // IHttpRequest
+		#endregion // IHttpRequest2
 
 		#region Cloning
 
@@ -281,7 +265,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The new HTTP request instance.
 		/// </returns>
-		protected override HttpRequestBase CreateInstance(ImmutableDictionary<string, object> requestProperties)
+		protected override HttpRequestBase CreateInstance(IRequestPropertyStore requestProperties)
 		{
 			return new HttpRequest<TContext>(requestProperties);
 		}

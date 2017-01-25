@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 
 namespace HTTPlease
 {
@@ -31,7 +30,7 @@ namespace HTTPlease
 		/// <summary>
 		///		Additional properties for the request.
 		/// </summary>
-		ImmutableDictionary<string, object> Properties
+		IReadOnlyRequestPropertyStore Properties
 		{
 			get;
 		}

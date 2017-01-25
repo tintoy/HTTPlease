@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace HTTPlease.Core
 {
 	/// <summary>
@@ -6,6 +8,11 @@ namespace HTTPlease.Core
 	public interface IReadOnlyRequestPropertyStore
 		: IStore
 	{
+		/// <summary>
+		/// 	The names of properties that are defined in the store.
+		/// </summary>
+		IEnumerable<string> DefinedProperties { get; }
+
 		/// <summary>
         /// 	Determine whether the store contains the specified property.
         /// </summary>

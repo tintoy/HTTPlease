@@ -5,7 +5,7 @@ namespace HTTPlease
 	/// <summary>
 	///		Extension methods for <see cref="HttpRequestFactory"/>.
 	/// </summary>
-	public static class FactoryExtensions
+	public static class FactoryExtensions2
     {
 		/// <summary>
 		///		Create a new HTTP request with the specified request URI.

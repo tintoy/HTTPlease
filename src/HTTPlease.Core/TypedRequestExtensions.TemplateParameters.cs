@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 
 namespace HTTPlease
 {
+	using Core;
 	using Core.ValueProviders;
 
 	/// <summary>
@@ -212,30 +212,33 @@ namespace HTTPlease
 				throw new ArgumentNullException(nameof(templateParameters));
 
 			bool modified = false;
-			ImmutableDictionary<string, IValueProvider<TContext, string>>.Builder templateParametersBuilder = request.TemplateParameters.ToBuilder();
-			foreach (KeyValuePair<string, IValueProvider<TContext, string>> templateParameter in templateParameters)
-			{
-				if (templateParameter.Value == null)
+			var updatedTemplateParameters =
+				request.Properties.GetTemplateParameters<TContext>().BatchEdit(editor =>
 				{
-					throw new ArgumentException(
-						String.Format(
-							"Template parameter '{0}' has a null getter; this is not supported.",
-							templateParameter.Key
-						),
-						nameof(templateParameters)
-					);
-				}
+					foreach (var templateParameter in templateParameters)
+					{
+						if (templateParameter.Value == null)
+						{
+							throw new ArgumentException(
+								String.Format(
+									"Template parameter '{0}' has a null getter; this is not supported.",
+									templateParameter.Key
+								),
+								nameof(templateParameters)
+							);
+						}
 
-				templateParametersBuilder[templateParameter.Key] = templateParameter.Value;
-				modified = true;
-			}
+						editor[templateParameter.Key] = templateParameter.Value;
+						modified = true;
+					}
+				});
 
 			if (!modified)
 				return request;
 
 			return request.Clone(properties =>
 			{
-				properties[nameof(HttpRequest.TemplateParameters)] = templateParametersBuilder.ToImmutable();
+				properties[nameof(HttpRequest.TemplateParameters)] = updatedTemplateParameters;
 			});
 		}
 

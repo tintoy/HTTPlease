@@ -79,7 +79,7 @@ namespace HTTPlease
 		/// <returns>
 		///		A sequence of key / value pairs representing the parameters.
 		/// </returns>
-		static IEnumerable<KeyValuePair<string, IValueProvider<TContext, string>>> CreateDeferredParameters<TContext, TParameters>(this TParameters parameters)
+		static IEnumerable<KeyValuePair<string, IValueProvider<TContext, string>>> 	CreateDeferredParameters<TContext, TParameters>(this TParameters parameters)
 		{
 			if (Equals(parameters, null))
 				throw new ArgumentNullException(nameof(parameters));

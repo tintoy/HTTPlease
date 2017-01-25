@@ -111,32 +111,6 @@ namespace HTTPlease
 		}
 
 		/// <summary>
-		///		Create a copy of the request with the specified request URI.
-		/// </summary>
-		/// <param name="request">
-		///		The request.
-		/// </param>
-		/// <param name="requestUri">
-		///		The new request URI.
-		/// </param>
-		/// <returns>
-		///		The new <see cref="HttpRequest"/>.
-		/// </returns>
-		public static HttpRequest2 WithUri(this HttpRequest2 request, Uri requestUri)
-		{
-			if (request == null)
-				throw new ArgumentNullException(nameof(request));
-
-			if (requestUri == null)
-				throw new ArgumentNullException(nameof(requestUri));
-
-			return request.Clone(properties =>
-			{
-				properties.SetUri(requestUri);
-			});
-		}
-
-		/// <summary>
 		///		Create a copy of the request with the specified request URI appended to its existing URI.
 		/// </summary>
 		/// <param name="request">
