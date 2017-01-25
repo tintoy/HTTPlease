@@ -81,6 +81,37 @@ namespace HTTPlease
 		}
 
 		/// <summary>
+		///		Create a copy of the request with the specified request URI.
+		/// </summary>
+		/// <typeparam name="TContext">
+		///		The type of object used as a context for resolving deferred parameters.
+		/// </typeparam>
+		/// <param name="request">
+		///		The request.
+		/// </param>
+		/// <param name="requestUri">
+		///		The new request URI.
+		///
+		///		Must be an absolute URI (otherwise, use <see cref="WithRelativeUri{TContext}(HttpRequest{TContext}, Uri)"/>).
+		/// </param>
+		/// <returns>
+		///		The new <see cref="HttpRequest2{TContext}"/>.
+		/// </returns>
+		public static HttpRequest2<TContext> WithUri<TContext>(this HttpRequest2<TContext> request, Uri requestUri)
+		{
+			if (request == null)
+				throw new ArgumentNullException(nameof(request));
+
+			if (requestUri == null)
+				throw new ArgumentNullException(nameof(requestUri));
+
+			return request.Clone(properties =>
+			{
+				properties.SetUri(requestUri);
+			});
+		}
+
+		/// <summary>
 		///		Create a copy of the request with the specified request URI appended to its existing URI.
 		/// </summary>
 		/// <typeparam name="TContext">
