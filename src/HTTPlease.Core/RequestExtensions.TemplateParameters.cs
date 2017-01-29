@@ -129,7 +129,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
 		/// </returns>
-		public static HttpRequest WithTemplateParameters<TParameters>(HttpRequest request, TParameters parameters)
+		public static HttpRequest WithTemplateParameters<TParameters>(this HttpRequest request, TParameters parameters)
 		{
 			if (parameters == null)
 				throw new ArgumentNullException(nameof(parameters));
