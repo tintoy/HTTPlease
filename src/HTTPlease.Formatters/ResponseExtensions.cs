@@ -4,8 +4,10 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace HTTPlease.Formatters
+namespace HTTPlease
 {
+	using Formatters;
+
 	/// <summary>
 	///		Extension methods for the <see cref="HttpResponseMessage"/>s returned asynchronously by invocation of <see cref="HttpRequest"/>s by <see cref="HttpClient"/>s.
 	/// </summary>
