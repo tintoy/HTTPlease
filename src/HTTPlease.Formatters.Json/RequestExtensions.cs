@@ -8,7 +8,7 @@ namespace HTTPlease.Formatters
 	/// <summary>
 	///		Formatter-related extension methods for <see cref="HttpRequest"/> / <see cref="HttpRequest{TContext}"/>.
 	/// </summary>
-	public static class RequestExtensions
+	public static class FormatterRequestExtensions
 	{
 		/// <summary>
 		///		Create a copy of the <see cref="HttpRequest"/>, configuring it to only use the JSON formatters.

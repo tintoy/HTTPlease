@@ -11,7 +11,7 @@ namespace HTTPlease
 	/// <summary>
 	///		Extension methods for the <see cref="HttpResponseMessage"/>s returned asynchronously by invocation of <see cref="HttpRequest"/>s by <see cref="HttpClient"/>s.
 	/// </summary>
-	public static class ResponseExtensions
+	public static class FormatterResponseExtensions
 	{
 		/// <summary>
 		///		Asynchronously read the response body as the specified type using a specific content formatter.

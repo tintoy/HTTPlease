@@ -10,7 +10,7 @@ namespace HTTPlease
 	/// <summary>
 	///		Extension methods for working with <see cref="HttpRequest"/>s.
 	/// </summary>
-	public static class RequestExtensions
+	public static class FormatterRequestExtensions
     {
 		/// <summary>
 		///		Create a copy of the <see cref="HttpRequest"/>, configuring it to accept the JSON ("application/json") media type.

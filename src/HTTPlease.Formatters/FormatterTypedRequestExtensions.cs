@@ -8,7 +8,7 @@ namespace HTTPlease.Formatters
 	/// <summary>
 	///		Extension methods for working with <see cref="HttpRequest"/>s.
 	/// </summary>
-	public static class TypedRequestExtensions
+	public static class FormatterTypedRequestExtensions
     {
 		/// <summary>
 		///		Build an HTTP request message, selecting an appropriate content formatter to serialise its body content.
