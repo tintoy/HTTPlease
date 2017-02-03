@@ -215,6 +215,36 @@ namespace HTTPlease.Tests.BuildMessage
 			);
 		}
 
+		/// <summary>
+		/// 	An <see cref="HttpRequest"/> with an absolute URI that adds a query component, with no additional path component).
+		/// </summary>
+		[Fact]
+		public void AbsoluteUri_AddQuery_EmptyPath()
+		{
+			HttpRequest request =
+				AbsoluteRequest.WithRelativeUri("foo/bar")
+					.WithRelativeUri("?baz=bonk");
+			
+			RequestAssert.MessageHasUri(request,
+				expectedUri: "http://localhost:1234/foo/bar?baz=bonk"
+			);
+		}
+
+		/// <summary>
+		/// 	An <see cref="HttpRequest"/> with an absolute URI that adds a query component, with no additional path component).
+		/// </summary>
+		[Fact]
+		public void AbsoluteUri_WithQuery_AddQuery_EmptyPath()
+		{
+			HttpRequest request =
+				AbsoluteRequest.WithRelativeUri("foo/bar?baz=bonk")
+					.WithRelativeUri("?bo=diddly");
+			
+			RequestAssert.MessageHasUri(request,
+				expectedUri: "http://localhost:1234/foo/bar?baz=bonk&bo=diddly"
+			);
+		}
+
 		#endregion // Query parameters
 	}
 }

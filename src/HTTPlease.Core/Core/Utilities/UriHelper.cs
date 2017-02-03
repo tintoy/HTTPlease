@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Text;
 
 namespace HTTPlease.Core.Utilities
 {
-	using System.Diagnostics;
-
-	/// <summary>
-	///		Helper methods for working with <see cref="Uri"/>s.
-	/// </summary>
-	public static class UriHelper
+    /// <summary>
+    ///		Helper methods for working with <see cref="Uri"/>s.
+    /// </summary>
+    public static class UriHelper
 	{
 		/// <summary>
 		///		Parse the URI's query parameters.
@@ -168,19 +167,48 @@ namespace HTTPlease.Core.Utilities
 
 			if (baseUri.IsAbsoluteUri)
 			{
+				// Working with relative URIs is painful (e.g. you can't use .PathAndQuery).
+				string relativeUriString = relativeUri.ToString();
+
+				// Handle the case where the relative URI only contains query parameters (no path).
+				if (relativeUriString[0] == '?')
+				{
+					StringBuilder absoluteUriBuilder = new StringBuilder(baseUri.AbsoluteUri);
+					if (String.IsNullOrWhiteSpace(baseUri.Query))
+						absoluteUriBuilder.Append('?');
+					else
+						absoluteUriBuilder.Append('&');
+					
+					absoluteUriBuilder.Append(relativeUriString,
+						startIndex: 1,
+						count: relativeUriString.Length - 1
+					);
+
+					return new Uri(
+						absoluteUriBuilder.ToString()
+					);
+				}
+
 				// Retain URI-concatenation semantics, except that we behave the same whether trailing slash is present or absent.
 				UriBuilder uriBuilder = new UriBuilder(baseUri);
-				
+
 				string[] relativePathAndQuery =
-					relativeUri.ToString().Split(
+					relativeUriString.Split(
 						new[] { '?' },
 						count: 2,
 						options: StringSplitOptions.RemoveEmptyEntries
 					);
 
 				uriBuilder.Path = AppendPaths(uriBuilder.Path, relativePathAndQuery[0]);
+				
+				// Merge query parameters, if required.
 				if (relativePathAndQuery.Length == 2)
-					uriBuilder.Query = relativePathAndQuery[1];
+				{
+					uriBuilder.Query = MergeQueryStrings(
+						baseQueryString: uriBuilder.Query,
+						additionalQueryString: relativePathAndQuery[1]
+					);
+				}
 
 				return uriBuilder.Uri;
 			}
@@ -226,6 +254,45 @@ namespace HTTPlease.Core.Utilities
 			);
 
 			return pathBuilder.ToString();
+		}
+
+		/// <summary>
+		/// 	Merge 2 query strings.
+		/// </summary>
+		/// <param name="baseQueryString">
+		/// 	The base query string.
+		/// 
+		/// 	If empty, the additional query string is used.
+		/// </param>
+		/// <param name="additionalQueryString">
+		/// 	The additional query string.
+		/// 
+		/// 	If empty, the base query string is used.
+		/// </param>
+		/// <returns></returns>
+		/// <remarks>
+		/// 	Does not remove duplicate parameters.
+		/// </remarks>
+		static string MergeQueryStrings(string baseQueryString, string additionalQueryString)
+		{
+			if (String.IsNullOrWhiteSpace(additionalQueryString))
+				return baseQueryString;
+
+			if (String.IsNullOrWhiteSpace(baseQueryString))
+				return additionalQueryString;
+
+			StringBuilder combinedQueryParameters = new StringBuilder();
+			if (baseQueryString[0] != '?')
+				combinedQueryParameters.Append('?');
+
+			combinedQueryParameters.Append(baseQueryString);
+
+			if (additionalQueryString[0] != '?')
+				combinedQueryParameters.Append(additionalQueryString);
+			else
+				combinedQueryParameters.Append(additionalQueryString, 1, additionalQueryString.Length - 1);
+
+			return combinedQueryParameters.ToString();
 		}
 	}
 }
