@@ -1,18 +1,15 @@
 ﻿using System;
 
-namespace HTTPlease.Formatters.Json
+namespace HTTPlease
 {
 	/// <summary>
-	///		JSON request extension methods for <see cref="HttpRequestFactory{TContext}"/>.
+	///		XML request extension methods for <see cref="HttpRequestFactory"/>.
 	/// </summary>
-	public static class TypedFactoryExtensions
+	public static class XmlFormatterFactoryExtensions
     {
 		/// <summary>
-		///		Create a new HTTP request that expects and uses JSON as its primary format.
+		///		Create a new HTTP request that expects and uses XML as its primary format.
 		/// </summary>
-		/// <typeparam name="TContext">
-		///		The type of object used as a context for resolving deferred parameters.
-		/// </typeparam>
 		/// <param name="requestFactory">
 		///		The HTTP request factory.
 		/// </param>
@@ -22,7 +19,7 @@ namespace HTTPlease.Formatters.Json
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
 		/// </returns>
-		public static HttpRequest<TContext> Json<TContext>(this HttpRequestFactory<TContext> requestFactory, string requestUri)
+		public static HttpRequest Xml(this HttpRequestFactory requestFactory, string requestUri)
 		{
 			if (requestFactory == null)
 				throw new ArgumentNullException(nameof(requestFactory));
@@ -32,16 +29,13 @@ namespace HTTPlease.Formatters.Json
 
 			return
 				requestFactory.Create(requestUri)
-					.ExpectJson()
-					.UseJson();
+					.ExpectXml()
+					.UseXml();
 		}
-
+		
 		/// <summary>
-		///		Create a new HTTP request that expects and uses JSON as its primary format.
+		///		Create a new HTTP request that expects and uses XML as its primary format.
 		/// </summary>
-		/// <typeparam name="TContext">
-		///		The type of object used as a context for resolving deferred parameters.
-		/// </typeparam>
 		/// <param name="requestFactory">
 		///		The HTTP request factory.
 		/// </param>
@@ -51,7 +45,7 @@ namespace HTTPlease.Formatters.Json
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
 		/// </returns>
-		public static HttpRequest<TContext> Json<TContext>(this HttpRequestFactory<TContext> requestFactory, Uri requestUri)
+		public static HttpRequest Xml(this HttpRequestFactory requestFactory, Uri requestUri)
 		{
 			if (requestFactory == null)
 				throw new ArgumentNullException(nameof(requestFactory));
@@ -61,8 +55,8 @@ namespace HTTPlease.Formatters.Json
 
 			return
 				requestFactory.Create(requestUri)
-					.ExpectJson()
-					.UseJson();
+					.ExpectXml()
+					.UseXml();
 		}
 	}
 }

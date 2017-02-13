@@ -1,12 +1,15 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace HTTPlease.Formatters.Json
+namespace HTTPlease
 {
+	using Formatters;
+	using Formatters.Json;
+	
 	/// <summary>
 	///		Extension methods for content formatters.
 	/// </summary>
-    public static class FormatterExtensions
+    public static class JsonFormatterExtensions
     {
 		/// <summary>
 		///		Add the JSON content formatter.

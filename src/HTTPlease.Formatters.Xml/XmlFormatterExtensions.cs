@@ -1,11 +1,14 @@
 ﻿using System;
 
-namespace HTTPlease.Formatters.Xml
+namespace HTTPlease
 {
+	using Formatters;
+	using Formatters.Xml;
+	
 	/// <summary>
 	///		Extension methods for content formatters.
 	/// </summary>
-    public static class FormatterExtensions
+    public static class XmlFormatterExtensions
     {
 		/// <summary>
 		///		Add the XML content formatter.

@@ -1,13 +1,13 @@
 using System;
 
-namespace HTTPlease.Formatters
+namespace HTTPlease
 {
-	using Xml;
+	using Formatters.Xml;
 
 	/// <summary>
 	///		Formatter-related extension methods for <see cref="HttpRequest"/> / <see cref="HttpRequest{TContext}"/>.
 	/// </summary>
-	public static class RequestExtensions
+	public static class XmlFormatterRequestExtensions
 	{
 		/// <summary>
 		///		Create a copy of the <see cref="HttpRequest"/>, configuring it to only use the XML formatters.

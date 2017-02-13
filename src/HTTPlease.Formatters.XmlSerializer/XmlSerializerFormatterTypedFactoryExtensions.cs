@@ -1,15 +1,18 @@
 ﻿using System;
 
-namespace HTTPlease.Formatters.Xml
+namespace HTTPlease
 {
 	/// <summary>
-	///		XML serialiser request extension methods for <see cref="HttpRequestFactory"/>.
+	///		XML request extension methods for <see cref="HttpRequestFactory{TContext}"/>.
 	/// </summary>
-	public static class FactoryExtensions
+	public static class XmlSerializerFormatterTypedFactoryExtensions
     {
 		/// <summary>
 		///		Create a new HTTP request that expects and uses XML as its primary format.
 		/// </summary>
+		/// <typeparam name="TContext">
+		///		The type of object used as a context for resolving deferred parameters.
+		/// </typeparam>
 		/// <param name="requestFactory">
 		///		The HTTP request factory.
 		/// </param>
@@ -19,7 +22,7 @@ namespace HTTPlease.Formatters.Xml
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
 		/// </returns>
-		public static HttpRequest XmlSerializer(this HttpRequestFactory requestFactory, string requestUri)
+		public static HttpRequest<TContext> CreateXmlSerializer<TContext>(this HttpRequestFactory<TContext> requestFactory, string requestUri)
 		{
 			if (requestFactory == null)
 				throw new ArgumentNullException(nameof(requestFactory));
@@ -32,10 +35,13 @@ namespace HTTPlease.Formatters.Xml
 					.ExpectXml()
 					.UseXmlSerializer();
 		}
-		
+
 		/// <summary>
 		///		Create a new HTTP request that expects and uses XML as its primary format.
 		/// </summary>
+		/// <typeparam name="TContext">
+		///		The type of object used as a context for resolving deferred parameters.
+		/// </typeparam>
 		/// <param name="requestFactory">
 		///		The HTTP request factory.
 		/// </param>
@@ -45,7 +51,7 @@ namespace HTTPlease.Formatters.Xml
 		/// <returns>
 		///		The new <see cref="HttpRequest"/>.
 		/// </returns>
-		public static HttpRequest XmlSerializer(this HttpRequestFactory requestFactory, Uri requestUri)
+		public static HttpRequest<TContext> CreateXmlSerializer<TContext>(this HttpRequestFactory<TContext> requestFactory, Uri requestUri)
 		{
 			if (requestFactory == null)
 				throw new ArgumentNullException(nameof(requestFactory));

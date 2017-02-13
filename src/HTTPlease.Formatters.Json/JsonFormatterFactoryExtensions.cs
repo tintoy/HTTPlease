@@ -1,12 +1,14 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace HTTPlease.Formatters.Json
+namespace HTTPlease
 {
+	using Formatters.Json;
+	
 	/// <summary>
 	///		JSON request extension methods for <see cref="HttpRequestFactory"/>.
 	/// </summary>
-	public static class FactoryExtensions
+	public static class JsonFormatterFactoryExtensions
     {
 		/// <summary>
 		///		Create a new HTTP request that expects and uses JSON as its primary format.
