@@ -3,8 +3,10 @@ using System.Collections.Immutable;
 using System.Net.Http;
 using System.Text;
 
-namespace HTTPlease.Formatters
+namespace HTTPlease
 {
+	using Formatters;
+
 	/// <summary>
 	///		Extension methods for working with <see cref="HttpRequest"/>s.
 	/// </summary>

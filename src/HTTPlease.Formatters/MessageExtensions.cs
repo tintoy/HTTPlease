@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Net.Http;
 
-namespace HTTPlease.Formatters
+namespace HTTPlease
 {
+	using Formatters;
+
 	/// <summary>
 	///		Formatter-related extension methods for <see cref="HttpRequestMessage"/> / <see cref="HttpResponseMessage"/>.
 	/// </summary>
-	public static class MessageExtensions
+	public static class FormatterMessageExtensions
     {
 		/// <summary>
 		///		Get the message's <see cref="IFormatterCollection"/> (if any).

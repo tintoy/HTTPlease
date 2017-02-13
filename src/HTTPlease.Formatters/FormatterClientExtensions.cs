@@ -3,12 +3,14 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace HTTPlease.Formatters
+namespace HTTPlease
 {
+	using Formatters;
+
 	/// <summary>
 	///		Extension methods for invocation of untyped <see cref="HttpRequest"/>s using an <see cref="HttpClient"/>.
 	/// </summary>
-	public static class ClientExtensions
+	public static class FormatterClientExtensions
 	{
 		/// <summary>
 		///		Asynchronously execute a request as an HTTP POST.
