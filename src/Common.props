@@ -1,0 +1,19 @@
+<Project>
+    <!-- Common package properties -->
+    <PropertyGroup>
+        <PackageIconUrl>https://tintoy.github.io/HTTPlease/_static/logo-nuget.png</PackageIconUrl>
+        <PackageProjectUrl>https://tintoy.github.io/HTTPlease/</PackageProjectUrl>
+        <PackageLicenseUrl>https://raw.githubusercontent.com/tintoy/HTTPlease/development/r1.0/LICENSE</PackageLicenseUrl>
+
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/tintoy/HTTPlease</RepositoryUrl>
+    </PropertyGroup>
+    
+    <!-- We're using AssemblyInfo.cs, so no need to auto-generate these assembly-level attributes -->
+    <PropertyGroup>        
+        <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+        <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+        <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+        <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+    </PropertyGroup>
+</Project>

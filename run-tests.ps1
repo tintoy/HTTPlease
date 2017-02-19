@@ -1,8 +1,6 @@
 $dotnet = Get-Command dotnet
 
-Function Invoke-DnxTests([string] $ProjectName) {
-	& $dotnet test ".\test\$ProjectName"
+$projectFiles = Get-ChildItem -File -Recurse 'test\HTTPlease*.csproj'
+ForEach ($projectFile in $projectFiles) {
+	& $dotnet test $projectFile
 }
-
-Invoke-DnxTests -ProjectName HTTPlease.Core.Tests
-Invoke-DnxTests -ProjectName HTTPlease.Formatters.Tests

@@ -8,4 +8,4 @@ fi
 
 echo "Building all projects with build version '${BuildVersion}'."
 
-dotnet build ./src/HTTPlease* ./test/HTTPlease* --version-suffix $BuildVersion
+dotnet build --version-suffix $BuildVersion

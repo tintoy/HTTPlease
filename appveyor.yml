@@ -3,14 +3,14 @@ branches:
   only:
   - development/r1.0
   - release/r1.0
-image: Visual Studio 2015
+image: Visual Studio 2017
 cache:
 - '%USERPROFILE%\.nuget\packages'
 build_script:
 - ps:
     dotnet restore
 
-    $buildVersion = "beta3-$($env:APPVEYOR_BUILD_NUMBER.PadLeft(4, '0'))"
+    $buildVersion = "beta4-$($env:APPVEYOR_BUILD_NUMBER.PadLeft(4, '0'))"
     
     dotnet build --version-suffix $buildVersion "src/HTTPlease*/project.json" "test/HTTPlease*/project.json"
 
@@ -20,7 +20,7 @@ build_script:
 
 test_script:
 - ps: >-
-    Dir test/HTTPlease* -Directory | % { dotnet test $_ }
+    Dir -File -Recurse test/HTTPlease*.csproj | ForEach-Object { dotnet test $_ }
 
 artifacts:
 - path: src\artifacts\packages\*.nupkg

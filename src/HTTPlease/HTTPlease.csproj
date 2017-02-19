@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.3</TargetFramework>
+    <AssemblyName>HTTPlease</AssemblyName>
+    <PackageId>HTTPlease</PackageId>
+    <PackageTags>HTTP;HTTPlease;WebApi;HttpClient;Template;Immutable</PackageTags>
+  </PropertyGroup>
+
+  <Import Project="../Common.props"/>
+
+  <ItemGroup>
+    <ProjectReference Include="../HTTPlease.Core/HTTPlease.Core.csproj" />
+    <ProjectReference Include="../HTTPlease.Formatters/HTTPlease.Formatters.csproj" />
+    <ProjectReference Include="../HTTPlease.Formatters.Json/HTTPlease.Formatters.Json.csproj" />
+  </ItemGroup>
+
+</Project>

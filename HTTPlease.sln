@@ -8,31 +8,31 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		global.json = global.json
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HTTPlease.Core.Tests", "test\HTTPlease.Core.Tests\HTTPlease.Core.Tests.xproj", "{E6533F2D-7CE2-4603-BAC4-1523C9FDB9B0}"
+Project("{13B669BE-BB05-4DDF-9536-439F39A36129}") = "HTTPlease.Core.Tests", "test\HTTPlease.Core.Tests\HTTPlease.Core.Tests.csproj", "{E6533F2D-7CE2-4603-BAC4-1523C9FDB9B0}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HTTPlease.Core", "src\HTTPlease.Core\HTTPlease.Core.xproj", "{D187F596-31E0-4D59-9ACC-BD75B6862D8B}"
+Project("{13B669BE-BB05-4DDF-9536-439F39A36129}") = "HTTPlease.Core", "src\HTTPlease.Core\HTTPlease.Core.csproj", "{D187F596-31E0-4D59-9ACC-BD75B6862D8B}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HTTPlease.Formatters", "src\HTTPlease.Formatters\HTTPlease.Formatters.xproj", "{9C833550-D488-453C-8FD2-80E0CF51C5F0}"
+Project("{13B669BE-BB05-4DDF-9536-439F39A36129}") = "HTTPlease.Formatters", "src\HTTPlease.Formatters\HTTPlease.Formatters.csproj", "{9C833550-D488-453C-8FD2-80E0CF51C5F0}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HTTPlease.Formatters.Json", "src\HTTPlease.Formatters.Json\HTTPlease.Formatters.Json.xproj", "{CB72EC31-9E28-49CD-B0F1-746F88C3283F}"
+Project("{13B669BE-BB05-4DDF-9536-439F39A36129}") = "HTTPlease.Formatters.Json", "src\HTTPlease.Formatters.Json\HTTPlease.Formatters.Json.csproj", "{CB72EC31-9E28-49CD-B0F1-746F88C3283F}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HTTPlease.Formatters.Tests", "test\HTTPlease.Formatters.Tests\HTTPlease.Formatters.Tests.xproj", "{C684FA41-F988-4B83-B2C1-345DC68FCE56}"
+Project("{13B669BE-BB05-4DDF-9536-439F39A36129}") = "HTTPlease.Formatters.Tests", "test\HTTPlease.Formatters.Tests\HTTPlease.Formatters.Tests.csproj", "{C684FA41-F988-4B83-B2C1-345DC68FCE56}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HTTPlease.Formatters.FunctionalTests", "test\HTTPlease.Formatters.FunctionalTests\HTTPlease.Formatters.FunctionalTests.xproj", "{E60CE33D-D39D-4A97-A1DC-4CDD2768CC04}"
+Project("{13B669BE-BB05-4DDF-9536-439F39A36129}") = "HTTPlease.Formatters.FunctionalTests", "test\HTTPlease.Formatters.FunctionalTests\HTTPlease.Formatters.FunctionalTests.csproj", "{E60CE33D-D39D-4A97-A1DC-4CDD2768CC04}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{244D5A84-F66C-4628-A33A-5FBA3E9895B4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{D91C25AB-6BDD-485E-8375-B638972DC8EF}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HTTPlease.Testability.Xunit", "src\HTTPlease.Testability.Xunit\HTTPlease.Testability.Xunit.xproj", "{5645DA46-0463-4ADD-AA79-3A26D26053E9}"
+Project("{13B669BE-BB05-4DDF-9536-439F39A36129}") = "HTTPlease.Testability.Xunit", "src\HTTPlease.Testability.Xunit\HTTPlease.Testability.Xunit.csproj", "{5645DA46-0463-4ADD-AA79-3A26D26053E9}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HTTPlease", "src\HTTPlease\HTTPlease.xproj", "{4FB41A5C-8735-4925-ADB9-85C27ECF347E}"
+Project("{13B669BE-BB05-4DDF-9536-439F39A36129}") = "HTTPlease", "src\HTTPlease\HTTPlease.csproj", "{4FB41A5C-8735-4925-ADB9-85C27ECF347E}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HTTPlease.Security", "src\HTTPlease.Security\HTTPlease.Security.xproj", "{E21212F9-D3C0-4A9A-8812-CD462CFC51EF}"
+Project("{13B669BE-BB05-4DDF-9536-439F39A36129}") = "HTTPlease.Security", "src\HTTPlease.Security\HTTPlease.Security.csproj", "{E21212F9-D3C0-4A9A-8812-CD462CFC51EF}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HTTPlease.Formatters.Xml", "src\HTTPlease.Formatters.Xml\HTTPlease.Formatters.Xml.xproj", "{4B00D670-EE73-4491-B137-866E6F84545B}"
+Project("{13B669BE-BB05-4DDF-9536-439F39A36129}") = "HTTPlease.Formatters.Xml", "src\HTTPlease.Formatters.Xml\HTTPlease.Formatters.Xml.csproj", "{4B00D670-EE73-4491-B137-866E6F84545B}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HTTPlease.Formatters.XmlSerializer", "src\HTTPlease.Formatters.XmlSerializer\HTTPlease.Formatters.XmlSerializer.xproj", "{B7DE2327-D1E3-4F30-8603-C7277A304A73}"
+Project("{13B669BE-BB05-4DDF-9536-439F39A36129}") = "HTTPlease.Formatters.XmlSerializer", "src\HTTPlease.Formatters.XmlSerializer\HTTPlease.Formatters.XmlSerializer.csproj", "{B7DE2327-D1E3-4F30-8603-C7277A304A73}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

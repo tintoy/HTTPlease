@@ -8,7 +8,7 @@ fi
 
 echo "Building all packages with build version '${BuildVersion}'."
 
-projects=`ls -d1 ./src/HTTPlease*`
+projects=$(find src -name 'HTTPlease*.csproj')
 for project in $projects; do
 	echo "Packing \"$project\"."
 	dotnet pack "$project" --version-suffix $BuildVersion

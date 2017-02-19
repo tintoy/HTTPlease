@@ -13,7 +13,7 @@ If (!$outputFolder) {
 }
 
 $dotnet = Get-Command dotnet
-$projectDirectories = Dir -Directory 'src\HTTPlease*'
-ForEach ($projectDirectory in $projectDirectories) {
-    & dotnet pack "$projectDirectory" -o "$outputFolder" --version-suffix $BuildVersion
+$projectFiles = Get-ChildItem -File -Recurse 'src\HTTPlease*.csproj'
+ForEach ($projectFile in $projectFiles) {
+    & dotnet pack "$projectFile" -o "$outputFolder" --version-suffix $BuildVersion
 }
