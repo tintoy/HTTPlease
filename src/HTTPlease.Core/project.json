@@ -10,7 +10,7 @@
 	"packOptions": {
 		"title": "HTTPlease.Core",
 		"summary": "HTTPlease Core",
-		"description": "Core functionality for HTTPlease Immutable HTTP templates",
+		"description": "Core functionality for HTTPlease immutable HttpClient templates",
 		"authors": [
 			"tintoy@tintoy.io"
 		],
@@ -22,7 +22,7 @@
 			"HTTP",
 			"HTTPlease",
 			"WebApi",
-			"Client",
+			"HttpClient",
 			"Template",
 			"Immutable"
 		],

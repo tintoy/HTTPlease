@@ -4,7 +4,7 @@
 	"packOptions": {
 		"title": "HTTPlease",
 		"summary": "HTTPlease",
-		"description": "Immutable HTTP templates",
+		"description": "Immutable templates for HttpClient",
 		"authors": [
 			"tintoy@tintoy.io"
 		],
@@ -16,7 +16,7 @@
 			"HTTP",
 			"HTTPlease",
 			"WebApi",
-			"Client",
+			"HttpClient",
 			"Template",
 			"Immutable"
 		],

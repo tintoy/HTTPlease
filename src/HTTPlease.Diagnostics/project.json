@@ -21,6 +21,7 @@
         "tags": [
             "HTTP",
             "HTTPlease",
+            "HttpClient",
             "Diagnostics",
             "Logging",
             "Tracing"
