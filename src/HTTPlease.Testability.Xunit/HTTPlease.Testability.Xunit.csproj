@@ -2,11 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.3</TargetFramework>
-    <PublicSign>true</PublicSign>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    
     <AssemblyName>HTTPlease.Testability.Xunit</AssemblyName>
-    <AssemblyOriginatorKeyFile>../../HTTPlease.snk</AssemblyOriginatorKeyFile>
-    <SignAssembly>true</SignAssembly>
+    
     <PackageId>HTTPlease.Testability.Xunit</PackageId>
     <PackageTags>HTTP;HTTPlease;Test;Testability</PackageTags>
   </PropertyGroup>

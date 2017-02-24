@@ -1,4 +1,9 @@
 <Project>
+    <!-- Common project settings -->
+    <PropertyGroup>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
     <!-- Common package properties -->
     <PropertyGroup>
         <PackageIconUrl>https://tintoy.github.io/HTTPlease/_static/logo-nuget.png</PackageIconUrl>
@@ -18,4 +23,5 @@
     </PropertyGroup>
 
     <Import Project="../VersionInfo.props" />
+    <Import Project="../Signing.props" />
 </Project>

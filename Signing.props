@@ -1,0 +1,7 @@
+<Project>
+    <PropertyGroup>
+        <PublicSign>true</PublicSign>
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)HTTPlease.snk</AssemblyOriginatorKeyFile>
+    </PropertyGroup>
+</Project>

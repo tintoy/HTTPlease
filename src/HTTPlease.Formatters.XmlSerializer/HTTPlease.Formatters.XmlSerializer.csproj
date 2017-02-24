@@ -2,7 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.3</TargetFramework>
+    
     <AssemblyName>HTTPlease.Formatters.XmlSerializer</AssemblyName>
+    
     <PackageId>HTTPlease.Formatters.XmlSerializer</PackageId>
     <PackageTags>HTTP;HTTPlease;Formatters;Serialization;XML</PackageTags>
   </PropertyGroup>

@@ -2,11 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.3</TargetFramework>
-    <PublicSign>true</PublicSign>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    
     <AssemblyName>HTTPlease.Formatters.Xml</AssemblyName>
-    <AssemblyOriginatorKeyFile>../../HTTPlease.snk</AssemblyOriginatorKeyFile>
-    <SignAssembly>true</SignAssembly>
+    
     <PackageId>HTTPlease.Formatters.Xml</PackageId>
     <PackageTags>HTTP;HTTPlease;Formatters;Serialization;XML</PackageTags>
   </PropertyGroup>
