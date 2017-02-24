@@ -9,7 +9,6 @@
     <SignAssembly>true</SignAssembly>
     <PackageId>HTTPlease.Diagnostics</PackageId>
     <PackageTags>HTTP;HTTPlease;HttpClient;Diagnostics;Logging;Tracing</PackageTags>
-    <!--<PackageTargetFallback>$(PackageTargetFallback);dotnet5.6;dnxcore50;portable-net45+win8</PackageTargetFallback>-->
   </PropertyGroup>
 
   <Import Project="../Common.props"/>

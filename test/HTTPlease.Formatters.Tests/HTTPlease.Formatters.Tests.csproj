@@ -22,11 +22,12 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0-rc4-build1270" />
     <PackageReference Include="xunit" Version="2.2.0-rc4-build3536" />
 
-    <PackageReference Include="HTTPlease.Core" Version="1.0.0-*" />
-    <PackageReference Include="HTTPlease.Formatters" Version="1.0.0-*" />
-    <PackageReference Include="HTTPlease.Formatters.Json" Version="1.0.0-*" />
-    <PackageReference Include="HTTPlease.Formatters.Xml" Version="1.0.0-*" />
-    <PackageReference Include="HTTPlease.Testability.Xunit" Version="1.0.0-*" />
+    <ProjectReference Include="../../src/HTTPlease.Core/HTTPlease.Core.csproj"/>
+    <ProjectReference Include="../../src/HTTPlease.Formatters/HTTPlease.Formatters.csproj"/>
+    <ProjectReference Include="../../src/HTTPlease.Formatters.Json/HTTPlease.Formatters.Json.csproj"/>
+    <ProjectReference Include="../../src/HTTPlease.Formatters.Xml/HTTPlease.Formatters.Xml.csproj"/>
+    <ProjectReference Include="../../src/HTTPlease.Testability.Xunit/HTTPlease.Testability.Xunit.csproj"/>
+    
     <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
     <PackageReference Include="System.Collections.Immutable" Version="1.2.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.0" />
