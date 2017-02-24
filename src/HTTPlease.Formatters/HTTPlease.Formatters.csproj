@@ -9,6 +9,8 @@
     <SignAssembly>true</SignAssembly>
     <PackageId>HTTPlease.Formatters</PackageId>
     <PackageTags>HTTP;HTTPlease;Formatters;Serialization</PackageTags>
+
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
   </PropertyGroup>
 
   <Import Project="../Common.props"/>

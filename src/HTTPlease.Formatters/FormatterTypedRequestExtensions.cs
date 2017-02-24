@@ -44,7 +44,7 @@ namespace HTTPlease
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
-			return request.BuildRequestMessage(httpMethod, context, bodyContent, mediaType, Encoding.UTF8, baseUri);
+			return request.BuildRequestMessage(httpMethod, context, bodyContent, mediaType, OutputEncoding.UTF8, baseUri);
 		}
 
 		/// <summary>

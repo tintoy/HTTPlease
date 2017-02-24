@@ -1,7 +1,6 @@
 using System;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 
 namespace HTTPlease.Testability
 {
@@ -114,7 +113,7 @@ namespace HTTPlease.Testability
 
 			try
 			{
-				response.Content = new StringContent(responseBody, Encoding.UTF8, mediaType);
+				response.Content = new StringContent(responseBody, OutputEncoding.UTF8, mediaType);
 			}
 			catch
 			{

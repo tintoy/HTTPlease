@@ -15,6 +15,11 @@ namespace HTTPlease.Formatters
 		: HttpContent
 	{
 		/// <summary>
+		/// 	The default encoding used by <see cref="FormattedObjectContent"/>.
+		/// </summary>
+		public static readonly Encoding DefaultEncoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
+
+		/// <summary>
 		///		Create new formatted object content.
 		/// </summary>
 		/// <param name="formatter">
@@ -33,7 +38,7 @@ namespace HTTPlease.Formatters
 		///		Uses UTF-8 encoding.
 		/// </remarks>
 		public FormattedObjectContent(IOutputFormatter formatter, Type dataType, object data, string mediaType)
-			: this(formatter, data, dataType, mediaType, Encoding.UTF8)
+			: this(formatter, data, dataType, mediaType, DefaultEncoding)
 		{
 		}
 

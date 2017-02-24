@@ -16,4 +16,6 @@
         <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
         <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     </PropertyGroup>
+
+    <Import Project="../VersionInfo.props" />
 </Project>
