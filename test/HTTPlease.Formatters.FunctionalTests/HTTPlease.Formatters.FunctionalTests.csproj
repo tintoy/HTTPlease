@@ -8,11 +8,11 @@
     <AssemblyOriginatorKeyFile>../../HTTPlease.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
     <PackageId>HTTPlease.Formatters.FunctionalTests</PackageId>
-    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <PackageProjectUrl>https://tintoy.github.io/HTTPlease/</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/tintoy/HTTPlease/development/r1.0/LICENSE</PackageLicenseUrl>
+    
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <RuntimeFrameworkVersion>1.1.0</RuntimeFrameworkVersion>
-    <!--<PackageTargetFallback>$(PackageTargetFallback);netcore50</PackageTargetFallback>-->
   </PropertyGroup>
 
   <Import Project="../Common.props"/>  

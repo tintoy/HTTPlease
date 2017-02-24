@@ -8,6 +8,7 @@
     <AssemblyOriginatorKeyFile>../../HTTPlease.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
     <PackageId>HTTPlease.Core.Tests</PackageId>
+    
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <RuntimeFrameworkVersion>1.1.0</RuntimeFrameworkVersion>
   </PropertyGroup>

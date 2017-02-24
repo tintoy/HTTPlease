@@ -9,8 +9,6 @@
     <SignAssembly>true</SignAssembly>
     <PackageId>HTTPlease.Core</PackageId>
     <PackageTags>HTTP;HTTPlease;WebApi;HttpClient;Template;Immutable</PackageTags>
-
-    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
   </PropertyGroup>
 
   <Import Project="../Common.props"/>
