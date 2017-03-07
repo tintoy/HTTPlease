@@ -16,7 +16,7 @@ build_script:
     MkDir .\src\artifacts\packages -EA SilentlyContinue | Out-Null
 
     $packageDir = Get-Item .\src\artifacts\packages
-    dotnet pack --version-suffix $buildVersion -o $packageDir.FullName
+    dotnet pack --version-suffix $buildVersion --output $packageDir.FullName
 
 test_script:
 - ps: >-
