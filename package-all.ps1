@@ -12,8 +12,8 @@ If (!$outputFolder) {
     $outputFolder = MkDir $outputFolderPath
 }
 
-$dotnet = Get-Command dotnet
-$projectFiles = Get-ChildItem -File -Recurse 'src\HTTPlease*.csproj'
-ForEach ($projectFile in $projectFiles) {
-    & dotnet pack "$projectFile" -o "$outputFolder" --version-suffix $BuildVersion
-}
+Write-Host "Building all packages with version suffix '$BuildVersion'..."
+
+dotnet pack --version-suffix $BuildVersion --output "$outputFolder"
+
+Write-Host "Done (packages created in '$PWD/release/packages')."

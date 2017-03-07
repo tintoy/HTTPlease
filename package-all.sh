@@ -6,12 +6,10 @@ else
 	BuildVersion="dev"
 fi
 
-echo "Building all packages with build version '${BuildVersion}'."
+echo "Building all packages with version suffix '${BuildVersion}'..."
 
-projects=$(find src -name 'HTTPlease*.csproj')
-for project in $projects; do
-	echo "Packing \"$project\"."
-	dotnet pack "$project" --version-suffix $BuildVersion
-done
+OutputFolder=$PWD/release/packages
+mkdir -p $OutputFolder
+dotnet pack --version-suffix $BuildVersion --output "$OutputFolder" /p:Configuration=Release
 
-echo "Done."
+echo "Done (packages created in '$PWD/release/packages')."
