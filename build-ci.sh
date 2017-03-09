@@ -6,26 +6,31 @@ set -e
 # Build script for Travis CI
 ############################
 
+BUILD_BASEVERSION=$(cat $PWD/build-version-suffix.txt)
 BUILD_ID=${TRAVIS_JOB_ID:=dev}
-BUILD_VERSION_SUFFIX="beta4-${BUILD_ID}"
+BUILD_VERSION_SUFFIX="${BUILD_BASEVERSION}-${BUILD_ID}"
+
+echo ''
+echo "Version suffix is '$BUILD_VERSION_SUFFIX'."
+echo ''
 
 # Build outputs go here.
-artifactsDirectory="$PWD/artifacts"
-if [ -d $artifactsDirectory ]; then
-	rm -rf $artifactsDirectory
+ARTIFACTS_DIRECTORY="$PWD/artifacts"
+if [ -d $ARTIFACTS_DIRECTORY ]; then
+	rm -rf $ARTIFACTS_DIRECTORY
 fi
 
 echo ''
 echo 'Restoring packages...'
 echo ''
 
-dotnet restore /p:VersionSuffix=${BUILD_VERSION_SUFFIX}
+dotnet restore /p:VersionSuffix=$BUILD_VERSION_SUFFIX
 
 echo ''
 echo 'Building...'
 echo ''
 
-dotnet build --version-suffix ${BUILD_VERSION_SUFFIX}
+dotnet build --version-suffix $BUILD_VERSION_SUFFIX
 
 echo ''
 echo 'Testing...'
@@ -37,7 +42,7 @@ for testProject in $testProjects; do
 done
 
 echo ''
-echo 'Packing...'
+echo "Packing into '$ARTIFACTS_DIRECTORY'..."
 echo ''
 
-dotnet pack --version-suffix ${BUILD_VERSION_SUFFIX} --output $artifactsDirectory
+dotnet pack --version-suffix $BUILD_VERSION_SUFFIX --output $ARTIFACTS_DIRECTORY
