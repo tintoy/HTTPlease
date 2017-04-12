@@ -54,5 +54,28 @@ namespace HTTPlease
 		///		The response body.
 		/// </summary>
 		public TResponse Response { get; }
+
+		/// <summary>
+		/// 	Create a new <see cref="HttpRequestException{TRespose}"/>.
+		/// </summary>
+		/// <param name="statusCode">
+		///		The HTTP response status code.
+		/// </param>
+		/// <param name="response">
+		///		A <typeparamref name="TResponse"/> representing the HTTP response body.
+		/// </param>
+		/// <returns>
+		///		The configured <see cref="HttpRequestException{TRespose}"/>.
+		/// </returns>
+		public static HttpRequestException<TResponse> Create(HttpStatusCode statusCode, TResponse response)
+		{
+			string message = $"HTTP request failed ({statusCode}).";
+
+			IHttpErrorResponse errorResponse = response as IHttpErrorResponse;
+			if (errorResponse != null)
+				message = errorResponse.GetExceptionMesage();
+
+			return new HttpRequestException<TResponse>(statusCode, response, message);
+		}
 	}
 }
