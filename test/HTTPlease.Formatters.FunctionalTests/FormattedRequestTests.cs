@@ -71,9 +71,9 @@ namespace HTTPlease.Formatters.FunctionalTests
 				responseBody: "Success!",
 				assertion: async request =>
 				{
-					MessageAssert.AcceptsMediaType(request, WellKnownMediaTypes.Json);
+					Assertions.Message.AcceptsMediaType(request, WellKnownMediaTypes.Json);
 
-					await MessageAssert.BodyIsAsync(request,
+					await Assertions.Message.BodyIsAsync(request,
 						"{\"Foo\":\"Bar\",\"Baz\":1234}"
 					);
 				}
@@ -118,9 +118,9 @@ namespace HTTPlease.Formatters.FunctionalTests
 				new Uri(BaseUri, "foo/bar"), HttpMethod.Post, responseBody: 1234,
 				assertion: async request =>
 				{
-					MessageAssert.AcceptsMediaType(request, WellKnownMediaTypes.Json);
+					Assertions.Message.AcceptsMediaType(request, WellKnownMediaTypes.Json);
 
-					await MessageAssert.BodyIsAsync(request, "\"1234\"");
+					await Assertions.Message.BodyIsAsync(request, "\"1234\"");
 				}
 			);
 			using (client)

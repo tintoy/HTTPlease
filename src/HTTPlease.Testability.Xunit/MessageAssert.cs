@@ -13,13 +13,16 @@ namespace HTTPlease.Testability
 		/// <summary>
 		///		Assert that the request message has the specified URI.
 		/// </summary>
+		/// <param name="assertions">
+		/// 	Request-related assertions.
+		/// </param>
 		/// <param name="requestMessage">
 		///		The <see cref="HttpRequestMessage"/>.
 		/// </param>
 		/// <param name="expectedUri">
 		///		The expected URI.
 		/// </param>
-		public static void HasRequestUri(HttpRequestMessage requestMessage, string expectedUri)
+		public static void HasRequestUri(this Assertions.IMessageAssertions assertions, HttpRequestMessage requestMessage, string expectedUri)
 		{
 			if (requestMessage == null)
 				throw new ArgumentNullException(nameof(requestMessage));
@@ -27,7 +30,7 @@ namespace HTTPlease.Testability
 			if (String.IsNullOrWhiteSpace(expectedUri))
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'expectedUri'.", nameof(expectedUri));
 
-			HasRequestUri(requestMessage,
+			assertions.HasRequestUri(requestMessage,
 				new Uri(expectedUri, UriKind.RelativeOrAbsolute)
 			);
 		}
@@ -35,13 +38,16 @@ namespace HTTPlease.Testability
 		/// <summary>
 		///		Assert that the request message has the specified URI.
 		/// </summary>
+		/// <param name="assertions">
+		/// 	Request-related assertions.
+		/// </param>
 		/// <param name="requestMessage">
 		///		The <see cref="HttpRequestMessage"/>.
 		/// </param>
 		/// <param name="expectedUri">
 		///		The expected URI.
 		/// </param>
-		public static void HasRequestUri(HttpRequestMessage requestMessage, Uri expectedUri)
+		public static void HasRequestUri(this Assertions.IMessageAssertions assertions, HttpRequestMessage requestMessage, Uri expectedUri)
 		{
 			if (requestMessage == null)
 				throw new ArgumentNullException(nameof(requestMessage));
@@ -57,13 +63,16 @@ namespace HTTPlease.Testability
 		/// <summary>
 		///		Assert that the request message's Accept header contains the specified media type.
 		/// </summary>
+		/// <param name="assertions">
+		/// 	Request-related assertions.
+		/// </param>
 		/// <param name="requestMessage">
 		///		The <see cref="HttpRequestMessage"/>.
 		/// </param>
 		/// <param name="mediaType">
 		///		The expected media type.
 		/// </param>
-		public static void AcceptsMediaType(HttpRequestMessage requestMessage, string mediaType)
+		public static void AcceptsMediaType(this Assertions.IMessageAssertions assertions, HttpRequestMessage requestMessage, string mediaType)
 		{
 			if (requestMessage == null)
 				throw new ArgumentNullException(nameof(requestMessage));
@@ -79,6 +88,9 @@ namespace HTTPlease.Testability
 		/// <summary>
 		///		Asynchronously assert that the request message body is equal to the specified string.
 		/// </summary>
+		/// <param name="assertions">
+		/// 	Request-related assertions.
+		/// </param>
 		/// <param name="requestMessage">
 		///		The HTTP request message to examine.
 		/// </param>
@@ -88,7 +100,7 @@ namespace HTTPlease.Testability
 		/// <returns>
 		///		The actual message body.
 		/// </returns>
-		public static async Task<string> BodyIsAsync(HttpRequestMessage requestMessage, string expectedBody)
+		public static async Task<string> BodyIsAsync(this Assertions.IMessageAssertions assertions, HttpRequestMessage requestMessage, string expectedBody)
 		{
 			if (requestMessage == null)
 				throw new ArgumentNullException(nameof(requestMessage));

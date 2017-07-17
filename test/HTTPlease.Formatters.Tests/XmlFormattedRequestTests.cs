@@ -26,9 +26,9 @@ namespace HTTPlease.Formatters.Tests
 		[Fact]
 		public void Request_ExpectXml_Sets_AcceptHeader()
 		{
-			RequestAssert.Message(BaseRequest.ExpectXml(), HttpMethod.Get, requestMessage =>
+			Assertions.Request.Message(BaseRequest.ExpectXml(), HttpMethod.Get, requestMessage =>
 			{
-				MessageAssert.AcceptsMediaType(requestMessage, WellKnownMediaTypes.Xml);
+				Assertions.Message.AcceptsMediaType(requestMessage, WellKnownMediaTypes.Xml);
 			});
 		}
 
@@ -38,9 +38,9 @@ namespace HTTPlease.Formatters.Tests
 		[Fact]
 		public void TypedRequest_ExpectXml_Sets_AcceptHeader()
 		{
-			RequestAssert.Message(TypedBaseRequest.ExpectXml(), HttpMethod.Get, requestMessage =>
+			Assertions.Request.Message(TypedBaseRequest.ExpectXml(), HttpMethod.Get, requestMessage =>
 			{
-				MessageAssert.AcceptsMediaType(requestMessage, WellKnownMediaTypes.Xml);
+				Assertions.Message.AcceptsMediaType(requestMessage, WellKnownMediaTypes.Xml);
 			});
 		}
 	}

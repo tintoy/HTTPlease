@@ -69,7 +69,7 @@ namespace HTTPlease.Tests.BuildMessage
 		{
 			Uri baseUri = new Uri("http://tintoy.io:5678/");
 			
-			RequestAssert.MessageHasUri(RelativeRequest, DefaultContext, baseUri,
+			Assertions.Request.MessageHasUri(RelativeRequest, DefaultContext, baseUri,
 				expectedUri: new Uri(baseUri, RelativeRequest.Uri)
 			);
 		}
@@ -84,7 +84,7 @@ namespace HTTPlease.Tests.BuildMessage
 		[Fact]
 		public void AbsoluteUri_NoBaseUri_UsesRequestUri()
 		{
-			RequestAssert.MessageHasUri(AbsoluteRequest, DefaultContext,
+			Assertions.Request.MessageHasUri(AbsoluteRequest, DefaultContext,
 				expectedUri: AbsoluteRequest.Uri
 			);
 		}
@@ -97,7 +97,7 @@ namespace HTTPlease.Tests.BuildMessage
 		{
 			Uri baseUri = new Uri("http://tintoy.io:5678/");
 
-			RequestAssert.MessageHasUri(AbsoluteRequest, DefaultContext, baseUri,
+			Assertions.Request.MessageHasUri(AbsoluteRequest, DefaultContext, baseUri,
 				expectedUri: AbsoluteRequest.Uri
 			);
 		}
