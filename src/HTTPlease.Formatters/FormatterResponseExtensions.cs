@@ -33,7 +33,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The deserialised response body.
 		/// </returns>
-		public static async Task<TBody> ReadAsAsync<TBody>(this Task<HttpResponseMessage> response, IInputFormatter formatter, params HttpStatusCode[] expectedStatusCodes)
+		public static async Task<TBody> ReadContentAsAsync<TBody>(this Task<HttpResponseMessage> response, IInputFormatter formatter, params HttpStatusCode[] expectedStatusCodes)
 		{
 			if (response == null)
 				throw new ArgumentNullException(nameof(response));
@@ -70,7 +70,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The deserialised response body.
 		/// </returns>
-		public static async Task<TBody> ReadAsAsync<TBody>(this Task<HttpResponseMessage> response, IFormatterCollection formatters, params HttpStatusCode[] expectedStatusCodes)
+		public static async Task<TBody> ReadContentAsAsync<TBody>(this Task<HttpResponseMessage> response, IFormatterCollection formatters, params HttpStatusCode[] expectedStatusCodes)
 		{
 			if (response == null)
 				throw new ArgumentNullException(nameof(response));
@@ -109,7 +109,7 @@ namespace HTTPlease
 		///
 		///		Consider using the overload of ReadAsAsync that takes a specific <see cref="IInputFormatter"/>.
 		/// </exception>
-		public static async Task<TBody> ReadAsAsync<TBody>(this Task<HttpResponseMessage> response, params HttpStatusCode[] expectedStatusCodes)
+		public static async Task<TBody> ReadContentAsAsync<TBody>(this Task<HttpResponseMessage> response, params HttpStatusCode[] expectedStatusCodes)
 		{
 			if (response == null)
 				throw new ArgumentNullException(nameof(response));
@@ -144,7 +144,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The deserialised body.
 		/// </returns>
-		public static Task<TBody> ReadAsAsync<TBody>(this Task<HttpResponseMessage> response, IInputFormatter formatter, Func<TBody> onFailureResponse, params HttpStatusCode[] successStatusCodes)
+		public static Task<TBody> ReadContentAsAsync<TBody>(this Task<HttpResponseMessage> response, IInputFormatter formatter, Func<TBody> onFailureResponse, params HttpStatusCode[] successStatusCodes)
 		{
 			if (response == null)
 				throw new ArgumentNullException(nameof(response));
@@ -179,7 +179,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The deserialised body.
 		/// </returns>
-		public static async Task<TBody> ReadAsAsync<TBody>(this Task<HttpResponseMessage> response, IInputFormatter formatter, Func<HttpResponseMessage, TBody> onFailureResponse, params HttpStatusCode[] successStatusCodes)
+		public static async Task<TBody> ReadContentAsAsync<TBody>(this Task<HttpResponseMessage> response, IInputFormatter formatter, Func<HttpResponseMessage, TBody> onFailureResponse, params HttpStatusCode[] successStatusCodes)
 		{
 			if (response == null)
 				throw new ArgumentNullException(nameof(response));
@@ -214,7 +214,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The deserialised body.
 		/// </returns>
-		public static Task<TBody> ReadAsAsync<TBody>(this Task<HttpResponseMessage> response, Func<TBody> onFailureResponse, params HttpStatusCode[] successStatusCodes)
+		public static Task<TBody> ReadContentAsAsync<TBody>(this Task<HttpResponseMessage> response, Func<TBody> onFailureResponse, params HttpStatusCode[] successStatusCodes)
 		{
 			if (response == null)
 				throw new ArgumentNullException(nameof(response));
@@ -243,7 +243,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The deserialised body.
 		/// </returns>
-		public static async Task<TBody> ReadAsAsync<TBody>(this Task<HttpResponseMessage> response, Func<HttpResponseMessage, TBody> onFailureResponse, params HttpStatusCode[] successStatusCodes)
+		public static async Task<TBody> ReadContentAsAsync<TBody>(this Task<HttpResponseMessage> response, Func<HttpResponseMessage, TBody> onFailureResponse, params HttpStatusCode[] successStatusCodes)
 		{
 			if (response == null)
 				throw new ArgumentNullException(nameof(response));
@@ -284,7 +284,7 @@ namespace HTTPlease
 		/// <exception cref="InvalidOperationException">
 		///		No formatters were configured for the request, or an appropriate formatter could not be found in the request's list of formatters.
 		/// </exception>
-		public static async Task<TBody> ReadAsAsync<TBody, TError>(this Task<HttpResponseMessage> response, params HttpStatusCode[] successStatusCodes)
+		public static async Task<TBody> ReadContentAsAsync<TBody, TError>(this Task<HttpResponseMessage> response, params HttpStatusCode[] successStatusCodes)
 		{
 			if (response == null)
 				throw new ArgumentNullException(nameof(response));
@@ -329,7 +329,7 @@ namespace HTTPlease
 		/// <exception cref="HttpRequestException{TError}">
 		///		The response status code was unexpected or did not represent success.
 		/// </exception>
-		public static async Task<TBody> ReadAsAsync<TBody, TError>(this Task<HttpResponseMessage> response, IInputFormatter formatter, Func<HttpResponseMessage, TError> onFailureResponse, params HttpStatusCode[] successStatusCodes)
+		public static async Task<TBody> ReadContentAsAsync<TBody, TError>(this Task<HttpResponseMessage> response, IInputFormatter formatter, Func<HttpResponseMessage, TError> onFailureResponse, params HttpStatusCode[] successStatusCodes)
 		{
 			if (response == null)
 				throw new ArgumentNullException(nameof(response));
@@ -524,6 +524,92 @@ namespace HTTPlease
 			responseMessage.EnsureHasBody();
 
 			return await responseMessage.Content.ReadAsAsync<TBody>(formatter, formatterContext).ConfigureAwait(false);
+		}
+
+		/// <summary>
+		///		Asynchronously read the response body as the specified type using the most appropriate formatter.
+		/// </summary>
+		/// <typeparam name="TBody">
+		///		The CLR type into which the body content will be deserialised.
+		/// </typeparam>
+		/// <typeparam name="TError">
+		///		The CLR type that will be returned in the event that the response status code is unexpected or does not represent success.
+		/// </typeparam>
+		/// <param name="responseMessage">
+		///		The response message.
+		/// </param>
+		/// <param name="successStatusCodes">
+		///		Optional <see cref="HttpStatusCode"/>s that should be treated as representing a successful response.
+		/// </param>
+		/// <returns>
+		///		The deserialised body.
+		/// </returns>
+		/// <exception cref="HttpRequestException{TError}">
+		///		The response status code was unexpected or did not represent success.
+		/// </exception>
+		/// <exception cref="InvalidOperationException">
+		///		No formatters were configured for the request, or an appropriate formatter could not be found in the request's list of formatters.
+		/// </exception>
+		public static async Task<TBody> ReadContentAsAsync<TBody, TError>(this HttpResponseMessage responseMessage, params HttpStatusCode[] successStatusCodes)
+		{
+			if (responseMessage == null)
+				throw new ArgumentNullException(nameof(responseMessage));
+
+			if (!successStatusCodes.Contains(responseMessage.StatusCode) && !responseMessage.IsSuccessStatusCode)
+			{
+				TError error = await responseMessage.ReadContentAsAsync<TError>().ConfigureAwait(false);
+
+				throw new HttpRequestException<TError>(responseMessage.StatusCode, error);
+			}
+
+			return await responseMessage.ReadContentAsAsync<TBody>().ConfigureAwait(false);
+		}
+
+		/// <summary>
+		///		Asynchronously read the response body as the specified type using the specified formatter.
+		/// </summary>
+		/// <typeparam name="TBody">
+		///		The CLR type into which the body content will be deserialised.
+		/// </typeparam>
+		/// <typeparam name="TError">
+		///		The CLR type that will be returned in the event that the response status code is unexpected or does not represent success.
+		/// </typeparam>
+		/// <param name="responseMessage">
+		///		The response message.
+		/// </param>
+		/// <param name="formatter">
+		///		The <see cref="IInputFormatter"/> that will be used to read the response body.
+		/// </param>
+		/// <param name="onFailureResponse">
+		///		A delegate that is called to get a <typeparamref name="TError"/> in the event that the response status code is unexpected or does not represent success.
+		/// </param>
+		/// <param name="successStatusCodes">
+		///		Optional <see cref="HttpStatusCode"/>s that should be treated as representing a successful response.
+		/// </param>
+		/// <returns>
+		///		The deserialised body.
+		/// </returns>
+		/// <exception cref="HttpRequestException{TError}">
+		///		The response status code was unexpected or did not represent success.
+		/// </exception>
+		public static async Task<TBody> ReadContentAsAsync<TBody, TError>(this HttpResponseMessage responseMessage, IInputFormatter formatter, Func<HttpResponseMessage, TError> onFailureResponse, params HttpStatusCode[] successStatusCodes)
+		{
+			if (responseMessage == null)
+				throw new ArgumentNullException(nameof(responseMessage));
+
+			if (onFailureResponse == null)
+				throw new ArgumentNullException(nameof(onFailureResponse));
+
+			if (!successStatusCodes.Contains(responseMessage.StatusCode) && !responseMessage.IsSuccessStatusCode)
+			{
+				TError error = onFailureResponse(responseMessage);
+				if (error == null)
+					throw new InvalidOperationException("The failure response handler returned null.");
+
+				throw new HttpRequestException<TError>(responseMessage.StatusCode, error);
+			}
+
+			return await responseMessage.ReadContentAsAsync<TBody>(formatter).ConfigureAwait(false);
 		}
 	}
 }
