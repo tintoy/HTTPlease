@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.0</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <PublicSign>true</PublicSign>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>HTTPlease.Formatters.Tests</AssemblyName>
@@ -10,24 +10,23 @@
     <PackageId>HTTPlease.Formatters.Tests</PackageId>
     
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
-    <RuntimeFrameworkVersion>1.1.0</RuntimeFrameworkVersion>
   </PropertyGroup>
 
-  <Import Project="../Common.props"/>
+  <Import Project="../Common.props" />
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
-    <PackageReference Include="xunit" Version="2.2.0" />
+		<PackageReference Include="xunit" Version="2.3.0" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.3.0" />
 
-    <ProjectReference Include="../../src/HTTPlease.Core/HTTPlease.Core.csproj"/>
-    <ProjectReference Include="../../src/HTTPlease.Formatters/HTTPlease.Formatters.csproj"/>
-    <ProjectReference Include="../../src/HTTPlease.Formatters.Json/HTTPlease.Formatters.Json.csproj"/>
-    <ProjectReference Include="../../src/HTTPlease.Formatters.Xml/HTTPlease.Formatters.Xml.csproj"/>
-    <ProjectReference Include="../../src/HTTPlease.Testability.Xunit/HTTPlease.Testability.Xunit.csproj"/>
+    <ProjectReference Include="../../src/HTTPlease.Core/HTTPlease.Core.csproj" />
+    <ProjectReference Include="../../src/HTTPlease.Formatters/HTTPlease.Formatters.csproj" />
+    <ProjectReference Include="../../src/HTTPlease.Formatters.Json/HTTPlease.Formatters.Json.csproj" />
+    <ProjectReference Include="../../src/HTTPlease.Formatters.Xml/HTTPlease.Formatters.Xml.csproj" />
+    <ProjectReference Include="../../src/HTTPlease.Testability.Xunit/HTTPlease.Testability.Xunit.csproj" />
     
     <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
-    <PackageReference Include="System.Collections.Immutable" Version="1.2.0" />
+    <PackageReference Include="System.Collections.Immutable" Version="1.3.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.0" />
   </ItemGroup>
 
