@@ -45,7 +45,7 @@ namespace HTTPlease.Formatters.Tests
 			{
 				TestBody actualBody = await client
 					.GetAsync(DefaultRequest)
-					.ReadAsAsync<TestBody>(new JsonFormatter());
+					.ReadContentAsAsync<TestBody>(new JsonFormatter());
 
 				Assert.NotNull(actualBody);
 				Assert.NotSame(expectedBody, actualBody);
@@ -72,7 +72,7 @@ namespace HTTPlease.Formatters.Tests
 			{
 				TestBody actualBody = await client
 					.GetAsync(DefaultRequest)
-					.ReadAsAsync<TestBody>(new JsonFormatter(), HttpStatusCode.OK, HttpStatusCode.BadRequest);
+					.ReadContentAsAsync<TestBody>(new JsonFormatter(), HttpStatusCode.OK, HttpStatusCode.BadRequest);
 
 				Assert.NotNull(actualBody);
 				Assert.NotSame(expectedBody, actualBody);
@@ -105,7 +105,7 @@ namespace HTTPlease.Formatters.Tests
 			{
 				TestBody actualBody = await client
 					.GetAsync(DefaultRequest)
-					.ReadAsAsync(new JsonFormatter(),
+					.ReadContentAsAsync(new JsonFormatter(),
 						onFailureResponse: () => new TestBody
 						{
 							StringProperty = expectedBody.StringProperty,
@@ -142,7 +142,7 @@ namespace HTTPlease.Formatters.Tests
 			{
 				TestBody actualBody = await client
 					.GetAsync(DefaultRequest)
-					.ReadAsAsync<TestBody>(new XmlFormatter());
+					.ReadContentAsAsync<TestBody>(new XmlFormatter());
 
 				Assert.NotNull(actualBody);
 				Assert.NotSame(expectedBody, actualBody);
@@ -169,7 +169,7 @@ namespace HTTPlease.Formatters.Tests
 			{
 				TestBody actualBody = await client
 					.GetAsync(DefaultRequest)
-					.ReadAsAsync<TestBody>(new XmlFormatter(), HttpStatusCode.OK, HttpStatusCode.BadRequest);
+					.ReadContentAsAsync<TestBody>(new XmlFormatter(), HttpStatusCode.OK, HttpStatusCode.BadRequest);
 
 				Assert.NotNull(actualBody);
 				Assert.NotSame(expectedBody, actualBody);
@@ -202,7 +202,7 @@ namespace HTTPlease.Formatters.Tests
 			{
 				TestBody actualBody = await client
 					.GetAsync(DefaultRequest)
-					.ReadAsAsync(new XmlFormatter(),
+					.ReadContentAsAsync(new XmlFormatter(),
 						onFailureResponse: () => new TestBody
 						{
 							StringProperty = expectedBody.StringProperty,

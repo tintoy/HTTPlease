@@ -133,7 +133,7 @@ namespace HTTPlease.Formatters.FunctionalTests
 					client.PostAsJsonAsync(request,
 						postBody: 1234.ToString()
 					)
-					.ReadAsAsync<int>();
+					.ReadContentAsAsync<int>();
 
 				Assert.Equal(1234, responseBody);
 			}

@@ -1,33 +1,20 @@
+language: csharp
+mono: none
+dotnet: 2.0.0
+dist: trusty
+
 branches:
   only:
     - development/r1.0
     - release/r1.0
 
-language: csharp
-dist: trusty  
-env:  
-  - CLI_VERSION=latest
-addons:  
+addons:
   apt:
+    sources:
+    - sourceline: 'deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-trusty-prod trusty main'
+      key_url: 'https://packages.microsoft.com/keys/microsoft.asc'
     packages:
-    - gettext
-    - libcurl4-openssl-dev
-    - libicu-dev
-    - libssl-dev
-    - libunwind8
-    - zlib1g
-os:  
-  - linux
-
-# AF: OSX build disabled for now (Travis OSX build hangs trying to install mono).
-
-before_install:  
-  - if test "$TRAVIS_OS_NAME" == "osx"; then brew update; brew install openssl; ln -s /usr/local/opt/openssl/lib/libcrypto.1.0.0.dylib /usr/local/lib/; ln -s /usr/local/opt/openssl/lib/libssl.1.0.0.dylib /usr/local/lib/; openssl version; fi
-
-install:  
-  - export DOTNET_INSTALL_DIR="$PWD/.dotnetcli"
-  - curl -sSL https://raw.githubusercontent.com/dotnet/cli/rel/1.0.0/scripts/obtain/dotnet-install.sh | bash /dev/stdin --version "$CLI_VERSION" --install-dir "$DOTNET_INSTALL_DIR"
-  - export PATH="$DOTNET_INSTALL_DIR:$PATH"  
+    - dotnet-sdk-2.0.2
 
 script:
   - ./build-ci.sh

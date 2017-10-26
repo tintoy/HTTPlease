@@ -155,7 +155,7 @@ namespace HTTPlease
 			if (onFailureResponse == null)
 				throw new ArgumentNullException(nameof(onFailureResponse));
 
-			return response.ReadAsAsync(formatter, responseMessage => onFailureResponse(), successStatusCodes);
+			return response.ReadContentAsAsync(formatter, responseMessage => onFailureResponse(), successStatusCodes);
 		}
 
 		/// <summary>
@@ -222,7 +222,7 @@ namespace HTTPlease
 			if (onFailureResponse == null)
 				throw new ArgumentNullException(nameof(onFailureResponse));
 
-			return response.ReadAsAsync(responseMessage => onFailureResponse(), successStatusCodes);
+			return response.ReadContentAsAsync(responseMessage => onFailureResponse(), successStatusCodes);
 		}
 
 		/// <summary>

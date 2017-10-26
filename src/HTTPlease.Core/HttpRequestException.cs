@@ -7,7 +7,7 @@ namespace HTTPlease
 	///		Exception thrown when an error response is received while making an HTTP request.
 	/// </summary>
 	/// <remarks>
-	///		TODO: Throw this from response.ReadAsAsync&lt;TResponse, TErrorResponse&gt;.
+	///		TODO: Throw this from response.ReadContentAsAsync&lt;TResponse, TErrorResponse&gt;.
 	/// </remarks>
 	public class HttpRequestException<TResponse>
 		: HttpRequestException
