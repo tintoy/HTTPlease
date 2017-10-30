@@ -185,5 +185,63 @@ namespace HTTPlease
 		{
 			return httpClient.PatchAsync(request, patchBody, WellKnownMediaTypes.Json, cancellationToken);
 		}
+
+		/// <summary>
+		///		Asynchronously execute a request as an HTTP DELETE.
+		/// </summary>
+		/// <param name="httpClient">
+		///		The <see cref="HttpClient"/> used to execute the request.
+		/// </param>
+		/// <param name="request">
+		///		The HTTP request.
+		/// </param>
+		/// <param name="deleteBody">
+		///		An optional object to be used as the the request body.
+		/// </param>
+		/// <param name="mediaType">
+		///		If <paramref name="deleteBody"/> is specified, the media type to be used
+		/// </param>
+		/// <param name="cancellationToken">
+		///		An optional cancellation token that can be used to cancel the asynchronous operation.
+		/// </param>
+		/// <returns>
+		///		An <see cref="HttpResponseMessage"/> representing the response.
+		/// </returns>
+		public static async Task<HttpResponseMessage> DeleteAsync(this HttpClient httpClient, HttpRequest request, object deleteBody, string mediaType, CancellationToken cancellationToken = default(CancellationToken))
+		{
+			if (httpClient == null)
+				throw new ArgumentNullException(nameof(httpClient));
+
+			if (request == null)
+				throw new ArgumentNullException(nameof(request));
+
+			using (HttpRequestMessage requestMessage = request.BuildRequestMessage(HttpMethod.Delete, deleteBody, mediaType, baseUri: httpClient.BaseAddress))
+			{
+				return await httpClient.SendAsync(requestMessage, cancellationToken);
+			}
+		}
+
+		/// <summary>
+		///		Asynchronously execute a request as an HTTP DELETE, serialising the request to JSON.
+		/// </summary>
+		/// <param name="httpClient">
+		///		The <see cref="HttpClient"/> used to execute the request.
+		/// </param>
+		/// <param name="request">
+		///		The HTTP request.
+		/// </param>
+		/// <param name="deleteBody">
+		///		An optional object to be used as the the request body.
+		/// </param>
+		/// <param name="cancellationToken">
+		///		An optional cancellation token that can be used to cancel the asynchronous operation.
+		/// </param>
+		/// <returns>
+		///		An <see cref="HttpResponseMessage"/> representing the response.
+		/// </returns>
+		public static Task<HttpResponseMessage> DeleteAsJsonAsync(this HttpClient httpClient, HttpRequest request, object deleteBody, CancellationToken cancellationToken = default(CancellationToken))
+		{
+			return httpClient.DeleteAsync(request, deleteBody, WellKnownMediaTypes.Json, cancellationToken);
+		}
 	}
 }
