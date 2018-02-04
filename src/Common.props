@@ -22,6 +22,10 @@
         <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     </PropertyGroup>
 
-    <Import Project="../VersionInfo.props" />
+		<!-- Versioning -->
+		<ItemGroup>
+				<PackageReference Include="Nerdbank.GitVersioning" Version="2.1.17" />
+		</ItemGroup>
+
     <Import Project="../Signing.props" />
 </Project>
