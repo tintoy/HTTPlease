@@ -16,7 +16,7 @@ echo ''
 echo 'Building...'
 echo ''
 
-dotnet build /p:PublicRelease=true
+dotnet build /p:DisableGitVersioning=true
 
 echo ''
 echo 'Testing...'
@@ -31,4 +31,4 @@ echo ''
 echo "Packing into '$ARTIFACTS_DIRECTORY'..."
 echo ''
 
-dotnet pack /p:PublicRelease=true -o "$ARTIFACTS_DIRECTORY"
+dotnet pack /p:DisableGitVersioning=true -o "$ARTIFACTS_DIRECTORY"
