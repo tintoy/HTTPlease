@@ -5,8 +5,8 @@ dist: trusty
 
 branches:
   only:
-    - development/r1.0
-    - release/r1.0
+    - development/v1.1
+    - release/v1.1
 
 addons:
   apt:

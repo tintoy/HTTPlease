@@ -1,26 +1,33 @@
-$VersionSuffix = (Get-Content "$PWD/build-version-suffix.txt").Trim()
-
-$AppVeyorBuildNumber = $env:APPVEYOR_BUILD_NUMBER
-If (!$AppVeyorBuildNumber) {
-	$AppVeyorBuildNumber = '0'
+$VersionSuffix = (Get-Content "$PWD/build-version-suffix.txt")
+If ($VersionSuffix) {
+	$VersionSuffix = $VersionSuffix.Trim()
 }
-$AppVeyorBuildNumber = $AppVeyorBuildNumber.PadLeft(4, '0')
+If ($VersionSuffix) {
+	$AppVeyorBuildNumber = $env:APPVEYOR_BUILD_NUMBER
+	
+	If (!$AppVeyorBuildNumber) {
+		$AppVeyorBuildNumber = '0'
+	}
+	$AppVeyorBuildNumber = $AppVeyorBuildNumber.PadLeft(4, '0')
 
-$VersionSuffix += "-$AppVeyorBuildNumber"
+	$VersionSuffix += "%build$AppVeyorBuildNumber"
 
-Write-Host "Version suffix is '$VersionSuffix'."
+	Write-Host "Version suffix is '$VersionSuffix'."
+} Else {
+	Write-Host 'No version suffix.'
+}
 
 Write-Host 'Restoring packages...'
 
-dotnet restore /p:VersionSuffix=$VersionSuffix
+dotnet restore /p:VersionSuffix="$VersionSuffix"
 
 Write-Host 'Building...'
 
-dotnet build --version-suffix $VersionSuffix
+dotnet build /p:VersionSuffix="$VersionSuffix"
 
 Write-Host 'Packing...'
 
 $PackagesDir = "$PWD/src/artifacts/packages"
 MkDir $PackagesDir -EA SilentlyContinue | Out-Null
 
-dotnet pack --version-suffix $VersionSuffix --output $PackagesDir
+dotnet pack /p:VersionSuffix="$VersionSuffix" -o $PackagesDir

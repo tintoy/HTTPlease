@@ -1,7 +1,7 @@
 <Project>
     <!-- Global version info -->
     <PropertyGroup>
-        <VersionPrefix>1.0.0</VersionPrefix>
+				<VersionPrefix>1.1.0</VersionPrefix>
 
         <Version Condition=" '$(VersionSuffix)' == '' ">$(VersionPrefix)</Version>
         <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionPrefix)-$(VersionSuffix)</Version>

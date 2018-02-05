@@ -8,7 +8,7 @@ set -e
 
 BUILD_BASEVERSION=$(cat $PWD/build-version-suffix.txt)
 BUILD_ID=${TRAVIS_JOB_ID:=dev}
-BUILD_VERSION_SUFFIX="${BUILD_BASEVERSION}-${BUILD_ID}"
+BUILD_VERSION_SUFFIX="${BUILD_BASEVERSION}%${BUILD_ID}"
 
 echo ''
 echo "Version suffix is '$BUILD_VERSION_SUFFIX'."
@@ -24,13 +24,13 @@ echo ''
 echo 'Restoring packages...'
 echo ''
 
-dotnet restore /p:VersionSuffix=$BUILD_VERSION_SUFFIX
+dotnet restore /p:VersionSuffix="$BUILD_VERSION_SUFFIX"
 
 echo ''
 echo 'Building...'
 echo ''
 
-dotnet build --version-suffix $BUILD_VERSION_SUFFIX
+dotnet build /p:VersionSuffix="$BUILD_VERSION_SUFFIX"
 
 echo ''
 echo 'Testing...'
@@ -45,4 +45,4 @@ echo ''
 echo "Packing into '$ARTIFACTS_DIRECTORY'..."
 echo ''
 
-dotnet pack --version-suffix $BUILD_VERSION_SUFFIX --output $ARTIFACTS_DIRECTORY
+dotnet pack /p:VersionSuffix="$BUILD_VERSION_SUFFIX" -o $ARTIFACTS_DIRECTORY

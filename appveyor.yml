@@ -1,8 +1,10 @@
-version: 1.0.{build}
+version: 1.1.{build}
+
 branches:
   only:
-  - development/r1.0
-  - release/r1.0
+  - development/v1.1
+  - release/v1.1
+
 image: Visual Studio 2017
 cache:
 - '%USERPROFILE%\.nuget\packages'
@@ -18,7 +20,7 @@ artifacts:
 deploy:
   provider: NuGet
   on:
-    branch: release/r1.0
+    branch: release/v1.1
   api_key:
     secure: ljl/r7XeQm+KBzR7pm1OOW4+YcDUsYiWlr9jWFztMh/8/orG4V9ylTi+P1jGME7g
   skip_symbols: false
