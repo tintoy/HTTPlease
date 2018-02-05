@@ -13,5 +13,10 @@
         <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     </PropertyGroup>
 
+		<!-- Fix reference version used by tests (prevents needless package restore warnings) -->
+		<ItemGroup>
+				<PackageReference Include="Microsoft.Extensions.DependencyModel" Version="1.0.0" />
+		</ItemGroup>
+
     <Import Project="../VersionInfo.props"/>
 </Project>
