@@ -4,6 +4,10 @@ language: csharp
 mono: latest
 dotnet: 2.0.2
 
+# Needed by GitVersion
+git:
+  depth: 9999999
+
 branches:
   only:
     - development/v1.1
