@@ -4,6 +4,7 @@ branches:
   only:
   - development/v1.1
   - release/v1.1
+  - master
 
 image: Visual Studio 2017
 cache:

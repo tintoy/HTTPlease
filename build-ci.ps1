@@ -1,33 +1,26 @@
-$VersionSuffix = (Get-Content "$PWD/build-version-suffix.txt")
-If ($VersionSuffix) {
-	$VersionSuffix = $VersionSuffix.Trim()
-}
-If ($VersionSuffix) {
-	$AppVeyorBuildNumber = $env:APPVEYOR_BUILD_NUMBER
-	
-	If (!$AppVeyorBuildNumber) {
-		$AppVeyorBuildNumber = '0'
-	}
-	$AppVeyorBuildNumber = $AppVeyorBuildNumber.PadLeft(4, '0')
+$ErrorActionPreference = 'Stop'
 
-	$VersionSuffix += "%build$AppVeyorBuildNumber"
+$versionInfo = .\tools\GitVersion\GitVersion.exe | ConvertFrom-Json
 
-	Write-Host "Version suffix is '$VersionSuffix'."
+$versionPrefix = $versionInfo.MajorMinorPatch
+$versionSuffix = $versionInfo.NuGetPreReleaseTagV2
+$informationalVersion = $versionInfo.InformationalVersion
+
+If ($versionSuffix) {
+	Write-Host "Build version is '$versionPrefix-$versionSuffix'."
 } Else {
-	Write-Host 'No version suffix.'
+	Write-Host "Build version is '$versionPrefix'."
 }
 
 Write-Host 'Restoring packages...'
 
-dotnet restore /p:VersionSuffix="$VersionSuffix"
+dotnet restore /p:VersionPrefix="$versionPrefix" /p:VersionSuffix="$versionSuffix" /p:AssemblyInformationalVersion="$informationalVersion"
 
 Write-Host 'Building...'
 
-dotnet build /p:VersionSuffix="$VersionSuffix"
+dotnet build /p:VersionPrefix="$versionPrefix" /p:VersionSuffix="$versionSuffix" /p:AssemblyInformationalVersion="$informationalVersion"
 
 Write-Host 'Packing...'
 
 $PackagesDir = "$PWD/src/artifacts/packages"
-MkDir $PackagesDir -EA SilentlyContinue | Out-Null
-
-dotnet pack /p:VersionSuffix="$VersionSuffix" -o $PackagesDir
+dotnet pack /p:VersionPrefix="$versionPrefix" /p:VersionSuffix="$versionSuffix" /p:AssemblyInformationalVersion="$informationalVersion" -o $PackagesDir
