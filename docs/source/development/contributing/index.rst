@@ -35,6 +35,8 @@ Some basic guidelines:
   * You're working with an anonymous type
   * You're working with a LINQ expression whose type is obvious (e.g. a grouping)
   * You're calling a generic method whose sole type parameter determines the return type (e.g. ``container.Resolve<MyEntities>()``)
+* Err on the side of ease-of-use / ease-of-correct-usage for the consumer - the unspoken contract when it comes to authoring a library is that it's supposed to be more difficult for you so it's easier for them.
+* If it's hard to express how functionality is meant to be used, consider writing a test that shows correct usage.
 
 .. toctree::
    :maxdepth: 2
