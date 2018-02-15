@@ -8,8 +8,7 @@ set -euo pipefail
 
 echo 'Computing build version...'
 
-mono $PWD/tools/GitVersion/GitVersion.exe
-mono $PWD/tools/GitVersion/GitVersion.exe > $PWD/version-info.json
+mono $PWD/tools/GitVersion/GitVersion.exe | tee $PWD/version-info.json
 
 BUILD_BASEVERSION=$(cat $PWD/version-info.json | jq -r .MajorMinorPatch)
 BUILD_VERSION_SUFFIX=$(cat $PWD/version-info.json | jq -r .NuGetPreReleaseTagV2)

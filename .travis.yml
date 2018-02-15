@@ -1,7 +1,8 @@
+dist: trusty
+
 language: csharp
 mono: latest
-dotnet: 2.0.0
-dist: trusty
+dotnet: 2.0.2
 
 branches:
   only:
@@ -10,12 +11,8 @@ branches:
 
 addons:
   apt:
-    sources:
-    - sourceline: 'deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-trusty-prod trusty main'
-      key_url: 'https://packages.microsoft.com/keys/microsoft.asc'
     packages:
     - jq
-    - dotnet-sdk-2.0.2
 
 script:
   - ./build-ci.sh
