@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -30,6 +32,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="HTTPlease 1.0.0-alpha1 documentation" href="../index.html"/>
         <link rel="up" title="Clients" href="index.html"/>
         <link rel="next" title="Requests" href="../requests/index.html"/>
@@ -42,6 +47,7 @@
 
 <body class="wy-body-for-nav" role="document">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -82,7 +88,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../uri-templates/index.html">URI Templates</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Clients</a><ul class="current">
@@ -104,8 +113,10 @@
 
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../index.html">HTTPlease</a>
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">HTTPlease</a>
+        
       </nav>
 
 
@@ -114,23 +125,40 @@
         <div class="rst-content">
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="index.html">Clients</a> &raquo;</li>
-      
-    <li>Using HttpClientBuilder</li>
+        
+      <li>Using HttpClientBuilder</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -138,7 +166,7 @@
             
   <div class="section" id="using-httpclientbuilder">
 <h1>Using HttpClientBuilder<a class="headerlink" href="#using-httpclientbuilder" title="Permalink to this headline">¶</a></h1>
-<div class="highlight-csharp"><div class="highlight"><pre><span class="k">static</span> <span class="k">readonly</span> <span class="n">HttpClientBuilder</span> <span class="n">ClientBuilder</span> <span class="p">=</span>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="k">readonly</span> <span class="n">HttpClientBuilder</span> <span class="n">ClientBuilder</span> <span class="p">=</span>
         <span class="k">new</span> <span class="nf">HttpClientBuilder</span><span class="p">()</span>
                 <span class="p">.</span><span class="n">WithActivityCorrelation</span><span class="p">()</span>
                 <span class="p">.</span><span class="n">WithLogging</span><span class="p">(</span><span class="n">logger</span><span class="p">);</span>
@@ -160,15 +188,18 @@
 
 
            </div>
+           <div class="articleComments">
+            
+           </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../requests/index.html" class="btn btn-neutral float-right" title="Requests" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../requests/index.html" class="btn btn-neutral float-right" title="Requests" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral" title="Clients" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral" title="Clients" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -201,7 +232,8 @@
             VERSION:'1.0.0-alpha1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>

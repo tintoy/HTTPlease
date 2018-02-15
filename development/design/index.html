@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -30,6 +32,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
     <link rel="top" title="HTTPlease 1.0.0-alpha1 documentation" href="../../index.html"/>
         <link rel="up" title="Development" href="../index.html"/>
         <link rel="next" title="How to build HTTPlease" href="../building/index.html"/>
@@ -42,6 +47,7 @@
 
 <body class="wy-body-for-nav" role="document">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -82,7 +88,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../uri-templates/index.html">URI Templates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../clients/index.html">Clients</a></li>
@@ -107,8 +116,10 @@
 
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../index.html">HTTPlease</a>
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">HTTPlease</a>
+        
       </nav>
 
 
@@ -117,23 +128,40 @@
         <div class="rst-content">
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../index.html">Development</a> &raquo;</li>
-      
-    <li>HTTPlease Design</li>
+        
+      <li>HTTPlease Design</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -141,10 +169,10 @@
             
   <div class="section" id="httplease-design">
 <h1>HTTPlease Design<a class="headerlink" href="#httplease-design" title="Permalink to this headline">¶</a></h1>
-<p>HTTPlease uses Microsoft&#8217;s immutable collections to ensure that the state for a given HttpRequest is immutable. In order to change the HttpRequest, you clone it, making one or more changes in the process (leaving the original untouched).
+<p>HTTPlease uses Microsoft’s immutable collections to ensure that the state for a given HttpRequest is immutable. In order to change the HttpRequest, you clone it, making one or more changes in the process (leaving the original untouched).
 Normally, this mutate-by-cloning operation is implemented as an extension method.</p>
 <p>For example:</p>
-<div class="highlight-csharp"><div class="highlight"><pre><span class="k">public</span> <span class="k">static</span> <span class="n">HttpRequest</span> <span class="nf">WithRequestAction</span><span class="p">(</span><span class="k">this</span> <span class="n">HttpRequest</span> <span class="n">request</span><span class="p">,</span> <span class="n">RequestAction</span><span class="p">&lt;</span><span class="kt">object</span><span class="p">&gt;</span> <span class="n">requestAction</span><span class="p">)</span>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">public</span> <span class="k">static</span> <span class="n">HttpRequest</span> <span class="nf">WithRequestAction</span><span class="p">(</span><span class="k">this</span> <span class="n">HttpRequest</span> <span class="n">request</span><span class="p">,</span> <span class="n">RequestAction</span><span class="p">&lt;</span><span class="kt">object</span><span class="p">&gt;</span> <span class="n">requestAction</span><span class="p">)</span>
 <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">request</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
                 <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="n">nameof</span><span class="p">(</span><span class="n">request</span><span class="p">));</span>
@@ -159,21 +187,24 @@ Normally, this mutate-by-cloning operation is implemented as an extension method
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Note that the <code class="docutils literal"><span class="pre">Clone</span></code> method takes an <code class="docutils literal"><span class="pre">Action&lt;IDictionary&lt;string,</span> <span class="pre">object&gt;&gt;</span></code> delegate. This delegate makes changes to an <code class="docutils literal"><span class="pre">IDictionary</span></code> that represents a mutable (change-tracking) version of the <code class="docutils literal"><span class="pre">ImmutableDictionary</span></code> that acts as a backing store for the original request&#8217;s properties.
-Any changes you make to this dictionary will be applied as deltas to the original <code class="docutils literal"><span class="pre">ImmutableDictionary</span></code> to produce a new <code class="docutils literal"><span class="pre">ImmutableDictionary</span></code> that only contains the differences from the original.</p>
+<p>Note that the <code class="docutils literal notranslate"><span class="pre">Clone</span></code> method takes an <code class="docutils literal notranslate"><span class="pre">Action&lt;IDictionary&lt;string,</span> <span class="pre">object&gt;&gt;</span></code> delegate. This delegate makes changes to an <code class="docutils literal notranslate"><span class="pre">IDictionary</span></code> that represents a mutable (change-tracking) version of the <code class="docutils literal notranslate"><span class="pre">ImmutableDictionary</span></code> that acts as a backing store for the original request’s properties.
+Any changes you make to this dictionary will be applied as deltas to the original <code class="docutils literal notranslate"><span class="pre">ImmutableDictionary</span></code> to produce a new <code class="docutils literal notranslate"><span class="pre">ImmutableDictionary</span></code> that only contains the differences from the original.</p>
 </div>
 
 
+           </div>
+           <div class="articleComments">
+            
            </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../building/index.html" class="btn btn-neutral float-right" title="How to build HTTPlease" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../building/index.html" class="btn btn-neutral float-right" title="How to build HTTPlease" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../index.html" class="btn btn-neutral" title="Development" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../index.html" class="btn btn-neutral" title="Development" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -206,7 +237,8 @@ Any changes you make to this dictionary will be applied as deltas to the origina
             VERSION:'1.0.0-alpha1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../_static/jquery.js"></script>

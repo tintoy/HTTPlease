@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -30,6 +32,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="HTTPlease 1.0.0-alpha1 documentation" href="#"/>
         <link rel="next" title="URI Templates" href="uri-templates/index.html"/> 
 
@@ -40,6 +45,7 @@
 
 <body class="wy-body-for-nav" role="document">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -80,7 +86,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="uri-templates/index.html">URI Templates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clients/index.html">Clients</a></li>
@@ -99,8 +108,10 @@
 
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="#">HTTPlease</a>
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">HTTPlease</a>
+        
       </nav>
 
 
@@ -109,21 +120,38 @@
         <div class="rst-content">
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="#">Docs</a> &raquo;</li>
-      
-    <li>Introduction</li>
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>Introduction</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -143,11 +171,11 @@
 </ul>
 </div>
 <div class="section" id="request-templates">
-<h2>Request templates...?<a class="headerlink" href="#request-templates" title="Permalink to this headline">¶</a></h2>
-<p>For example, you might have a base request with a URL of <code class="docutils literal"><span class="pre">/api</span></code>, and then extend that with a relative URI <code class="docutils literal"><span class="pre">{apiVersion}</span></code>, which would effectively be <code class="docutils literal"><span class="pre">/api/{apiVersion}</span></code>.</p>
-<p>Then you might extend that with <code class="docutils literal"><span class="pre">{entitySet}</span></code> to become <code class="docutils literal"><span class="pre">api/{apiVersion}/{entitySet}</span></code> (let&#8217;s call this template &#8220;entity list&#8221;), and extend that with <code class="docutils literal"><span class="pre">{entityId}</span></code> resulting in <code class="docutils literal"><span class="pre">api/{apiVersion}/{entitySet}/{entityId}</span></code> (let&#8217;s call this template &#8220;entity by Id&#8221;).</p>
-<p>So if all the entity sets exposed by your API follow this pattern then you can simply customise these templates by giving them values for &#8220;apiVersion&#8221; and &#8220;entitySet&#8221; (e.g. &#8220;user list&#8221; = &#8220;entity list with entitySet=user&#8221; and &#8220;user by Id&#8221; = &#8220;entity by Id&#8221; with &#8220;entitySet = user&#8221;, resulting in <code class="docutils literal"><span class="pre">api/v1/users/1</span></code>).</p>
-<p>If the overall pattern for your API changes (e.g. <code class="docutils literal"><span class="pre">/api/{entityVersion}</span></code> becomes <code class="docutils literal"><span class="pre">/api/public/versions/{entityVersion}</span></code>) then you simply modify the base template definition.</p>
+<h2>Request templates…?<a class="headerlink" href="#request-templates" title="Permalink to this headline">¶</a></h2>
+<p>For example, you might have a base request with a URL of <code class="docutils literal notranslate"><span class="pre">/api</span></code>, and then extend that with a relative URI <code class="docutils literal notranslate"><span class="pre">{apiVersion}</span></code>, which would effectively be <code class="docutils literal notranslate"><span class="pre">/api/{apiVersion}</span></code>.</p>
+<p>Then you might extend that with <code class="docutils literal notranslate"><span class="pre">{entitySet}</span></code> to become <code class="docutils literal notranslate"><span class="pre">api/{apiVersion}/{entitySet}</span></code> (let’s call this template “entity list”), and extend that with <code class="docutils literal notranslate"><span class="pre">{entityId}</span></code> resulting in <code class="docutils literal notranslate"><span class="pre">api/{apiVersion}/{entitySet}/{entityId}</span></code> (let’s call this template “entity by Id”).</p>
+<p>So if all the entity sets exposed by your API follow this pattern then you can simply customise these templates by giving them values for “apiVersion” and “entitySet” (e.g. “user list” = “entity list with entitySet=user” and “user by Id” = “entity by Id” with “entitySet = user”, resulting in <code class="docutils literal notranslate"><span class="pre">api/v1/users/1</span></code>).</p>
+<p>If the overall pattern for your API changes (e.g. <code class="docutils literal notranslate"><span class="pre">/api/{entityVersion}</span></code> becomes <code class="docutils literal notranslate"><span class="pre">/api/public/versions/{entityVersion}</span></code>) then you simply modify the base template definition.</p>
 <p>Note that not all template parameter values have to be deferred (lazily evaluated). Some can be given constant values as part of the template definition. See the tests for examples of how the API can be used.</p>
 </div>
 <div class="section" id="what-about-clients">
@@ -155,11 +183,11 @@
 <p>The <a class="reference external" href="clients/index">HttpClient builder</a> performs a similar role; it is a template describing how to create and configure an HttpClient (most of its power comes from the ability to define extension methods to encapsulate special configuration or custom message handlers in the pipeline). Again, see the tests for examples of how it can be used.</p>
 </div>
 <div class="section" id="how-does-this-compare-to">
-<h2>How does this compare to...?<a class="headerlink" href="#how-does-this-compare-to" title="Permalink to this headline">¶</a></h2>
-<ul>
+<h2>How does this compare to…?<a class="headerlink" href="#how-does-this-compare-to" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
 <li><dl class="first docutils">
 <dt>Microsoft.AspNet.WebApi.Client</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li>HTTPlease is definitely inspired by ASP.NET WebAPI (especially regarding the use of extension methods)</li>
 <li>However, it seems to me that ASP.NET WebAPI is being superceded by ASP.NET MVC Core (and, therefore, a gap now exists regarding client functionality)</li>
 </ul>
@@ -168,7 +196,7 @@
 </li>
 <li><dl class="first docutils">
 <dt>RestSharp - similar facilities, but an emphasis on:</dt>
-<dd><ul class="first last simple">
+<dd><ul class="first last">
 <li>Testability (and repeatability) of requests</li>
 <li>Support for URI templates</li>
 <li>Composability</li>
@@ -179,7 +207,7 @@
 </dl>
 </li>
 </ul>
-<p>Honestly, if you use either of these frameworks to make one-off web requests, they&#8217;re totally fit-for-purpose; where HTTPlease really excels is in building client libraries to wrap web APIs.</p>
+<p>Honestly, if you use either of these frameworks to make one-off web requests, they’re totally fit-for-purpose; where HTTPlease really excels is in building client libraries to wrap web APIs.</p>
 </div>
 <div class="section" id="contents">
 <h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
@@ -220,12 +248,15 @@
 
 
            </div>
+           <div class="articleComments">
+            
+           </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="uri-templates/index.html" class="btn btn-neutral float-right" title="URI Templates" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="uri-templates/index.html" class="btn btn-neutral float-right" title="URI Templates" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>
@@ -259,7 +290,8 @@
             VERSION:'1.0.0-alpha1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="_static/jquery.js"></script>

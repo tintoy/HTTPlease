@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -30,6 +32,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
     <link rel="top" title="HTTPlease 1.0.0-alpha1 documentation" href="../../index.html"/>
         <link rel="up" title="HttpRequest" href="index.html"/>
         <link rel="next" title="HttpRequest&lt;TContext&gt;" href="../typed/index.html"/>
@@ -42,6 +47,7 @@
 
 <body class="wy-body-for-nav" role="document">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -82,7 +88,10 @@
           
             
             
-                <ul class="current">
+              
+            
+            
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../uri-templates/index.html">URI Templates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../clients/index.html">Clients</a></li>
@@ -91,7 +100,7 @@
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Usage</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#creating-a-request-from-a-uri">Creating a request from a URI</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#binding-request-parameters">Binding request parameters</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#binding-request-parameters-to-an-object-s-properties">Binding request parameters to an object&#8217;s properties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#binding-request-parameters-to-an-object-s-properties">Binding request parameters to an object’s properties</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#creating-a-request-with-late-bound-parameters">Creating a request with late-bound parameters</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#working-with-responses">Working with responses</a></li>
 </ul>
@@ -115,8 +124,10 @@
 
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../index.html">HTTPlease</a>
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">HTTPlease</a>
+        
       </nav>
 
 
@@ -125,25 +136,42 @@
         <div class="rst-content">
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="../../index.html">Docs</a> &raquo;</li>
-      
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
           <li><a href="../index.html">Requests</a> &raquo;</li>
-      
+        
           <li><a href="index.html">HttpRequest</a> &raquo;</li>
-      
-    <li>Using HttpRequest</li>
+        
+      <li>Using HttpRequest</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -154,7 +182,7 @@
 <ul class="simple">
 <li><a class="reference internal" href="#creating-a-request-from-a-uri">Creating a request from a URI</a></li>
 <li><a class="reference internal" href="#binding-request-parameters">Binding request parameters</a></li>
-<li><a class="reference internal" href="#binding-request-parameters-to-an-object-s-properties">Binding request parameters to an object&#8217;s properties</a></li>
+<li><a class="reference internal" href="#binding-request-parameters-to-an-object-s-properties">Binding request parameters to an object’s properties</a></li>
 <li><a class="reference internal" href="#creating-a-request-with-late-bound-parameters">Creating a request with late-bound parameters</a></li>
 <li><a class="reference internal" href="#working-with-responses">Working with responses</a><ul>
 <li><a class="reference internal" href="#just-give-me-the-response">Just give me the response</a></li>
@@ -166,10 +194,10 @@
 </ul>
 <div class="section" id="creating-a-request-from-a-uri">
 <h2>Creating a request from a URI<a class="headerlink" href="#creating-a-request-from-a-uri" title="Permalink to this headline">¶</a></h2>
-<p>First, let&#8217;s define a request that will act as the basis for the requests in subsequent examples.</p>
-<p>Note that, if you prefer, you don&#8217;t have to do this separately (you can declare the full URI in-place where you use it).
-You can also use relative URIs (in which case the the HttpClient&#8217;s base URI will be used).</p>
-<div class="highlight-csharp"><div class="highlight"><pre><span class="n">HttpRequest</span> <span class="n">baseRequest</span> <span class="p">=</span> <span class="n">HttpRequest</span><span class="p">.</span><span class="n">Factory</span><span class="p">.</span><span class="n">Create</span><span class="p">(</span><span class="s">&quot;http://localhost:1234&quot;</span><span class="p">);</span>
+<p>First, let’s define a request that will act as the basis for the requests in subsequent examples.</p>
+<p>Note that, if you prefer, you don’t have to do this separately (you can declare the full URI in-place where you use it).
+You can also use relative URIs (in which case the the HttpClient’s base URI will be used).</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">HttpRequest</span> <span class="n">baseRequest</span> <span class="p">=</span> <span class="n">HttpRequest</span><span class="p">.</span><span class="n">Factory</span><span class="p">.</span><span class="n">Create</span><span class="p">(</span><span class="s">&quot;http://localhost:1234&quot;</span><span class="p">);</span>
 <span class="n">HttpRequest</span> <span class="n">requestTemplate</span> <span class="p">=</span> <span class="n">baseRequest</span><span class="p">.</span><span class="n">WithRelativeRequestUri</span><span class="p">(</span>
     <span class="s">&quot;customers/{variable1}/foo/{variable2}/bar&quot;</span>
 <span class="p">);</span>
@@ -181,9 +209,9 @@ You can also use relative URIs (in which case the the HttpClient&#8217;s base UR
 </div>
 <div class="section" id="binding-request-parameters">
 <h2>Binding request parameters<a class="headerlink" href="#binding-request-parameters" title="Permalink to this headline">¶</a></h2>
-<p>The parameters (or &#8220;holes&#8221;) in the request URI must be bound to values before the request can be invoked.
+<p>The parameters (or “holes”) in the request URI must be bound to values before the request can be invoked.
 One way to do this is to give the parameters constant values by specialising the template:</p>
-<div class="highlight-csharp"><div class="highlight"><pre><span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span><span class="p">())</span>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span><span class="p">())</span>
 <span class="p">{</span>
     <span class="n">HttpRequest</span> <span class="n">request</span> <span class="p">=</span>
         <span class="n">requestTemplate</span>
@@ -199,13 +227,13 @@ One way to do this is to give the parameters constant values by specialising the
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Note that while all of a request&#8217;s parameters must be bound, they can be have a value of <code class="docutils literal"><span class="pre">null</span></code> which will result in their path segment / query parameter being omitted from the final URI.</p>
+<p>Note that while all of a request’s parameters must be bound, they can be have a value of <code class="docutils literal notranslate"><span class="pre">null</span></code> which will result in their path segment / query parameter being omitted from the final URI.</p>
 </div>
 <div class="section" id="binding-request-parameters-to-an-object-s-properties">
-<h2>Binding request parameters to an object&#8217;s properties<a class="headerlink" href="#binding-request-parameters-to-an-object-s-properties" title="Permalink to this headline">¶</a></h2>
+<h2>Binding request parameters to an object’s properties<a class="headerlink" href="#binding-request-parameters-to-an-object-s-properties" title="Permalink to this headline">¶</a></h2>
 <p>The parameters in the request URI can also be bound to the properties of an object (including anonymous types).
-If you&#8217;re not using anonymous types (or other immutable object types) then you may be better off using <a class="reference external" href="../typed/index">HttpRequest&lt;TContext&gt;</a>.</p>
-<div class="highlight-csharp"><div class="highlight"><pre><span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span><span class="p">())</span>
+If you’re not using anonymous types (or other immutable object types) then you may be better off using <a class="reference external" href="../typed/index">HttpRequest&lt;TContext&gt;</a>.</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span><span class="p">())</span>
 <span class="p">{</span>
     <span class="n">HttpRequest</span> <span class="n">request</span> <span class="p">=</span>
         <span class="n">requestTemplate</span>
@@ -228,7 +256,7 @@ If you&#8217;re not using anonymous types (or other immutable object types) then
 <div class="section" id="creating-a-request-with-late-bound-parameters">
 <h2>Creating a request with late-bound parameters<a class="headerlink" href="#creating-a-request-with-late-bound-parameters" title="Permalink to this headline">¶</a></h2>
 <p>Instead of constant values, however, request parameters can also be bound to delegates that resolve their values each time the request is invoked.</p>
-<div class="highlight-csharp"><div class="highlight"><pre><span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span><span class="p">())</span>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span><span class="p">())</span>
 <span class="p">{</span>
     <span class="kt">int</span> <span class="n">variable1</span> <span class="p">=</span> <span class="m">1234</span><span class="p">;</span>
     <span class="kt">string</span> <span class="n">variable2</span> <span class="p">=</span> <span class="s">&quot;hello&quot;</span><span class="p">;</span>
@@ -264,7 +292,7 @@ These range from simple / low-ceremony to fully-customisable.</p>
 <p>Click <a class="reference internal" href="#data-types"><span class="std std-ref">here</span></a> for the definitions of some basic data-types used in these examples.</p>
 <div class="section" id="just-give-me-the-response">
 <h3>Just give me the response<a class="headerlink" href="#just-give-me-the-response" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-csharp"><div class="highlight"><pre><span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span> <span class="p">{</span> <span class="n">BaseAddress</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Uri</span><span class="p">(</span><span class="s">&quot;http://localhost:1234/&quot;</span><span class="p">)</span> <span class="p">})</span>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span> <span class="p">{</span> <span class="n">BaseAddress</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Uri</span><span class="p">(</span><span class="s">&quot;http://localhost:1234/&quot;</span><span class="p">)</span> <span class="p">})</span>
 <span class="p">{</span>
     <span class="n">HttpRequest</span> <span class="n">request</span> <span class="p">=</span> <span class="n">HttpRequest</span><span class="p">.</span><span class="n">Factory</span><span class="p">.</span><span class="n">CreateJson</span><span class="p">(</span><span class="s">&quot;customers/1&quot;</span><span class="p">);</span>
 
@@ -278,7 +306,7 @@ These range from simple / low-ceremony to fully-customisable.</p>
 </div>
 <div class="section" id="i-want-to-handle-specific-status-codes">
 <h3>I want to handle specific status codes<a class="headerlink" href="#i-want-to-handle-specific-status-codes" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-csharp"><div class="highlight"><pre><span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span> <span class="p">{</span> <span class="n">BaseAddress</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Uri</span><span class="p">(</span><span class="s">&quot;http://localhost:1234/&quot;</span><span class="p">)</span> <span class="p">})</span>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span> <span class="p">{</span> <span class="n">BaseAddress</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Uri</span><span class="p">(</span><span class="s">&quot;http://localhost:1234/&quot;</span><span class="p">)</span> <span class="p">})</span>
 <span class="p">{</span>
     <span class="n">HttpRequest</span> <span class="n">request</span> <span class="p">=</span> <span class="n">HttpRequest</span><span class="p">.</span><span class="n">Factory</span><span class="p">.</span><span class="n">CreateJson</span><span class="p">(</span><span class="s">&quot;customers/1&quot;</span><span class="p">);</span>
 
@@ -310,7 +338,7 @@ These range from simple / low-ceremony to fully-customisable.</p>
 </div>
 <div class="section" id="i-want-to-handle-failure-status-codes-as-exceptions">
 <h3>I want to handle failure status codes as exceptions<a class="headerlink" href="#i-want-to-handle-failure-status-codes-as-exceptions" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-csharp"><div class="highlight"><pre><span class="n">HttpRequest</span> <span class="n">request</span> <span class="p">=</span> <span class="n">HttpRequest</span><span class="p">.</span><span class="n">Factory</span><span class="p">.</span><span class="n">CreateJson</span><span class="p">(</span><span class="s">&quot;customers/1&quot;</span><span class="p">);</span>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">HttpRequest</span> <span class="n">request</span> <span class="p">=</span> <span class="n">HttpRequest</span><span class="p">.</span><span class="n">Factory</span><span class="p">.</span><span class="n">CreateJson</span><span class="p">(</span><span class="s">&quot;customers/1&quot;</span><span class="p">);</span>
 
 <span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span><span class="p">())</span>
 <span class="p">{</span>
@@ -350,7 +378,7 @@ These range from simple / low-ceremony to fully-customisable.</p>
 </div>
 <div class="section" id="i-want-to-do-it-all-myself">
 <h3>I want to do it all myself<a class="headerlink" href="#i-want-to-do-it-all-myself" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-csharp"><div class="highlight"><pre><span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span> <span class="p">{</span> <span class="n">BaseAddress</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Uri</span><span class="p">(</span><span class="s">&quot;http://localhost:1234/&quot;</span><span class="p">)</span> <span class="p">})</span>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="p">(</span><span class="n">HttpClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpClient</span> <span class="p">{</span> <span class="n">BaseAddress</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Uri</span><span class="p">(</span><span class="s">&quot;http://localhost:1234/&quot;</span><span class="p">)</span> <span class="p">})</span>
 <span class="p">{</span>
     <span class="n">HttpRequest</span> <span class="n">request</span> <span class="p">=</span> <span class="n">HttpRequest</span><span class="p">.</span><span class="n">Factory</span><span class="p">.</span><span class="n">CreateJson</span><span class="p">(</span><span class="s">&quot;customers/1&quot;</span><span class="p">);</span>
 
@@ -384,7 +412,7 @@ These range from simple / low-ceremony to fully-customisable.</p>
 </div>
 <div class="section" id="some-basic-data-types">
 <h3>Some basic data-types<a class="headerlink" href="#some-basic-data-types" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-csharp" id="data-types"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Customer</span>
+<div class="highlight-csharp notranslate" id="data-types"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Customer</span>
 <span class="p">{</span>
     <span class="k">public</span> <span class="kt">string</span> <span class="n">FirstName</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
     <span class="k">public</span> <span class="kt">string</span> <span class="n">LastName</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
@@ -412,15 +440,18 @@ These range from simple / low-ceremony to fully-customisable.</p>
 
 
            </div>
+           <div class="articleComments">
+            
+           </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../typed/index.html" class="btn btn-neutral float-right" title="HttpRequest&lt;TContext&gt;" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../typed/index.html" class="btn btn-neutral float-right" title="HttpRequest&lt;TContext&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral" title="HttpRequest" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral" title="HttpRequest" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -453,7 +484,8 @@ These range from simple / low-ceremony to fully-customisable.</p>
             VERSION:'1.0.0-alpha1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../_static/jquery.js"></script>
