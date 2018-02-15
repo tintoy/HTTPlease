@@ -33,7 +33,7 @@ namespace HTTPlease
 		/// <returns>
 		///		An <see cref="HttpResponseMessage"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> HeadAsync<TContext>(this HttpClient httpClient, HttpRequest<TContext> request, TContext context, CancellationToken cancellationToken = default(CancellationToken))
+		public static async Task<HttpResponseMessage> HeadAsync<TContext>(this HttpClient httpClient, HttpRequest<TContext> request, TContext context, CancellationToken cancellationToken = default)
 		{
 			if (httpClient == null)
 				throw new ArgumentNullException(nameof(httpClient));
@@ -62,7 +62,7 @@ namespace HTTPlease
 		/// <returns>
 		///		An <see cref="HttpResponseMessage"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> GetAsync<TContext>(this HttpClient httpClient, HttpRequest<TContext> request, TContext context, CancellationToken cancellationToken = default(CancellationToken))
+		public static async Task<HttpResponseMessage> GetAsync<TContext>(this HttpClient httpClient, HttpRequest<TContext> request, TContext context, CancellationToken cancellationToken = default)
 		{
 			if (httpClient == null)
 				throw new ArgumentNullException(nameof(httpClient));
@@ -94,7 +94,7 @@ namespace HTTPlease
 		/// <returns>
 		///		An <see cref="HttpResponseMessage"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> PostAsync<TContext>(this HttpClient httpClient, HttpRequest<TContext> request, TContext context, HttpContent postBody = null, CancellationToken cancellationToken = default(CancellationToken))
+		public static async Task<HttpResponseMessage> PostAsync<TContext>(this HttpClient httpClient, HttpRequest<TContext> request, TContext context, HttpContent postBody = null, CancellationToken cancellationToken = default)
 		{
 			if (httpClient == null)
 				throw new ArgumentNullException(nameof(httpClient));
@@ -126,7 +126,7 @@ namespace HTTPlease
 		/// <returns>
 		///		An <see cref="HttpResponseMessage"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> PutAsync<TContext>(this HttpClient httpClient, HttpRequest<TContext> request, TContext context, HttpContent putBody, CancellationToken cancellationToken = default(CancellationToken))
+		public static async Task<HttpResponseMessage> PutAsync<TContext>(this HttpClient httpClient, HttpRequest<TContext> request, TContext context, HttpContent putBody, CancellationToken cancellationToken = default)
 		{
 			if (httpClient == null)
 				throw new ArgumentNullException(nameof(httpClient));
@@ -161,7 +161,7 @@ namespace HTTPlease
 		/// <returns>
 		///		An <see cref="HttpResponseMessage"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> PatchAsync<TContext>(this HttpClient httpClient, HttpRequest<TContext> request, TContext context, HttpContent patchBody, CancellationToken cancellationToken = default(CancellationToken))
+		public static async Task<HttpResponseMessage> PatchAsync<TContext>(this HttpClient httpClient, HttpRequest<TContext> request, TContext context, HttpContent patchBody, CancellationToken cancellationToken = default)
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
@@ -190,7 +190,7 @@ namespace HTTPlease
 		/// <returns>
 		///		An <see cref="HttpResponseMessage"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> DeleteAsync<TContext>(this HttpClient httpClient, HttpRequest<TContext> request, TContext context, CancellationToken cancellationToken = default(CancellationToken))
+		public static async Task<HttpResponseMessage> DeleteAsync<TContext>(this HttpClient httpClient, HttpRequest<TContext> request, TContext context, CancellationToken cancellationToken = default)
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
@@ -222,7 +222,7 @@ namespace HTTPlease
 		/// <returns>
 		///		An <see cref="HttpResponseMessage"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> SendAsync<TContext>(this HttpClient httpClient, HttpRequest<TContext> request, HttpMethod method, TContext context, HttpContent body = null, CancellationToken cancellationToken = default(CancellationToken))
+		public static async Task<HttpResponseMessage> SendAsync<TContext>(this HttpClient httpClient, HttpRequest<TContext> request, HttpMethod method, TContext context, HttpContent body = null, CancellationToken cancellationToken = default)
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
