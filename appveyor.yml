@@ -17,14 +17,6 @@ artifacts:
 - path: src\artifacts\packages\*.nupkg
 
 deploy:
-  # Project feed
-  - provider: NuGet
-    server: https://ci.appveyor.com/nuget/httplease
-    api_key:
-      secure: JSudMjYtLSEPLJcy7s3AaKfHpy2PljVoFQ/GLydKb7s=
-    skip_symbols: false
-    artifact: /.*\.nupkg$/
-
   # MyGet feed
   - on:
       branch: /(development|release|feature|master)(\/)?.*/
