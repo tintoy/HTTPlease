@@ -12,6 +12,7 @@ branches:
   only:
     - development/v1.1
     - release/v1.1
+    - master
 
 addons:
   apt:
