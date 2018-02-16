@@ -1,17 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace HTTPlease
 {
-	using System.Collections.Generic;
 	using Core;
 
 	/// <summary>
 	///		Invocation-related extension methods for <see cref="HttpClient"/>s that use an <see cref="HttpRequest"/>.
 	/// </summary>
-	public static class ClientExtensions
+	public static partial class ClientExtensions
     {
 		#region Invoke
 
@@ -30,7 +30,7 @@ namespace HTTPlease
 		/// <returns>
 		///		An <see cref="HttpResponseMessage"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> HeadAsync(this HttpClient httpClient, HttpRequest request, CancellationToken cancellationToken = default(CancellationToken))
+		public static async Task<HttpResponseMessage> HeadAsync(this HttpClient httpClient, HttpRequest request, CancellationToken cancellationToken = default)
 		{
 			if (httpClient == null)
 				throw new ArgumentNullException(nameof(httpClient));
@@ -56,7 +56,7 @@ namespace HTTPlease
 		/// <returns>
 		///		An <see cref="HttpResponseMessage"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> GetAsync(this HttpClient httpClient, HttpRequest request, CancellationToken cancellationToken = default(CancellationToken))
+		public static async Task<HttpResponseMessage> GetAsync(this HttpClient httpClient, HttpRequest request, CancellationToken cancellationToken = default)
 		{
 			if (httpClient == null)
 				throw new ArgumentNullException(nameof(httpClient));
@@ -85,7 +85,7 @@ namespace HTTPlease
 		/// <returns>
 		///		An <see cref="HttpResponseMessage"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> PostAsync(this HttpClient httpClient, HttpRequest request, HttpContent postBody = null, CancellationToken cancellationToken = default(CancellationToken))
+		public static async Task<HttpResponseMessage> PostAsync(this HttpClient httpClient, HttpRequest request, HttpContent postBody = null, CancellationToken cancellationToken = default)
 		{
 			if (httpClient == null)
 				throw new ArgumentNullException(nameof(httpClient));
@@ -114,7 +114,7 @@ namespace HTTPlease
 		/// <returns>
 		///		An <see cref="HttpResponseMessage"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> PutAsync(this HttpClient httpClient, HttpRequest request, HttpContent putBody, CancellationToken cancellationToken = default(CancellationToken))
+		public static async Task<HttpResponseMessage> PutAsync(this HttpClient httpClient, HttpRequest request, HttpContent putBody, CancellationToken cancellationToken = default)
 		{
 			if (httpClient == null)
 				throw new ArgumentNullException(nameof(httpClient));
@@ -146,7 +146,7 @@ namespace HTTPlease
 		/// <returns>
 		///		An <see cref="HttpResponseMessage"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> PatchAsync(this HttpClient httpClient, HttpRequest request, HttpContent patchBody, CancellationToken cancellationToken = default(CancellationToken))
+		public static async Task<HttpResponseMessage> PatchAsync(this HttpClient httpClient, HttpRequest request, HttpContent patchBody, CancellationToken cancellationToken = default)
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
@@ -172,7 +172,7 @@ namespace HTTPlease
 		/// <returns>
 		///		An <see cref="HttpResponseMessage"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> DeleteAsync(this HttpClient httpClient, HttpRequest request, CancellationToken cancellationToken = default(CancellationToken))
+		public static async Task<HttpResponseMessage> DeleteAsync(this HttpClient httpClient, HttpRequest request, CancellationToken cancellationToken = default)
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
@@ -201,7 +201,7 @@ namespace HTTPlease
 		/// <returns>
 		///		An <see cref="HttpResponseMessage"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> SendAsync(this HttpClient httpClient, HttpRequest request, HttpMethod method, HttpContent body = null, CancellationToken cancellationToken = default(CancellationToken))
+		public static async Task<HttpResponseMessage> SendAsync(this HttpClient httpClient, HttpRequest request, HttpMethod method, HttpContent body = null, CancellationToken cancellationToken = default)
 		{
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));

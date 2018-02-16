@@ -21,6 +21,6 @@ namespace HTTPlease.Security.Abstractions
 		/// <returns>
 		///		A <see cref="Task"/> representing the asynchronous operation.
 		/// </returns>
-		Task AddAuthenticationAsync(HttpRequestMessage requestMessage, CancellationToken cancellationToken = default(CancellationToken));
+		Task AddAuthenticationAsync(HttpRequestMessage requestMessage, CancellationToken cancellationToken = default);
 	}
 }

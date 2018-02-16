@@ -33,7 +33,7 @@ namespace HTTPlease
 		/// <returns>
 		///		An <see cref="HttpResponseMessage"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> PostAsync(this HttpClient httpClient, HttpRequest request, object postBody, string mediaType, CancellationToken cancellationToken = default(CancellationToken))
+		public static async Task<HttpResponseMessage> PostAsync(this HttpClient httpClient, HttpRequest request, object postBody, string mediaType, CancellationToken cancellationToken = default)
 		{
 			if (httpClient == null)
 				throw new ArgumentNullException(nameof(httpClient));
@@ -65,7 +65,7 @@ namespace HTTPlease
 		/// <returns>
 		///		A <see cref="Task{HttpResponseMessage}"/> representing the asynchronous request, whose result is the response message.
 		/// </returns>
-		public static Task<HttpResponseMessage> PostAsJsonAsync(this HttpClient httpClient, HttpRequest request, object postBody, CancellationToken cancellationToken = default(CancellationToken))
+		public static Task<HttpResponseMessage> PostAsJsonAsync(this HttpClient httpClient, HttpRequest request, object postBody, CancellationToken cancellationToken = default)
 		{
 			return httpClient.PostAsync(request, postBody, WellKnownMediaTypes.Json, cancellationToken);
 		}
@@ -91,7 +91,7 @@ namespace HTTPlease
 		/// <returns>
 		///		An <see cref="HttpResponseMessage"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> PutAsync(this HttpClient httpClient, HttpRequest request, object putBody, string mediaType, CancellationToken cancellationToken = default(CancellationToken))
+		public static async Task<HttpResponseMessage> PutAsync(this HttpClient httpClient, HttpRequest request, object putBody, string mediaType, CancellationToken cancellationToken = default)
 		{
 			if (httpClient == null)
 				throw new ArgumentNullException(nameof(httpClient));
@@ -123,7 +123,7 @@ namespace HTTPlease
 		/// <returns>
 		///		A <see cref="Task{HttpResponseMessage}"/> representing the asynchronous request, whose result is the response message.
 		/// </returns>
-		public static Task<HttpResponseMessage> PutAsJsonAsync(this HttpClient httpClient, HttpRequest request, object putBody, CancellationToken cancellationToken = default(CancellationToken))
+		public static Task<HttpResponseMessage> PutAsJsonAsync(this HttpClient httpClient, HttpRequest request, object putBody, CancellationToken cancellationToken = default)
 		{
 			return httpClient.PutAsync(request, putBody, WellKnownMediaTypes.Json, cancellationToken);
 		}
@@ -149,7 +149,7 @@ namespace HTTPlease
 		/// <returns>
 		///		An <see cref="HttpResponseMessage"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> PatchAsync(this HttpClient httpClient, HttpRequest request, object patchBody, string mediaType, CancellationToken cancellationToken = default(CancellationToken))
+		public static async Task<HttpResponseMessage> PatchAsync(this HttpClient httpClient, HttpRequest request, object patchBody, string mediaType, CancellationToken cancellationToken = default)
 		{
 			if (httpClient == null)
 				throw new ArgumentNullException(nameof(httpClient));
@@ -181,7 +181,7 @@ namespace HTTPlease
 		/// <returns>
 		///		A <see cref="Task{HttpResponseMessage}"/> representing the asynchronous request, whose result is the response message.
 		/// </returns>
-		public static Task<HttpResponseMessage> PatchAsJsonAsync(this HttpClient httpClient, HttpRequest request, object patchBody, CancellationToken cancellationToken = default(CancellationToken))
+		public static Task<HttpResponseMessage> PatchAsJsonAsync(this HttpClient httpClient, HttpRequest request, object patchBody, CancellationToken cancellationToken = default)
 		{
 			return httpClient.PatchAsync(request, patchBody, WellKnownMediaTypes.Json, cancellationToken);
 		}
@@ -207,7 +207,7 @@ namespace HTTPlease
 		/// <returns>
 		///		An <see cref="HttpResponseMessage"/> representing the response.
 		/// </returns>
-		public static async Task<HttpResponseMessage> DeleteAsync(this HttpClient httpClient, HttpRequest request, object deleteBody, string mediaType, CancellationToken cancellationToken = default(CancellationToken))
+		public static async Task<HttpResponseMessage> DeleteAsync(this HttpClient httpClient, HttpRequest request, object deleteBody, string mediaType, CancellationToken cancellationToken = default)
 		{
 			if (httpClient == null)
 				throw new ArgumentNullException(nameof(httpClient));
@@ -239,7 +239,7 @@ namespace HTTPlease
 		/// <returns>
 		///		An <see cref="HttpResponseMessage"/> representing the response.
 		/// </returns>
-		public static Task<HttpResponseMessage> DeleteAsJsonAsync(this HttpClient httpClient, HttpRequest request, object deleteBody, CancellationToken cancellationToken = default(CancellationToken))
+		public static Task<HttpResponseMessage> DeleteAsJsonAsync(this HttpClient httpClient, HttpRequest request, object deleteBody, CancellationToken cancellationToken = default)
 		{
 			return httpClient.DeleteAsync(request, deleteBody, WellKnownMediaTypes.Json, cancellationToken);
 		}
