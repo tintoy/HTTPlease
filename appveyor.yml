@@ -17,10 +17,31 @@ artifacts:
 - path: src\artifacts\packages\*.nupkg
 
 deploy:
-  provider: NuGet
-  on:
-    branch: master
-  api_key:
-    secure: ljl/r7XeQm+KBzR7pm1OOW4+YcDUsYiWlr9jWFztMh/8/orG4V9ylTi+P1jGME7g
-  skip_symbols: false
-  artifact: /.*\.nupkg$/
+  # Project feed
+  - provider: NuGet
+    server: https://ci.appveyor.com/nuget/httplease
+    api_key:
+      secure: JSudMjYtLSEPLJcy7s3AaKfHpy2PljVoFQ/GLydKb7s=
+    skip_symbols: false
+    artifact: /.*\.nupkg$/
+
+  # MyGet feed
+  - on:
+      branch: /(development|release|feature|master)(\/)?.*/
+    provider: NuGet
+    server: https://www.myget.org/F/httplease/api/v3/index.json
+    api_key:
+      secure: FIA0E1YzvgpRKQTPH+ky8bh2wYBcyHiO/XINMQl8KoXpqpGLTX95bslkR1mspq/I
+    skip_symbols: false
+    artifact: /.*\.nupkg$/
+
+  # Public feed
+  - on:
+      # Master branch, release branch, or tag-named branch (AppVeyor quirk when using annotated tags).
+      branch: /(master|release\/.*|v\d{1,3}\.\d{1,3}\.\d{1,3}.*)/
+      appveyor_repo_tag: true # Only if tagged
+    provider: NuGet
+    api_key:
+      secure: ljl/r7XeQm+KBzR7pm1OOW4+YcDUsYiWlr9jWFztMh/8/orG4V9ylTi+P1jGME7g
+    skip_symbols: false
+    artifact: /.*\.nupkg$/
