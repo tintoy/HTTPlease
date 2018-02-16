@@ -23,6 +23,5 @@
         <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     </PropertyGroup>
 
-    <Import Project="../VersionInfo.props" />
     <Import Project="../Signing.props" />
 </Project>
