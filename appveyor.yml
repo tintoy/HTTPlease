@@ -21,7 +21,7 @@ deploy:
   - on:
       branch: /(development|release|feature|master)(\/)?.*/
     provider: NuGet
-    server: https://www.myget.org/F/httplease/api/v3/index.json
+    server: https://www.myget.org/F/httplease/api/v2/package
     symbol_server: https://www.myget.org/F/httplease/symbols/api/v2/package
     api_key:
       secure: FIA0E1YzvgpRKQTPH+ky8bh2wYBcyHiO/XINMQl8KoXpqpGLTX95bslkR1mspq/I
