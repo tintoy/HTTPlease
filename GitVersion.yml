@@ -24,6 +24,16 @@ branches:
     tracks-release-branches: false
     is-release-branch: true
   
+  develop:
+    regex: develop
+    mode: ContinuousDeployment
+    tag: unstable
+    increment: Minor
+    prevent-increment-of-merged-branch-version: false
+    track-merge-target: true
+    tracks-release-branches: true
+    is-release-branch: false
+
   development:
     regex: development?[/-]
     mode: ContinuousDeployment
