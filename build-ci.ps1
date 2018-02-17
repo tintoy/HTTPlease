@@ -23,4 +23,4 @@ dotnet build /p:VersionPrefix="$versionPrefix" /p:VersionSuffix="$versionSuffix"
 Write-Host 'Packing...'
 
 $PackagesDir = "$PWD/src/artifacts/packages"
-dotnet pack /p:VersionPrefix="$versionPrefix" /p:VersionSuffix="$versionSuffix" /p:AssemblyInformationalVersion="$informationalVersion" -o $PackagesDir
+dotnet pack /p:VersionPrefix="$versionPrefix" /p:VersionSuffix="$versionSuffix" /p:AssemblyInformationalVersion="$informationalVersion" -o $PackagesDir --include-symbols
