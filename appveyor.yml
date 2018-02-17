@@ -1,7 +1,7 @@
 branches:
   only:
-  - development/v1.1
-  - release/v1.1
+  - develop
+  - release/v1.2
   - master
 
 image: Visual Studio 2017
@@ -19,7 +19,8 @@ artifacts:
 deploy:
   # MyGet feed
   - on:
-      branch: /(development|release|feature|master)(\/)?.*/
+      # Development branch, feature branch, release branch, or master branch.
+      branch: /(develop|development|feature|release|master)(\/)?.*/
     provider: NuGet
     server: https://www.myget.org/F/httplease/api/v2/package
     symbol_server: https://www.myget.org/F/httplease/symbols/api/v2/package
