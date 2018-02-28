@@ -261,9 +261,6 @@ namespace HTTPlease
             
             if (expectServerCertificate == null)
                 throw new ArgumentNullException(nameof(expectServerCertificate));
-            
-            if (!expectServerCertificate.HasPrivateKey)
-                throw new InvalidOperationException($"Cannot use certificate '{expectServerCertificate.Subject}' as a client certificate (no private key is not available for it).");
 
             return clientBuilder.ConfigureHttpClientHandler(clientHandler =>
 			{
