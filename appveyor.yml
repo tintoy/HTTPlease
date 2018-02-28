@@ -5,8 +5,7 @@ branches:
   - master
 
 image: Visual Studio 2017
-cache:
-- '%USERPROFILE%\.nuget\packages'
+
 build_script:
 - ps: .\build-ci.ps1
 
