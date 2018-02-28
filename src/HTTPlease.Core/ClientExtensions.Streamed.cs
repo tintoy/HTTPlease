@@ -34,6 +34,8 @@ namespace HTTPlease
         {
             using (HttpRequestMessage requestMessage = request.BuildRequestMessage(HttpMethod.Get, baseUri: httpClient.BaseAddress))
             {
+				requestMessage.MarkAsStreamed();
+
                 return await httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead);
             }
         }

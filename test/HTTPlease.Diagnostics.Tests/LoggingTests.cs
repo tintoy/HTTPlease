@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -8,10 +9,9 @@ using Xunit;
 
 namespace HTTPlease.Diagnostics.Tests
 {
-	using Testability;
+    using Formatters;
+    using Testability;
 	using Testability.Mocks;
-
-	using EventIds = Diagnostics.MessageHandlers.LoggerExtensions.LogEventIds;
 
 	/// <summary>
 	///		Tests for the HTTPlease.Diagnostics logging facility.
@@ -29,8 +29,10 @@ namespace HTTPlease.Diagnostics.Tests
 		///		Verify that BeginRequest / EndRequest log entries are emitted for a successful HTTP GET request.
 		/// </summary>
 		[Fact(DisplayName = "Emit BeginRequest / EndRequest log entries for successful HTTP GET")]
-		public async Task Get_Request_Emits_LogEntries()
+		public async Task Post_Request_Emits_LogEntries()
 		{
+			string expectedResponseBody = JsonConvert.ToString("hello test");
+			
 			var logEntries = new List<LogEntry>();
 
 			TestLogger logger = new TestLogger(LogLevel.Information);
@@ -39,44 +41,70 @@ namespace HTTPlease.Diagnostics.Tests
 			);
 
 			ClientBuilder clientBuilder = new ClientBuilder()
-				.WithLogging(logger);
+				.WithLogging(logger,
+					responseComponents: LogMessageComponents.Basic | LogMessageComponents.Body
+				);
 
 			HttpClient client = clientBuilder.CreateClient("http://localhost:1234", new MockMessageHandler(
-				request => request.CreateResponse(HttpStatusCode.OK)
+				request => request.CreateResponse(HttpStatusCode.OK,
+                    responseBody: expectedResponseBody,
+					mediaType: WellKnownMediaTypes.Json
+				)
 			));
 			using (client)
 			using (HttpResponseMessage response = await client.GetAsync("/test"))
 			{
 				response.EnsureSuccessStatusCode();
+
+				string responseBody = await response.Content.ReadAsStringAsync();
+				Assert.Equal(expectedResponseBody, responseBody);
 			}
 
-			Assert.Equal(2, logEntries.Count);
+			Assert.Equal(3, logEntries.Count);
 
-			LogEntry logEntry1 = logEntries[0];
-			Assert.Equal(EventIds.BeginRequest, logEntry1.EventId.Id);
+			LogEntry beginRequestEntry = logEntries[0];
+			Assert.Equal(LogEventIds.BeginRequest, beginRequestEntry.EventId);
 			Assert.Equal("Performing GET request to 'http://localhost:1234/test'.",
-				logEntry1.Message
+				beginRequestEntry.Message
 			);
 			Assert.Equal("GET",
-				logEntry1.Properties["Method"]
+				beginRequestEntry.Properties["Method"]
 			);
 			Assert.Equal(new Uri("http://localhost:1234/test"),
-				logEntry1.Properties["RequestUri"]
+				beginRequestEntry.Properties["RequestUri"]
 			);
 
-			LogEntry logEntry2 = logEntries[1];
-			Assert.Equal(EventIds.EndRequest, logEntry2.EventId.Id);
-			Assert.Equal("Completed GET request to 'http://localhost:1234/test' (OK).",
-				logEntry2.Message
+			LogEntry responseBodyEntry = logEntries[1];
+			Assert.Equal(LogEventIds.ResponseBody, responseBodyEntry.EventId);
+			Assert.Equal($"Receive body for GET request to 'http://localhost:1234/test' (OK):\n{expectedResponseBody}",
+				responseBodyEntry.Message
 			);
 			Assert.Equal("GET",
-				logEntry2.Properties["Method"]
+				responseBodyEntry.Properties["Method"]
 			);
 			Assert.Equal(new Uri("http://localhost:1234/test"),
-				logEntry2.Properties["RequestUri"]
+				responseBodyEntry.Properties["RequestUri"]
+			);
+			Assert.Equal(expectedResponseBody,
+				responseBodyEntry.Properties["Body"]
 			);
 			Assert.Equal(HttpStatusCode.OK,
-				logEntry2.Properties["StatusCode"]
+				responseBodyEntry.Properties["StatusCode"]
+			);
+
+			LogEntry endRequestEntry = logEntries[2];
+			Assert.Equal(LogEventIds.EndRequest, endRequestEntry.EventId);
+			Assert.Equal("Completed GET request to 'http://localhost:1234/test' (OK).",
+				endRequestEntry.Message
+			);
+			Assert.Equal("GET",
+				endRequestEntry.Properties["Method"]
+			);
+			Assert.Equal(new Uri("http://localhost:1234/test"),
+				endRequestEntry.Properties["RequestUri"]
+			);
+			Assert.Equal(HttpStatusCode.OK,
+				endRequestEntry.Properties["StatusCode"]
 			);
 		}
 
@@ -100,7 +128,7 @@ namespace HTTPlease.Diagnostics.Tests
 
 			Assert.Single(logEntries, logEntry =>
 			{
-				Assert.Equal(0, logEntry.EventId.Id);
+				Assert.Equal(new EventId(), logEntry.EventId);
 				Assert.Null(logEntry.EventId.Name);
 
 				Assert.Equal(expectedLogLevel, logEntry.Level);

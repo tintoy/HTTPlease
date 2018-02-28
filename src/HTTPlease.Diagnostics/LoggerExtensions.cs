@@ -2,35 +2,15 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 
-namespace HTTPlease.Diagnostics.MessageHandlers
+namespace HTTPlease.Diagnostics
 {
-	/// <summary>
-	///		Extension methods for <see cref="ILogger"/> used to log messages about requests and responses.
-	/// </summary>
-	public static class LoggerExtensions
+    /// <summary>
+    ///		Extension methods for <see cref="ILogger"/> used to log messages about requests and responses.
+    /// </summary>
+    public static class LoggerExtensions
 	{
-		/// <summary>
-		///		The Ids of well-known log events raised by HTTPlease diagnostics.
-		/// </summary>
-		public static class LogEventIds
-		{
-			/// <summary>
-			/// 	An outgoing HTTP request is being performed. 
-			/// </summary>
-			public static readonly int BeginRequest	= 100;
-			
-			/// <summary>
-			/// 	An incoming HTTP response has been received.
-			/// </summary>
-			public static readonly int EndRequest	= 101;
-			
-			/// <summary>
-			/// 	An exception occurred while performing an HTTP request.
-			/// </summary>
-			public static readonly int RequestError	= 102;
-		}
-
 		/// <summary>
 		/// 	Log an event representing the start of an HTTP request.
 		/// </summary>
@@ -54,6 +34,96 @@ namespace HTTPlease.Diagnostics.MessageHandlers
 			);
 		}
 
+		/// <summary>
+		/// 	Asynchronously log an event representing the body of an HTTP request.
+		/// </summary>
+		/// <param name="logger">
+		///		The logger used to log the event.
+		/// </param>
+		/// <param name="request">
+		///		An <see cref="HttpRequestMessage"/> representing the request.
+		/// </param>
+		/// <returns>
+		/// 	A <see cref="Task"/> representing the asynchronous operation.
+		/// </returns>
+		public static async Task RequestBody(this ILogger logger, HttpRequestMessage request)
+		{
+			if (logger == null)
+				throw new ArgumentNullException(nameof(logger));
+
+			if (request == null)
+				throw new ArgumentNullException(nameof(request));
+
+			if (request.Content == null)
+				return; // No body to log.
+
+			string requestBody = await request.Content.ReadAsStringAsync();
+
+			logger.LogDebug(LogEventIds.RequestBody, "Send body for {Method} request to '{RequestUri}':\n{RequestBody}",
+				request.Method?.Method,
+				request.RequestUri,
+				requestBody
+			);
+		}
+
+		/// <summary>
+		/// 	Asynchronously log an event representing the body of an HTTP response.
+		/// </summary>
+		/// <param name="logger">
+		///		The logger used to log the event.
+		/// </param>
+		/// <param name="response">
+		///		An <see cref="HttpResponseMessage"/> representing the response.
+		/// </param>
+		/// <returns>
+		/// 	A <see cref="Task"/> representing the asynchronous operation.
+		/// </returns>
+		public static async Task ResponseBody(this ILogger logger, HttpResponseMessage response)
+		{
+			if (logger == null)
+				throw new ArgumentNullException(nameof(logger));
+
+			if (response == null)
+				throw new ArgumentNullException(nameof(response));
+
+			if (response.RequestMessage == null)
+				throw new InvalidOperationException("HttpResponseMessage.RequestMessage is null."); // Can't examine original request so we don't know if the response is streamed.
+
+			if (response.Content == null)
+				throw new InvalidOperationException("HttpResponseMessage.Content is null.");
+
+			string responseBody = await response.Content.ReadAsStringAsync();
+
+			logger.LogDebug(LogEventIds.ResponseBody, "Receive body for {Method} request to '{RequestUri}' ({StatusCode}):\n{Body}",
+				response.RequestMessage.Method?.Method,
+				response.RequestMessage.RequestUri,
+				response.StatusCode,
+				responseBody
+			);
+		}
+
+		/// <summary>
+		/// 	Log an event representing the streamed body of an HTTP response.
+		/// </summary>
+		/// <param name="logger">
+		///		The logger used to log the event.
+		/// </param>
+		/// <param name="response">
+		///		An <see cref="HttpResponseMessage"/> representing the response.
+		/// </param>
+		public static void StreamedResponse(this ILogger logger, HttpResponseMessage response)
+		{
+			if (logger == null)
+				throw new ArgumentNullException(nameof(logger));
+
+			if (response == null)
+				throw new ArgumentNullException(nameof(response));
+
+			logger.LogDebug(LogEventIds.StreamedResponse, "Receive body for {Method} request to '{RequestUri}' (response is streamed so body cannot be logged).",
+				response.RequestMessage.Method?.Method,
+				response.RequestMessage.RequestUri
+			);
+		}
 		
 		/// <summary>
 		/// 	Log an event representing the completion of an HTTP request.
