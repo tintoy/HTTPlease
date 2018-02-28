@@ -1,4 +1,9 @@
 <Project>
+		<!-- Common project settings -->
+		<PropertyGroup>
+			<LangVersion>latest</LangVersion>
+		</PropertyGroup>
+	
     <!-- Common package properties -->
     <PropertyGroup>
         <!-- Test projects don't produce packages -->

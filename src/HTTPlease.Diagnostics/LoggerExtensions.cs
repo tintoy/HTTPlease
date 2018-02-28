@@ -48,7 +48,7 @@ namespace HTTPlease.Diagnostics.MessageHandlers
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
-			logger.LogDebug(LogEventIds.BeginRequest, "Performing {Method} request to '{RequestUri}.",
+			logger.LogDebug(LogEventIds.BeginRequest, "Performing {Method} request to '{RequestUri}'.",
 				request.Method?.Method,
 				request.RequestUri
 			);
@@ -75,7 +75,7 @@ namespace HTTPlease.Diagnostics.MessageHandlers
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
-			logger.LogDebug(LogEventIds.EndRequest, "Completed {Method} request to '{RequestUri} ({StatusCode}).",
+			logger.LogDebug(LogEventIds.EndRequest, "Completed {Method} request to '{RequestUri}' ({StatusCode}).",
 				request.Method?.Method,
 				request.RequestUri,
 				statusCode
