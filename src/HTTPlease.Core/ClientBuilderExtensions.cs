@@ -9,7 +9,7 @@ namespace HTTPlease
 	/// <summary>
 	///		General-purpose extensions for <see cref="ClientBuilder"/>.
 	/// </summary>
-	public static class clientBuilderExtensions
+	public static class ClientBuilderExtensions
 	{
 		/// <summary>
 		///		The <see cref="DelegatingHandler"/> CLR type.
