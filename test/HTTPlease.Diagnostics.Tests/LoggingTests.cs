@@ -76,7 +76,7 @@ namespace HTTPlease.Diagnostics.Tests
 
 			LogEntry responseBodyEntry = logEntries[1];
 			Assert.Equal(LogEventIds.ResponseBody, responseBodyEntry.EventId);
-			Assert.Equal($"Receive body for GET request to 'http://localhost:1234/test' (OK):\n{expectedResponseBody}",
+			Assert.Equal($"Receive response body for GET request to 'http://localhost:1234/test' (OK):\n{expectedResponseBody}",
 				responseBodyEntry.Message
 			);
 			Assert.Equal("GET",
