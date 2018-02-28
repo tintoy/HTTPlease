@@ -7,6 +7,7 @@
 
     <!-- Common package properties -->
     <PropertyGroup>
+				<IsPackable>true</IsPackable>
         <PackageIconUrl>https://tintoy.github.io/HTTPlease/_static/logo-nuget.png</PackageIconUrl>
         <PackageProjectUrl>https://tintoy.github.io/HTTPlease/</PackageProjectUrl>
         <PackageLicenseUrl>https://raw.githubusercontent.com/tintoy/HTTPlease/development/r1.0/LICENSE</PackageLicenseUrl>
