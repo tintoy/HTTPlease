@@ -1,5 +1,6 @@
-$testProjects = Get-ChildItem test/HTTPlease*.csproj -File -Recurse
+$testDir = Join-Path $PSScriptRoot 'test'
+$testProjects = Get-ChildItem $testDir -Recurse -File -Filter '*.Tests.csproj'
 
 ForEach ($testProject In $testProjects) {
-	dotnet test $testProject
+	dotnet test --no-build $testProject.FullName
 }
