@@ -8,16 +8,21 @@ namespace HTTPlease
 		/// <summary>
 		///		The prefix for HTTPlease property names.
 		/// </summary>
-		static string Prefix = "HTTPlease.";
+		static readonly string Prefix = "HTTPlease.";
 
 		/// <summary>
 		///		The <see cref="IHttpRequest"/> that created the message.
 		/// </summary>
-		public static string Request = Prefix + "Request";
+		public static readonly string Request = Prefix + "Request";
 
 		/// <summary>
 		///		The message's collection of content formatters.
 		/// </summary>
-		public static string ContentFormatters = Prefix + "ContentFormatters";
+		public static readonly string ContentFormatters = Prefix + "ContentFormatters";
+
+		/// <summary>
+		/// 	Is the request configured for a streamed response?
+		/// </summary>
+		public static readonly string IsStreamed = Prefix + "IsStreamed";
 	}
 }
