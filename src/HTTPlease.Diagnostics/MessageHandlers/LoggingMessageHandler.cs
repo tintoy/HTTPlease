@@ -71,7 +71,7 @@ namespace HTTPlease.Diagnostics.MessageHandlers
 
 			try
 			{
-				if (ShouldLogRequest(LogMessageComponents.Body))
+				if (ShouldLogRequest(LogMessageComponents.Body) && request.Content != null)
 					await Log.RequestBody(request);
 
 				HttpResponseMessage response = await base.SendAsync(request, cancellationToken);

@@ -55,7 +55,10 @@ namespace HTTPlease.Diagnostics
 				throw new ArgumentNullException(nameof(request));
 
 			if (request.Content == null)
-				return; // No body to log.
+				throw new InvalidOperationException("HttpRequestMessage.Content is null.");
+
+			if (!logger.IsEnabled(LogLevel.Debug))
+				return; // Don't bother capturing request body if we won't be able to log it.
 
 			string requestBody = await request.Content.ReadAsStringAsync();
 
@@ -91,6 +94,9 @@ namespace HTTPlease.Diagnostics
 
 			if (response.Content == null)
 				throw new InvalidOperationException("HttpResponseMessage.Content is null.");
+
+			if (!logger.IsEnabled(LogLevel.Debug))
+				return; // Don't bother capturing response body if we won't be able to log it.
 
 			string responseBody = await response.Content.ReadAsStringAsync();
 
