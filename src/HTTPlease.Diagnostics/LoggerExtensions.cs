@@ -11,21 +11,6 @@ namespace HTTPlease.Diagnostics.MessageHandlers
 	public static class LoggerExtensions
 	{
 		/// <summary>
-		///		Delegate used to write the <see cref="LogEventIds.BeginRequest"/> event to an <see cref="ILogger"/>.
-		/// </summary>
-		static readonly Action<ILogger, string, Uri, Exception> _beginRequest = LoggerMessage.Define<string, Uri>(LogLevel.Debug, LogEventIds.BeginRequest, "Performing {Method} request to '{RequestUri}.");
-
-		/// <summary>
-		///		Delegate used to write the <see cref="LogEventIds.EndRequest"/> event to an <see cref="ILogger"/>.
-		/// </summary>
-		static readonly Action<ILogger, string, Uri, HttpStatusCode, Exception> _endRequest = LoggerMessage.Define<string, Uri, HttpStatusCode>(LogLevel.Debug, LogEventIds.BeginRequest, "Completed {Method} request to '{RequestUri} ({StatusCode}).");
-	
-		/// <summary>
-		///		Delegate used to write the <see cref="LogEventIds.RequestError"/> event to an <see cref="ILogger"/>.
-		/// </summary>
-		static readonly Action<ILogger, string, Uri, string, Exception> _requestError = LoggerMessage.Define<string, Uri, string>(LogLevel.Error, LogEventIds.BeginRequest, "{Method} request to '{RequestUri} failed: {ErrorMessage}");
-
-		/// <summary>
 		///		The Ids of well-known log events raised by HTTPlease diagnostics.
 		/// </summary>
 		public static class LogEventIds
@@ -63,7 +48,10 @@ namespace HTTPlease.Diagnostics.MessageHandlers
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
-			_beginRequest(logger, request.Method?.Method, request.RequestUri, null);
+			logger.LogDebug(LogEventIds.BeginRequest, "Performing {Method} request to '{RequestUri}.",
+				request.Method?.Method,
+				request.RequestUri
+			);
 		}
 
 		
@@ -87,7 +75,11 @@ namespace HTTPlease.Diagnostics.MessageHandlers
 			if (request == null)
 				throw new ArgumentNullException(nameof(request));
 
-			_endRequest(logger, request.Method?.Method, request.RequestUri, statusCode, null);
+			logger.LogDebug(LogEventIds.EndRequest, "Completed {Method} request to '{RequestUri} ({StatusCode}).",
+				request.Method?.Method,
+				request.RequestUri,
+				statusCode
+			);
 		}
 
 		/// <summary>
@@ -113,7 +105,11 @@ namespace HTTPlease.Diagnostics.MessageHandlers
 			if (error == null)
 				throw new ArgumentNullException(nameof(error));
 
-			_requestError(logger, request.Method?.Method, request.RequestUri, error.Message, error);
+			logger.LogDebug(LogEventIds.RequestError, error, "{Method} request to '{RequestUri} failed: {ErrorMessage}",
+				request.Method?.Method,
+				request.RequestUri,
+				error.Message
+			);
 		}
 	}
 }
