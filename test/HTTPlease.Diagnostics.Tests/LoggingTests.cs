@@ -35,7 +35,7 @@ namespace HTTPlease.Diagnostics.Tests
 			
 			var logEntries = new List<LogEntry>();
 
-			TestLogger logger = new TestLogger(LogLevel.Information);
+			TestLogger logger = new TestLogger(LogLevel.Debug);
 			logger.LogEntries.Subscribe(
 				logEntry => logEntries.Add(logEntry)
 			);
