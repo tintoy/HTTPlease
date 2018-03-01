@@ -55,11 +55,14 @@ namespace HTTPlease.Diagnostics
 				throw new ArgumentNullException(nameof(request));
 
 			if (request.Content == null)
-				return; // No body to log.
+				throw new InvalidOperationException("HttpRequestMessage.Content is null.");
+
+			if (!logger.IsEnabled(LogLevel.Debug))
+				return; // Don't bother capturing request body if we won't be able to log it.
 
 			string requestBody = await request.Content.ReadAsStringAsync();
 
-			logger.LogDebug(LogEventIds.RequestBody, "Send body for {Method} request to '{RequestUri}':\n{RequestBody}",
+			logger.LogDebug(LogEventIds.RequestBody, "Send request body for {Method} request to '{RequestUri}':\n{RequestBody}",
 				request.Method?.Method,
 				request.RequestUri,
 				requestBody
@@ -92,9 +95,12 @@ namespace HTTPlease.Diagnostics
 			if (response.Content == null)
 				throw new InvalidOperationException("HttpResponseMessage.Content is null.");
 
+			if (!logger.IsEnabled(LogLevel.Debug))
+				return; // Don't bother capturing response body if we won't be able to log it.
+
 			string responseBody = await response.Content.ReadAsStringAsync();
 
-			logger.LogDebug(LogEventIds.ResponseBody, "Receive body for {Method} request to '{RequestUri}' ({StatusCode}):\n{Body}",
+			logger.LogDebug(LogEventIds.ResponseBody, "Receive response body for {Method} request to '{RequestUri}' ({StatusCode}):\n{Body}",
 				response.RequestMessage.Method?.Method,
 				response.RequestMessage.RequestUri,
 				response.StatusCode,
@@ -119,7 +125,7 @@ namespace HTTPlease.Diagnostics
 			if (response == null)
 				throw new ArgumentNullException(nameof(response));
 
-			logger.LogDebug(LogEventIds.StreamedResponse, "Receive body for {Method} request to '{RequestUri}' (response is streamed so body cannot be logged).",
+			logger.LogDebug(LogEventIds.StreamedResponse, "Receive response body for {Method} request to '{RequestUri}' (response is streamed so body cannot be logged).",
 				response.RequestMessage.Method?.Method,
 				response.RequestMessage.RequestUri
 			);
