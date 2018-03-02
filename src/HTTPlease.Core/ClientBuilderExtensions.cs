@@ -290,5 +290,31 @@ namespace HTTPlease
 				};
 			});
 		}
+
+		/// <summary>
+        ///		Create a copy of the <see cref="ClientBuilder"/>, but with verification of the server's SSL certificate disabled (useful when the server has a self-signed certificate).
+        /// </summary>
+		/// <param name="clientBuilder">
+		///		The HTTP client builder.
+		/// </param>
+		/// <returns>
+		/// 	The configured <see cref="ClientBuilder"/>.
+		/// </returns>
+		/// <remarks>
+		/// 	Will accept any certificate.
+		/// </remarks>
+		public static ClientBuilder AcceptAnyServerCertificate(this ClientBuilder clientBuilder)
+		{
+			if (clientBuilder == null)
+                throw new ArgumentNullException(nameof(clientBuilder));
+            
+            return clientBuilder.ConfigureHttpClientHandler(clientHandler =>
+			{
+				clientHandler.ServerCertificateCustomValidationCallback = (request, certificate, chain, sslPolicyErrors) =>
+				{
+					return true; // Verification disabled.
+				};
+			});
+		}
 	}
 }
