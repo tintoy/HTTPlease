@@ -21,7 +21,7 @@ namespace HTTPlease.Testability
 		/// </returns>
 		public static HttpClient RespondWithOk()
 		{
-			return RespondWith(HttpStatusCode.OK);
+			return TestHandlers.RespondWith(HttpStatusCode.OK).CreateClient();
 		}
 
 		/// <summary>
@@ -32,7 +32,7 @@ namespace HTTPlease.Testability
 		/// </returns>
 		public static HttpClient RespondWithBadRequest()
 		{
-			return RespondWith(HttpStatusCode.BadRequest);
+			return TestHandlers.RespondWith(HttpStatusCode.BadRequest).CreateClient();
 		}
 
 		/// <summary>
@@ -52,9 +52,11 @@ namespace HTTPlease.Testability
 			if (String.IsNullOrWhiteSpace(responseMediaType))
 				throw new ArgumentException("Must specify a valid media type.", nameof(responseMediaType));
 
-			return RespondWith(
-				request => request.CreateResponse(HttpStatusCode.BadRequest, responseBody, responseMediaType)
-			);
+			return
+				TestHandlers.RespondWith(
+					request => request.CreateResponse(HttpStatusCode.BadRequest, responseBody, responseMediaType)
+				)
+				.CreateClient();
 		}
 
 		/// <summary>
@@ -68,9 +70,11 @@ namespace HTTPlease.Testability
 		/// </returns>
 		public static HttpClient RespondWith(HttpStatusCode statusCode)
 		{
-			return RespondWith(
-				request => request.CreateResponse(statusCode)
-			);
+			return
+				TestHandlers.RespondWith(
+					request => request.CreateResponse(statusCode)
+				)
+				.CreateClient();
 		}
 
 		/// <summary>
@@ -87,9 +91,7 @@ namespace HTTPlease.Testability
 			if (handler == null)
 				throw new ArgumentNullException(nameof(handler));
 
-			return new HttpClient(
-				new MockMessageHandler(handler)
-			);
+			return TestHandlers.RespondWith(handler).CreateClient();
 		}
 
 		/// <summary>
@@ -106,9 +108,7 @@ namespace HTTPlease.Testability
 			if (handler == null)
 				throw new ArgumentNullException(nameof(handler));
 
-			return new HttpClient(
-				new MockMessageHandler(handler)
-			);
+			return TestHandlers.AsyncRespondWith(handler).CreateClient();
 		}
 
 		/// <summary>
@@ -122,7 +122,7 @@ namespace HTTPlease.Testability
 		/// </returns>
 		public static HttpClient ExpectGet(Uri expectedRequestUri)
 		{
-			return ExpectGet(expectedRequestUri, HttpStatusCode.OK, assertion: null);
+			return TestHandlers.ExpectGet(expectedRequestUri, HttpStatusCode.OK, assertion: null).CreateClient();
 		}
 
 		/// <summary>
@@ -139,7 +139,7 @@ namespace HTTPlease.Testability
 		/// </returns>
 		public static HttpClient ExpectGet(Uri expectedRequestUri, Action<HttpRequestMessage> assertion)
 		{
-			return ExpectGet(expectedRequestUri, HttpStatusCode.OK, assertion);
+			return TestHandlers.ExpectGet(expectedRequestUri, HttpStatusCode.OK, assertion).CreateClient();
 		}
 
 		/// <summary>
@@ -159,7 +159,7 @@ namespace HTTPlease.Testability
 		/// </returns>
 		public static HttpClient ExpectGet(Uri expectedRequestUri, HttpStatusCode responseStatusCode, Action<HttpRequestMessage> assertion)
 		{
-			return Expect(expectedRequestUri, HttpMethod.Get, responseStatusCode, assertion);
+			return TestHandlers.Expect(expectedRequestUri, HttpMethod.Get, responseStatusCode, assertion).CreateClient();
 		}
 
 		/// <summary>
@@ -173,7 +173,7 @@ namespace HTTPlease.Testability
 		/// </returns>
 		public static HttpClient ExpectPost(Uri expectedRequestUri)
 		{
-			return ExpectPost(expectedRequestUri, HttpStatusCode.OK, assertion: null);
+			return TestHandlers.ExpectPost(expectedRequestUri, HttpStatusCode.OK, assertion: null).CreateClient();
 		}
 
 		/// <summary>
@@ -190,7 +190,7 @@ namespace HTTPlease.Testability
 		/// </returns>
 		public static HttpClient ExpectPost(Uri expectedRequestUri, Action<HttpRequestMessage> assertion)
 		{
-			return ExpectPost(expectedRequestUri, HttpStatusCode.OK, assertion);
+			return TestHandlers.ExpectPost(expectedRequestUri, HttpStatusCode.OK, assertion).CreateClient();
 		}
 
 		/// <summary>
@@ -210,7 +210,7 @@ namespace HTTPlease.Testability
 		/// </returns>
 		public static HttpClient ExpectPost(Uri expectedRequestUri, HttpStatusCode responseStatusCode, Action<HttpRequestMessage> assertion)
 		{
-			return Expect(expectedRequestUri, HttpMethod.Post, responseStatusCode, assertion);
+			return TestHandlers.Expect(expectedRequestUri, HttpMethod.Post, responseStatusCode, assertion).CreateClient();
 		}
 
 		/// <summary>
@@ -224,7 +224,7 @@ namespace HTTPlease.Testability
 		/// </returns>
 		public static HttpClient ExpectPut(Uri expectedRequestUri)
 		{
-			return ExpectPut(expectedRequestUri, HttpStatusCode.OK, assertion: null);
+			return TestHandlers.ExpectPut(expectedRequestUri, HttpStatusCode.OK, assertion: null).CreateClient();
 		}
 
 		/// <summary>
@@ -241,7 +241,7 @@ namespace HTTPlease.Testability
 		/// </returns>
 		public static HttpClient ExpectPut(Uri expectedRequestUri, Action<HttpRequestMessage> assertion)
 		{
-			return ExpectPut(expectedRequestUri, HttpStatusCode.OK, assertion);
+			return TestHandlers.ExpectPut(expectedRequestUri, HttpStatusCode.OK, assertion).CreateClient();
 		}
 
 		/// <summary>
@@ -261,7 +261,7 @@ namespace HTTPlease.Testability
 		/// </returns>
 		public static HttpClient ExpectPut(Uri expectedRequestUri, HttpStatusCode responseStatusCode, Action<HttpRequestMessage> assertion)
 		{
-			return Expect(expectedRequestUri, HttpMethod.Put, responseStatusCode, assertion);
+			return TestHandlers.Expect(expectedRequestUri, HttpMethod.Put, responseStatusCode, assertion).CreateClient();
 		}
 
 		/// <summary>
@@ -275,7 +275,7 @@ namespace HTTPlease.Testability
 		/// </returns>
 		public static HttpClient ExpectDelete(Uri expectedRequestUri)
 		{
-			return ExpectDelete(expectedRequestUri, HttpStatusCode.OK, assertion: null);
+			return TestHandlers.ExpectDelete(expectedRequestUri, HttpStatusCode.OK, assertion: null).CreateClient();
 		}
 
 		/// <summary>
@@ -292,7 +292,7 @@ namespace HTTPlease.Testability
 		/// </returns>
 		public static HttpClient ExpectDelete(Uri expectedRequestUri, Action<HttpRequestMessage> assertion)
 		{
-			return ExpectDelete(expectedRequestUri, HttpStatusCode.OK, assertion);
+			return TestHandlers.ExpectDelete(expectedRequestUri, HttpStatusCode.OK, assertion).CreateClient();
 		}
 
 		/// <summary>
@@ -312,7 +312,7 @@ namespace HTTPlease.Testability
 		/// </returns>
 		public static HttpClient ExpectDelete(Uri expectedRequestUri, HttpStatusCode responseStatusCode, Action<HttpRequestMessage> assertion)
 		{
-			return Expect(expectedRequestUri, HttpMethod.Delete, responseStatusCode, assertion);
+			return TestHandlers.Expect(expectedRequestUri, HttpMethod.Delete, responseStatusCode, assertion).CreateClient();
 		}
 
 		/// <summary>
@@ -326,7 +326,7 @@ namespace HTTPlease.Testability
 		/// </returns>
 		public static HttpClient Expect(Action<HttpRequestMessage> assertion)
 		{
-			return Expect(HttpStatusCode.OK, assertion);
+			return TestHandlers.Expect(HttpStatusCode.OK, assertion).CreateClient();
 		}
 
 		/// <summary>
@@ -343,14 +343,16 @@ namespace HTTPlease.Testability
 		/// </returns>
 		public static HttpClient Expect(HttpStatusCode responseStatusCode, Action<HttpRequestMessage> assertion)
 		{
-			return RespondWith(requestMessage =>
-			{
-				Assert.NotNull(requestMessage);
+			return
+				TestHandlers.RespondWith(requestMessage =>
+				{
+					Assert.NotNull(requestMessage);
 
-				assertion?.Invoke(requestMessage);
+					assertion?.Invoke(requestMessage);
 
-				return requestMessage.CreateResponse(responseStatusCode);
-			});
+					return requestMessage.CreateResponse(responseStatusCode);
+				})
+				.CreateClient();
 		}
 
 		/// <summary>
@@ -379,13 +381,15 @@ namespace HTTPlease.Testability
 			if (expectedRequestMethod == null)
 				throw new ArgumentNullException(nameof(expectedRequestMethod));
 
-			return Expect(responseStatusCode, requestMessage =>
-			{
-				Assert.Equal(expectedRequestMethod, requestMessage.Method);
-				Assert.Equal(expectedRequestUri, requestMessage.RequestUri);
+			return
+				TestHandlers.Expect(responseStatusCode, requestMessage =>
+				{
+					Assert.Equal(expectedRequestMethod, requestMessage.Method);
+					Assert.Equal(expectedRequestUri, requestMessage.RequestUri);
 
-				assertion?.Invoke(requestMessage);
-			});
+					assertion?.Invoke(requestMessage);
+				})
+				.CreateClient();
 		}
 	}
 }
