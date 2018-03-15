@@ -66,6 +66,14 @@ namespace HTTPlease.Testability.Mocks
 
 			return await _handlerImplementation(request);
 		}
+
+		/// <summary>
+		/// 	Create an <see cref="HttpClient"/> that wraps the <see cref="MockMessageHandler"/>.
+		/// </summary>
+		/// <returns>
+		/// 	The new <see cref="HttpClient"/>
+		/// </returns>
+		public HttpClient CreateClient() => new HttpClient(this);
 		
 		/// <summary>
 		/// 	Create an instance of the default mock message handler (responds to any request with <see cref="HttpStatusCode.OK"/>).
