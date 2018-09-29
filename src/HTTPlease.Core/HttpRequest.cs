@@ -149,7 +149,6 @@ namespace HTTPlease
 			if (requestUri == null)
 				throw new InvalidOperationException("Cannot build a request message; the request does not have a URI.");
 
-			System.Diagnostics.Debug.WriteLine(requestUri.ToString(), "RURI");
 			if (!requestUri.IsAbsoluteUri)
 			{
 				if (baseUri == null)
