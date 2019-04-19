@@ -4,50 +4,50 @@ using System.Net.Http;
 
 namespace HTTPlease.TestHarness
 {
-	/// <summary>
-	/// Quick-and-dirty test harness for use when Visual Studio refuses to debug unit tests.
-	/// </summary>
-	static class Program
-	{
-		static void Main()
-		{
-			Trace.Listeners.Add(
-				new TextWriterTraceListener(Console.Out)
-			);
+    /// <summary>
+    /// Quick-and-dirty test harness for use when Visual Studio refuses to debug unit tests.
+    /// </summary>
+    static class Program
+    {
+        static void Main()
+        {
+            Trace.Listeners.Add(
+                new TextWriterTraceListener(Console.Out)
+            );
 
-			try
-			{
-				string value1 = String.Empty;
-				string value2 = String.Empty;
+            try
+            {
+                string value1 = String.Empty;
+                string value2 = String.Empty;
 
-				HttpRequest request =
-					HttpRequest.Factory.Create("http://localhost:1234/foo/bar")
-						.WithQueryParameter("flag", () => value1)
-						.WithQueryParameter("flag", () => value2);
+                HttpRequest request =
+                    HttpRequest.Factory.Create("http://localhost:1234/foo/bar")
+                        .WithQueryParameter("flag", () => value1)
+                        .WithQueryParameter("flag", () => value2);
 
-				using (HttpRequestMessage requestMessage = request.BuildRequestMessage(HttpMethod.Get))
-				{
-					Debug.WriteLine("URI = '{0}'", requestMessage.RequestUri);
-				}
+                using (HttpRequestMessage requestMessage = request.BuildRequestMessage(HttpMethod.Get))
+                {
+                    Debug.WriteLine("URI = '{0}'", requestMessage.RequestUri);
+                }
 
-				value1 = null;
+                value1 = null;
 
-				using (HttpRequestMessage requestMessage = request.BuildRequestMessage(HttpMethod.Get))
-				{
-					Debug.WriteLine("URI = '{0}'", requestMessage.RequestUri);
-				}
+                using (HttpRequestMessage requestMessage = request.BuildRequestMessage(HttpMethod.Get))
+                {
+                    Debug.WriteLine("URI = '{0}'", requestMessage.RequestUri);
+                }
 
-				value2 = null;
+                value2 = null;
 
-				using (HttpRequestMessage requestMessage = request.BuildRequestMessage(HttpMethod.Get))
-				{
-					Debug.WriteLine("URI = '{0}'", requestMessage.RequestUri);
-				}
-			}
-			catch (Exception unexpectedError)
-			{
-				Console.WriteLine(unexpectedError);
-			}
-		}
-	}
+                using (HttpRequestMessage requestMessage = request.BuildRequestMessage(HttpMethod.Get))
+                {
+                    Debug.WriteLine("URI = '{0}'", requestMessage.RequestUri);
+                }
+            }
+            catch (Exception unexpectedError)
+            {
+                Console.WriteLine(unexpectedError);
+            }
+        }
+    }
 }

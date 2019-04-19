@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace HTTPlease
 {
-	using Core;
+    using Core;
 
-	/// <summary>
-	///		Invocation-related extension methods for <see cref="HttpClient"/>s that use an <see cref="HttpRequest"/>.
-	/// </summary>
-	public static partial class ClientExtensions
+    /// <summary>
+    ///    Invocation-related extension methods for <see cref="HttpClient"/>s that use an <see cref="HttpRequest"/>.
+    /// </summary>
+    public static partial class ClientExtensions
     {
-		#region Invoke (streamed)
+        #region Invoke (streamed)
 
-		/// <summary>
+        /// <summary>
         ///     Asynchronously execute a request as a streamed HTTP GET.
         /// </summary>
         /// <param name="httpClient">
@@ -34,12 +34,12 @@ namespace HTTPlease
         {
             using (HttpRequestMessage requestMessage = request.BuildRequestMessage(HttpMethod.Get, baseUri: httpClient.BaseAddress))
             {
-				requestMessage.MarkAsStreamed();
+                requestMessage.MarkAsStreamed();
 
                 return await httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead);
             }
         }
 
-		#endregion // Invoke (streamed)
-	}
+        #endregion // Invoke (streamed)
+    }
 }
