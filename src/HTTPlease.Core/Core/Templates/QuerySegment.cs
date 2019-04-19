@@ -30,12 +30,25 @@ namespace HTTPlease.Core.Templates
         /// <summary>
         ///    The name of the query parameter that the segment represents.
         /// </summary>
-        public string QueryParameterName
+        public string Name
         {
             get
             {
                 return _queryParameterName;
             }
+        }
+
+        /// <summary>
+        /// Escape the specified text according to the template segment type's escaping rules.
+        /// </summary>
+        /// <param name="text">The text to escape.</param>
+        /// <returns>The escaped text.</returns>
+        protected override string Escape(string text)
+        {
+            if (text == null)
+                return text;
+
+            return Uri.EscapeDataString(text);
         }
     }
 }

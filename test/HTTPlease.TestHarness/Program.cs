@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net.Http;
 
 namespace HTTPlease.TestHarness
 {
@@ -20,32 +20,22 @@ namespace HTTPlease.TestHarness
 
             try
             {
-                string value1 = String.Empty;
-                string value2 = String.Empty;
+                UriTemplate template = new UriTemplate(
+                    "api/{controller}/{action}/{id?}/properties?propertyIds={propertyGroupIds}&diddly={dee?}&foo=bar"
+                );
 
-                HttpRequest request =
-                    HttpRequest.Factory.Create("http://localhost:1234/foo/bar")
-                        .WithQueryParameter("flag", () => value1)
-                        .WithQueryParameter("flag", () => value2);
+                Uri generatedUri = template.Populate(
+                    baseUri: new Uri("http://test-host/"),
+                    templateParameters: new Dictionary<string, string>
+                    {
+                        ["controller"] = "organizations",
+                        ["action"] = "distinct",
+                        ["dee"] = "hello",
+                        ["propertyGroupIds"] = "System.OrganizationCommercial;EnterpriseMobility.OrganizationAirwatch"
+                    }
+                );
 
-                using (HttpRequestMessage requestMessage = request.BuildRequestMessage(HttpMethod.Get))
-                {
-                    Debug.WriteLine("URI = '{0}'", requestMessage.RequestUri);
-                }
-
-                value1 = null;
-
-                using (HttpRequestMessage requestMessage = request.BuildRequestMessage(HttpMethod.Get))
-                {
-                    Debug.WriteLine("URI = '{0}'", requestMessage.RequestUri);
-                }
-
-                value2 = null;
-
-                using (HttpRequestMessage requestMessage = request.BuildRequestMessage(HttpMethod.Get))
-                {
-                    Debug.WriteLine("URI = '{0}'", requestMessage.RequestUri);
-                }
+                Debug.WriteLine(generatedUri.AbsoluteUri);
             }
             catch (Exception unexpectedError)
             {

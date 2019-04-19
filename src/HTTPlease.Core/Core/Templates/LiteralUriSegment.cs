@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace HTTPlease.Core.Templates
 {
@@ -43,20 +44,28 @@ namespace HTTPlease.Core.Templates
         }
 
         /// <summary>
-        ///    Get the value of the segment (if any).
+        /// Render the template segment as text.
         /// </summary>
-        /// <param name="evaluationContext">
-        ///    The current template evaluation context.
-        /// </param>
-        /// <returns>
-        ///    The segment value, or <c>null</c> if the segment is missing.
-        /// </returns>
-        public override string GetValue(ITemplateEvaluationContext evaluationContext)
+        /// <param name="output">The <see cref="StringBuilder"/> to which the rendered text will be appended.</param>
+        /// <param name="evaluationContext">The template evaluation context.</param>
+        /// <returns><c>true</c>, if the segment produced any output; otherwise, <c>false</c>.</returns>
+        public override bool Render(StringBuilder output, ITemplateEvaluationContext evaluationContext)
         {
+            if (output == null)
+                throw new ArgumentNullException(nameof(output));
+            
             if (evaluationContext == null)
                 throw new ArgumentNullException(nameof(evaluationContext));
+            
+            if (_value == null)
+                return false;
+            
+            output.Append(_value);
 
-            return _value;
+            if (IsDirectory)
+                output.Append('/');
+
+            return true;
         }
     }
 }

@@ -91,17 +91,17 @@ namespace HTTPlease.Tests
             Assert.Equal("properties", propertiesSegment.Value);
 
             ParameterizedQuerySegment propertyIdsSegment = Assert.IsAssignableFrom<ParameterizedQuerySegment>(segments[6]);
-            Assert.Equal("propertyIds", propertyIdsSegment.QueryParameterName);
+            Assert.Equal("propertyIds", propertyIdsSegment.Name);
             Assert.Equal("propertyGroupIds", propertyIdsSegment.TemplateParameterName);
             Assert.False(propertyIdsSegment.IsOptional);
 
             ParameterizedQuerySegment diddlySegment = Assert.IsAssignableFrom<ParameterizedQuerySegment>(segments[7]);
-            Assert.Equal("diddly", diddlySegment.QueryParameterName);
+            Assert.Equal("diddly", diddlySegment.Name);
             Assert.Equal("dee", diddlySegment.TemplateParameterName);
             Assert.True(diddlySegment.IsOptional);
 
             LiteralQuerySegment fooSegment = Assert.IsAssignableFrom<LiteralQuerySegment>(segments[8]);
-            Assert.Equal("foo", fooSegment.QueryParameterName);
+            Assert.Equal("foo", fooSegment.Name);
             Assert.Equal("bar", fooSegment.QueryParameterValue);
         }
 

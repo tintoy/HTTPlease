@@ -1,4 +1,6 @@
-﻿namespace HTTPlease.Core.Templates
+﻿using System;
+
+namespace HTTPlease.Core.Templates
 {
     /// <summary>
     ///    The base class for URI template segments that represent segments of the URI.
@@ -31,6 +33,19 @@
             {
                 return _isDirectory;
             }
+        }
+
+        /// <summary>
+        /// Escape the specified text according to the template segment type's escaping rules.
+        /// </summary>
+        /// <param name="text">The text to escape.</param>
+        /// <returns>The escaped text.</returns>
+        protected override string Escape(string text)
+        {
+            if (text == null)
+                return text;
+
+            return Uri.EscapeUriString(text);
         }
     }
 }

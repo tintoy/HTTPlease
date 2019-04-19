@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace HTTPlease.Core.Templates
@@ -31,15 +32,19 @@ namespace HTTPlease.Core.Templates
         public virtual bool IsParameterized => true;
 
         /// <summary>
-        ///    Get the value of the segment (if any).
+        /// Render the template segment as text.
         /// </summary>
-        /// <param name="evaluationContext">
-        ///    The current template evaluation context.
-        /// </param>
-        /// <returns>
-        ///    The segment value, or <c>null</c> if the segment has no value.
-        /// </returns>
-        public abstract string GetValue(ITemplateEvaluationContext evaluationContext);
+        /// <param name="output">The <see cref="StringBuilder"/> to which the rendered text will be appended.</param>
+        /// <param name="evaluationContext">The template evaluation context.</param>
+        /// <returns><c>true</c>, if the segment produced any output; otherwise, <c>false</c>.</returns>
+        public abstract bool Render(StringBuilder output, ITemplateEvaluationContext evaluationContext);
+
+        /// <summary>
+        /// Escape the specified text according to the template segment type's escaping rules.
+        /// </summary>
+        /// <param name="text">The text to escape.</param>
+        /// <returns>The escaped text.</returns>
+        protected virtual string Escape(string text) => text;
 
         /// <summary>
         ///    Parse the specified URI into template segments.

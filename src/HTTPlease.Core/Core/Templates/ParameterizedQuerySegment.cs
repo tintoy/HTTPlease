@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace HTTPlease.Core.Templates
 {
@@ -74,20 +75,34 @@ namespace HTTPlease.Core.Templates
         public override bool IsParameterized => true;
 
         /// <summary>
-        ///    Get the value of the segment (if any).
+        /// Render the template segment as text.
         /// </summary>
-        /// <param name="evaluationContext">
-        ///    The current template evaluation context.
-        /// </param>
-        /// <returns>
-        ///    The segment value, or <c>null</c> if the segment has no value.
-        /// </returns>
-        public override string GetValue(ITemplateEvaluationContext evaluationContext)
+        /// <param name="output">The <see cref="StringBuilder"/> to which the rendered text will be appended.</param>
+        /// <param name="evaluationContext">The template evaluation context.</param>
+        /// <returns><c>true</c>, if the segment produced any output; otherwise, <c>false</c>.</returns>
+        public override bool Render(StringBuilder output, ITemplateEvaluationContext evaluationContext)
         {
+            if (output == null)
+                throw new ArgumentNullException(nameof(output));
+            
             if (evaluationContext == null)
                 throw new ArgumentNullException(nameof(evaluationContext));
+            
+            string parameterValue = evaluationContext[_templateParameterName, _isOptional];
+            if (parameterValue == null)
+                return false;
 
-            return evaluationContext[_templateParameterName, _isOptional];
+            output.Append(Name);
+
+            if (parameterValue != String.Empty)
+            {
+                output.Append('=');
+                output.Append(
+                    Escape(parameterValue)
+                );
+            }
+
+            return true;
         }
     }
 }

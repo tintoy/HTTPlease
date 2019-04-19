@@ -94,43 +94,36 @@ namespace HTTPlease
             if (_uriSegments.Count > 0)
             {
                 foreach (UriSegment uriSegment in _uriSegments)
-                {
-                    string segmentValue = uriSegment.GetValue(evaluationContext);
-                    if (segmentValue == null)
-                        continue;
-
-                    uriBuilder.Append(
-                        Uri.EscapeUriString(segmentValue)
-                    );
-                    if (uriSegment.IsDirectory)
-                        uriBuilder.Append('/');
-                }
+                    uriSegment.Render(uriBuilder, evaluationContext);
             }
             else
                 uriBuilder.Append('/');
 
-            bool isFirstParameterWithValue = true;
-            foreach (QuerySegment segment in _querySegments)
+            if (_querySegments.Count > 0)
             {
-                string queryParameterValue = segment.GetValue(evaluationContext);
-                if (queryParameterValue == null)
-                    continue;
+                int queryStartIndex = uriBuilder.Length;
 
-                // Different prefix for first parameter that has a value.
-                if (isFirstParameterWithValue)
+                bool renderedAny = false;
+                foreach (QuerySegment querySegment in _querySegments)
                 {
-                    uriBuilder.Append('?');
+                    int parameterStartIndex = uriBuilder.Length;
 
-                    isFirstParameterWithValue = false;
+                    bool rendered = querySegment.Render(uriBuilder, evaluationContext);
+                    if (rendered && renderedAny)
+                    {
+                        // Insert the leading '&' for this query parameter.
+                        uriBuilder.Insert(parameterStartIndex, '&');
+                    }
+                    else
+                        renderedAny |= rendered;
+
                 }
-                else
-                    uriBuilder.Append('&');
 
-                uriBuilder.AppendFormat(
-                    "{0}={1}",
-                    Uri.EscapeDataString(segment.QueryParameterName),
-                    Uri.EscapeDataString(queryParameterValue)
-                );
+                if (renderedAny)
+                {
+                    // Insert the leading '?'.
+                    uriBuilder.Insert(queryStartIndex, '?');
+                }
             }
 
             return new Uri(uriBuilder.ToString(), UriKind.RelativeOrAbsolute);
