@@ -28,7 +28,7 @@ Some basic guidelines:
 
   * Please don't use auto-generated comments - all this does is make it harder to know what members actually have meaningful comments.
   * If you really object to adding doc comments, make a note in the pull request and we'll try to add them for you
-* Tabs, not spaces
+* Spaces, not tabs
 * Please don't use the ``var`` keyword unless:
 
   * There is a type on the right-hand side of the expression (e.g. ``new Foo()``)
