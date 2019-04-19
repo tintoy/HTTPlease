@@ -22,16 +22,6 @@ namespace HTTPlease.Tests.BuildMessage
         /// </summary>
         static readonly HttpRequest RelativeRequest = HttpRequest.Create("foo/bar");
 
-        public UntypedRequest(ITestOutputHelper testOutput)
-        {
-            if (testOutput == null)
-                throw new ArgumentNullException(nameof(testOutput));
-
-            TestOutput = testOutput;
-        }
-
-        ITestOutputHelper TestOutput { get; }
-
         /// <summary>
         ///    An <see cref="HttpRequest"/> throws <see cref="InvalidOperationException"/>.
         /// </summary>

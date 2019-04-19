@@ -9,6 +9,9 @@ namespace HTTPlease.TestHarness
     /// </summary>
     static class Program
     {
+        /// <summary>
+        /// The main program entry-point.
+        /// </summary>
         static void Main()
         {
             Trace.Listeners.Add(
