@@ -5,6 +5,7 @@ using Xunit;
 namespace HTTPlease.Tests.BuildMessage
 {
 	using Testability;
+	using Xunit.Abstractions;
 
 	/// <summary>
 	///		Message-building tests for <see cref="HttpRequest"/> (<see cref="HttpRequest.BuildRequestMessage"/>).
@@ -20,6 +21,16 @@ namespace HTTPlease.Tests.BuildMessage
 		///		A request with a relative URI.
 		/// </summary>
 		static readonly HttpRequest RelativeRequest = HttpRequest.Create("foo/bar");
+
+		public UntypedRequest(ITestOutputHelper testOutput)
+		{
+			if (testOutput == null)
+				throw new ArgumentNullException(nameof(testOutput));
+
+			TestOutput = testOutput;
+		}
+
+		ITestOutputHelper TestOutput { get; }
 
 		/// <summary>
 		///		An <see cref="HttpRequest"/> throws <see cref="InvalidOperationException"/>.
@@ -133,13 +144,13 @@ namespace HTTPlease.Tests.BuildMessage
 		public void AbsoluteUri_Template_Query()
 		{
 			HttpRequest request =
-				HttpRequest.Factory.Create("http://localhost:1234/{action}/{id}?flag={flag}")
+				HttpRequest.Factory.Create("http://localhost:1234/{action}/{id}?value={value}")
 					.WithTemplateParameter("action", "foo")
 					.WithTemplateParameter("id", "bar")
-					.WithTemplateParameter("flag", true);
+					.WithTemplateParameter("value", true);
 
 			RequestAssert.MessageHasUri(request,
-				expectedUri: "http://localhost:1234/foo/bar?flag=True"
+				expectedUri: "http://localhost:1234/foo/bar?value=True"
 			);
 		}
 
@@ -151,22 +162,22 @@ namespace HTTPlease.Tests.BuildMessage
 		{
 			string action = "foo";
 			string id = "bar";
-			bool? flag = true;
+			bool? value = true;
 
 			HttpRequest request =
 				HttpRequest.Factory.Create("http://localhost:1234/")
-					.WithRelativeUri("{action}/{id}?flag={flag?}")
+					.WithRelativeUri("{action}/{id}?value={value?}")
 					.WithTemplateParameter("action", () => action)
 					.WithTemplateParameter("id", () => id)
-					.WithTemplateParameter("flag", () => flag);
+					.WithTemplateParameter("value", () => value);
 
 			RequestAssert.MessageHasUri(request,
-				expectedUri: "http://localhost:1234/foo/bar?flag=True"
+				expectedUri: "http://localhost:1234/foo/bar?value=True"
 			);
 
 			action = "diddly";
 			id = "dee";
-			flag = null;
+			value = null;
 
 			RequestAssert.MessageHasUri(request,
 				expectedUri: "http://localhost:1234/diddly/dee"
@@ -185,10 +196,10 @@ namespace HTTPlease.Tests.BuildMessage
 		{
 			HttpRequest request =
 				HttpRequest.Factory.Create("http://localhost:1234/foo/bar")
-					.WithQueryParameter("flag", true);
+					.WithQueryParameter("value", true);
 
 			RequestAssert.MessageHasUri(request,
-				expectedUri: "http://localhost:1234/foo/bar?flag=True"
+				expectedUri: "http://localhost:1234/foo/bar?value=True"
 			);
 		}
 
@@ -198,17 +209,79 @@ namespace HTTPlease.Tests.BuildMessage
 		[Fact]
 		public void AbsoluteUri_AddQuery_DeferredValues()
 		{
-			bool? flag = true;
+			bool? value = true;
 
 			HttpRequest request =
 				HttpRequest.Factory.Create("http://localhost:1234/foo/bar")
-					.WithQueryParameter("flag", () => flag);
+					.WithQueryParameter("value", () => value);
 
 			RequestAssert.MessageHasUri(request,
-				expectedUri: "http://localhost:1234/foo/bar?flag=True"
+				expectedUri: "http://localhost:1234/foo/bar?value=True"
 			);
 			
-			flag = null;
+			value = null;
+
+			RequestAssert.MessageHasUri(request,
+				expectedUri: "http://localhost:1234/foo/bar"
+			);
+		}
+
+		/// <summary>
+		///		An <see cref="HttpRequest"/> with an absolute URI that adds a multiple (duplicate) parameter query component, using dynamically-bound template parameters.
+		/// </summary>
+		[Fact]
+		public void AbsoluteUri_AddQuery_Multiple_DeferredValues()
+		{
+			bool? value1 = true;
+			bool? value2 = false;
+
+			HttpRequest request =
+				HttpRequest.Factory.Create("http://localhost:1234/foo/bar")
+					.WithQueryParameter("value", () => value1)
+					.WithQueryParameter("value", () => value2);
+
+			RequestAssert.MessageHasUri(request,
+				expectedUri: "http://localhost:1234/foo/bar?value=True&value=False"
+			);
+
+			value1 = null;
+
+			RequestAssert.MessageHasUri(request,
+				expectedUri: "http://localhost:1234/foo/bar?value=False"
+			);
+
+			value2 = null;
+
+			RequestAssert.MessageHasUri(request,
+				expectedUri: "http://localhost:1234/foo/bar"
+			);
+		}
+
+		/// <summary>
+		///		An <see cref="HttpRequest"/> with an absolute URI that adds a multiple (duplicate) flag parameter query component, using dynamically-bound template parameters.
+		/// </summary>
+		[Fact]
+		public void AbsoluteUri_AddQuery_Flag_Multiple_DeferredValues()
+		{
+			string value1 = String.Empty;
+			string value2 = String.Empty;
+
+			HttpRequest request =
+				HttpRequest.Factory.Create("http://localhost:1234/foo/bar")
+					.WithQueryParameter("flag", () => value1)
+					.WithQueryParameter("flag", () => value2);
+
+			RequestAssert.MessageHasUri(request,
+				expectedUri: "http://localhost:1234/foo/bar?flag&flag"
+			);
+
+			value1 = null;
+
+			RequestAssert.MessageHasUri(request,
+				expectedUri: "http://localhost:1234/foo/bar?flag"
+			);
+
+			value2 = null;
 
 			RequestAssert.MessageHasUri(request,
 				expectedUri: "http://localhost:1234/foo/bar"

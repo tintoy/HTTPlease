@@ -108,9 +108,14 @@ namespace HTTPlease
 
 			return request.Clone(properties =>
 			{
+				IValueProvider<object, string> stringValueProvider = valueProvider.Convert().ValueToString();
+
+				if (request.QueryParameters.TryGetValue(name, out IValueProvider<object, string> existingStringValueProvider))
+					stringValueProvider = stringValueProvider.Combine().ByAppendingTo(existingStringValueProvider);
+
 				properties[nameof(HttpRequest.QueryParameters)] = request.QueryParameters.SetItem(
 					key: name,
-					value: valueProvider.Convert().ValueToString()
+					value: stringValueProvider
 				);
 			});
 		}

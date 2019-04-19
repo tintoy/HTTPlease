@@ -20,7 +20,7 @@ namespace HTTPlease
 		///		The name of the target header.
 		/// </param>
 		/// <returns>
-		///		The header value, or <c>null</c> if the header is not present (or an <see cref="string.Empty"/> string if the header is present but has no value).
+		///		The header value, or <c>null</c> if the header is not present (or an <see cref="String.Empty"/> string if the header is present but has no value).
 		/// </returns>
 		public static string GetOptionalHeaderValue(this HttpRequestHeaders requestHeaders, string headerName)
 		{

@@ -11,31 +11,22 @@ namespace HTTPlease
 	///		Represents common properties of templates for building HTTP requests.
 	/// </summary>
 	public interface IHttpRequestProperties
-    {
+	{
 		/// <summary>
 		///		The request URI.
 		/// </summary>
-		Uri Uri
-		{
-			get;
-		}
+		Uri Uri { get; }
 
 		/// <summary>
 		///		Is the request URI a template?
 		/// </summary>
-		bool IsUriTemplate
-		{
-			get;
-		}
+		bool IsUriTemplate { get; }
 
 		/// <summary>
 		///		Additional properties for the request.
 		/// </summary>
-		ImmutableDictionary<string, object> Properties
-		{
-			get;
-		}
-    }
+		ImmutableDictionary<string, object> Properties { get; }
+	}
 
 	/// <summary>
 	///		Represents common properties of templates for building HTTP requests.

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace HTTPlease.Core.ValueProviders
 {
@@ -17,7 +18,7 @@ namespace HTTPlease.Core.ValueProviders
 		///		The type of value returned by the selector.
 		/// </typeparam>
 		/// <param name="selector">
-		///		A selector function that, when given an instance of <typeparamref name="TContext"/>, and returns a well-known value of type <typeparamref name="TValue"/> derived from the context.
+		///		A selector function that, when given an instance of <typeparamref name="TContext"/>, returns a value of type <typeparamref name="TValue"/> derived from the context.
 		/// </param>
 		/// <returns>
 		///		The value provider.
@@ -37,7 +38,7 @@ namespace HTTPlease.Core.ValueProviders
 		///		The type of value returned by the function.
 		/// </typeparam>
 		/// <param name="getValue">
-		///		A function that returns a well-known value of type <typeparamref name="TValue"/>.
+		///		A function that returns a value of type <typeparamref name="TValue"/>.
 		/// </param>
 		/// <returns>
 		///		The value provider.
@@ -64,7 +65,7 @@ namespace HTTPlease.Core.ValueProviders
 		/// </returns>
 		public static IValueProvider<TContext, TValue> FromConstantValue<TValue>(TValue value)
 		{
-			return new ConstantValueProvider<TValue>(value);
+			return new StaticValueProvider<TValue>(value);
 		}
 
 		/// <summary>
@@ -89,6 +90,9 @@ namespace HTTPlease.Core.ValueProviders
 			/// </param>
 			public SelectorValueProvider(Func<TContext, TValue> selector)
 			{
+				if (selector == null)
+					throw new ArgumentNullException(nameof(selector));
+
 				_selector = selector;
 			}
 
@@ -107,6 +111,20 @@ namespace HTTPlease.Core.ValueProviders
 					throw new InvalidOperationException("The current request template has one more more deferred parameters that refer to its context; the context parameter must therefore be supplied.");
 
 				return _selector(source);
+			}
+
+			/// <summary>
+			///		Extract values from the specified context.
+			/// </summary>
+			/// <param name="source">	
+			///		The TContext instance from which the values are to be extracted.
+			/// </param>
+			/// <returns>
+			///		The values.
+			/// </returns>
+			public IEnumerable<TValue> GetMultiple(TContext source)
+			{
+				yield return Get(source);
 			}
 		}
 
@@ -132,11 +150,14 @@ namespace HTTPlease.Core.ValueProviders
 			/// </param>
 			public FunctionValueProvider(Func<TValue> getValue)
 			{
+				if (getValue == null)
+					throw new ArgumentNullException(nameof(getValue));
+
 				_getValue = getValue;
 			}
 
 			/// <summary>
-			///		Extract the value from the specified context.
+			///		Extract a value from the specified context.
 			/// </summary>
 			/// <param name="source">	
 			///		The TContext instance from which the value is to be extracted.
@@ -144,26 +165,34 @@ namespace HTTPlease.Core.ValueProviders
 			/// <returns>
 			///		The value.
 			/// </returns>
-			public TValue Get(TContext source)
-			{
-				if (source == null)
-					return default(TValue); // AF: Is this correct?
+			public TValue Get(TContext source) => _getValue();
 
-				return _getValue();
+			/// <summary>
+			///		Extract values from the specified context.
+			/// </summary>
+			/// <param name="source">	
+			///		The TContext instance from which the values are to be extracted.
+			/// </param>
+			/// <returns>
+			///		The values.
+			/// </returns>
+			public IEnumerable<TValue> GetMultiple(TContext source)
+			{
+				yield return Get(source);
 			}
 		}
 
 		/// <summary>
-		///		Value provider that returns a constant value.
+		///		Value provider that returns a static set of values.
 		/// </summary>
 		/// <typeparam name="TValue">
 		///		The type of value returned by the provider.
 		/// </typeparam>
-		class ConstantValueProvider<TValue>
+		class StaticValueProvider<TValue>
 			: IValueProvider<TContext, TValue>
 		{
 			/// <summary>
-			///		The constant value returned by the provider.
+			///		The value returned by the provider.
 			/// </summary>
 			readonly TValue _value;
 
@@ -171,9 +200,9 @@ namespace HTTPlease.Core.ValueProviders
 			///		Create a new constant value provider.
 			/// </summary>
 			/// <param name="value">
-			///		The constant value returned by the provider.
+			///		The value returned by the provider.
 			/// </param>
-			public ConstantValueProvider(TValue value)
+			public StaticValueProvider(TValue value)
 			{
 				_value = value;
 			}
@@ -187,12 +216,20 @@ namespace HTTPlease.Core.ValueProviders
 			/// <returns>
 			///		The value.
 			/// </returns>
-			public TValue Get(TContext source)
-			{
-				if (source == null)
-					return default(TValue); // AF: Is this correct?
+			public TValue Get(TContext source) => _value;
 
-				return _value;
+			/// <summary>
+			///		Extract values from the specified context.
+			/// </summary>
+			/// <param name="source">	
+			///		The TContext instance from which the values are to be extracted.
+			/// </param>
+			/// <returns>
+			///		The values.
+			/// </returns>
+			public IEnumerable<TValue> GetMultiple(TContext source)
+			{
+				yield return Get(source);
 			}
 		}
 	}

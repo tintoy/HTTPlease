@@ -12,6 +12,7 @@ namespace HTTPlease
 	using Core.Utilities;
 	using Core.ValueProviders;
 
+	using QueryParameterDictionary = Dictionary<string, List<string>>;
 	using RequestProperties = ImmutableDictionary<string, object>;
 
 	/// <summary>
@@ -310,13 +311,23 @@ namespace HTTPlease
 			if (QueryParameters.Count == 0)
 				return requestUri;
 
-			NameValueCollection queryParameters = requestUri.ParseQueryParameters();
+			// Unlike other types of template parameters, query parameters are a special case - each parameter can have multiple values (which are rendered as multiple parameters of the form "param=value1&param=value2".
+			QueryParameterDictionary queryParameters = requestUri.ParseQueryParameters();
 			foreach (KeyValuePair<string, IValueProvider<TContext, string>> queryParameter in QueryParameters)
 			{
+				string parameterName = queryParameter.Key;
+
+				List<string> existingValues;
+				if (!queryParameters.TryGetValue(queryParameter.Key, out existingValues))
+				{
+					existingValues = new List<string>();
+					queryParameters.Add(queryParameter.Key, existingValues);
+				}
+
 				string queryParameterValue = queryParameter.Value.Get(context);
 				if (queryParameterValue != null)
-					queryParameters[queryParameter.Key] = queryParameterValue;
-				else
+					existingValues.Add(queryParameterValue);
+				else if (existingValues.Count == 0)
 					queryParameters.Remove(queryParameter.Key);
 			}
 

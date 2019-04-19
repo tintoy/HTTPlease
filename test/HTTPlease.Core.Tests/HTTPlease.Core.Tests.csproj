@@ -2,22 +2,26 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+		<OutputType>exe</OutputType>
     <PublicSign>true</PublicSign>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>HTTPlease.Core.Tests</AssemblyName>
     <AssemblyOriginatorKeyFile>../../HTTPlease.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
     <PackageId>HTTPlease.Core.Tests</PackageId>
-    
-    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+
+		<GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
   </PropertyGroup>
 
   <Import Project="../Common.props" />
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
-		<PackageReference Include="xunit" Version="2.3.0" />
-		<PackageReference Include="xunit.runner.visualstudio" Version="2.3.0" />
+		<PackageReference Include="xunit" Version="2.4.1" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 
     <ProjectReference Include="../../src/HTTPlease.Core/HTTPlease.Core.csproj" />
     <ProjectReference Include="../../src/HTTPlease.Formatters/HTTPlease.Formatters.csproj" />

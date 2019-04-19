@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Text;
 
 namespace HTTPlease.Core.Utilities
 {
+	using QueryParameterDictionary = Dictionary<string, List<string>>;
+
     /// <summary>
     ///		Helper methods for working with <see cref="Uri"/>s.
     /// </summary>
@@ -17,14 +20,14 @@ namespace HTTPlease.Core.Utilities
 		///		The URI.
 		/// </param>
 		/// <returns>
-		///		A <see cref="NameValueCollection"/> containing key / value pairs representing the query parameters.
+		///		A <see cref="QueryParameterDictionary"/> containing key / value pairs representing the query parameters.
 		/// </returns>
-		public static NameValueCollection ParseQueryParameters(this Uri uri)
+		public static QueryParameterDictionary ParseQueryParameters(this Uri uri)
 		{
 			if (uri == null)
 				throw new ArgumentNullException(nameof(uri));
 
-			NameValueCollection queryParameters = new NameValueCollection();
+			QueryParameterDictionary queryParameters = new QueryParameterDictionary();
 			if (String.IsNullOrWhiteSpace(uri.Query))
 				return queryParameters;
 
@@ -42,10 +45,16 @@ namespace HTTPlease.Core.Utilities
 					count: 2
 				);
 
-				string key = keyAndValue[0];
-				string value = keyAndValue.Length == 2 ? keyAndValue[1] : null;
+				string parameterName = keyAndValue[0];
+				string parameterValue = keyAndValue.Length == 2 ? keyAndValue[1] : null;
 
-				queryParameters[key] = value;
+				List<string> parameterValues;
+				if (!queryParameters.TryGetValue(parameterName, out parameterValues))
+				{
+					parameterValues = new List<string>(capacity: 1); // Optimise for most common case.
+					queryParameters.Add(parameterName, parameterValues);
+				}
+				parameterValues.Add(parameterValue);
 			}
 
 			return queryParameters;
@@ -58,12 +67,12 @@ namespace HTTPlease.Core.Utilities
 		///		The <see cref="Uri"/> used to construct the URI.
 		/// </param>
 		/// <param name="parameters">
-		///		A <see cref="NameValueCollection"/> representing the query parameters.
+		///		A <see cref="QueryParameterDictionary"/> representing the query parameters.
 		/// </param>
 		/// <returns>
 		///		A new URI with the specified query.
 		/// </returns>
-		public static Uri WithQueryParameters(this Uri uri, NameValueCollection parameters)
+		public static Uri WithQueryParameters(this Uri uri, QueryParameterDictionary parameters)
 		{
 			if (uri == null)
 				throw new ArgumentNullException(nameof(uri));
@@ -84,12 +93,12 @@ namespace HTTPlease.Core.Utilities
 		///		The <see cref="UriBuilder"/> used to construct the URI
 		/// </param>
 		/// <param name="parameters">
-		///		A <see cref="NameValueCollection"/> representing the query parameters.
+		///		A <see cref="QueryParameterDictionary"/> representing the query parameters.
 		/// </param>
 		/// <returns>
 		///		The <paramref name="uriBuilder">URI builder</paramref> (enables inline use).
 		/// </returns>
-		public static UriBuilder WithQueryParameters(this UriBuilder uriBuilder, NameValueCollection parameters)
+		public static UriBuilder WithQueryParameters(this UriBuilder uriBuilder, QueryParameterDictionary parameters)
 		{
 			if (uriBuilder == null)
 				throw new ArgumentNullException(nameof(uriBuilder));
@@ -102,33 +111,35 @@ namespace HTTPlease.Core.Utilities
 
 			// Yes, you could do this using String.Join, but it seems a bit wasteful to allocate all those "key=value" strings only to throw them away again.
 
-			Action<StringBuilder, int> addQueryParameter = (builder, parameterIndex) =>
-			{
-				string parameterName = parameters.GetKey(parameterIndex);
-				string parameterValue = parameters.Get(parameterIndex);
-
-				builder.Append(parameterName);
-
-				// Support for /foo/bar?x=1&y&z=2
-				if (parameterValue != null)
-				{
-					builder.Append('=');
-					builder.Append(
-						Uri.EscapeUriString(parameterValue)
-					);
-				}
-			};
-
+			bool isFirstItem = true;
 			StringBuilder queryBuilder = new StringBuilder();
-			
-			// First parameter has no prefix.
-			addQueryParameter(queryBuilder, 0);
-
-			// Subsequent parameters are separated with an '&'
-			for (int parameterIndex = 1; parameterIndex < parameters.Count; parameterIndex++)
+			foreach (KeyValuePair<string, List<string>> parameter in parameters)
 			{
-				queryBuilder.Append('&');
-				addQueryParameter(queryBuilder, parameterIndex);
+				string parameterName = parameter.Key;
+				List<string> parameterValues = parameter.Value;
+
+				// For multiple values, render them as separate query parameters (e.g. "?foo=value1&foo=value2").
+				foreach (string parameterValue in parameterValues)
+				{
+					if (parameterValue == null)
+						continue;
+
+					if (!isFirstItem)
+						queryBuilder.Append('&');
+					else
+						isFirstItem = false;
+
+					queryBuilder.Append(parameterName);
+
+					// Support for /foo/bar?x=1&y&z=2
+					if (parameterValue != String.Empty)
+					{
+						queryBuilder.Append('=');
+						queryBuilder.Append(
+							Uri.EscapeUriString(parameterValue)
+						);
+					}
+				}
 			}
 
 			uriBuilder.Query = queryBuilder.ToString();

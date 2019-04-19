@@ -29,5 +29,28 @@ namespace HTTPlease.Core.ValueProviders
 
 			return new ValueProviderConversion<TContext, TValue>(valueProvider);
 		}
+
+		/// <summary>
+		///		Perform a conversion on the value provider.
+		/// </summary>
+		/// <typeparam name="TContext">
+		///		The source type from which the value is extracted.
+		/// </typeparam>
+		/// <typeparam name="TValue">
+		///		The type of value extracted by the provider.
+		/// </typeparam>
+		/// <param name="valueProvider">
+		///		The value provider.
+		/// </param>
+		/// <returns>
+		///		A <see cref="ValueProviderCombiner{TContext,TValue}"/> whose methods can be used to select the conversion to perform on the value mergeer.
+		/// </returns>
+		public static ValueProviderCombiner<TContext, TValue> Combine<TContext, TValue>(this IValueProvider<TContext, TValue> valueProvider)
+		{
+			if (valueProvider == null)
+				throw new ArgumentNullException(nameof(valueProvider));
+
+			return new ValueProviderCombiner<TContext, TValue>(valueProvider);
+		}
 	}
 }
