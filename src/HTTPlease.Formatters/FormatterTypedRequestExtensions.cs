@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Immutable;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace HTTPlease
@@ -85,6 +86,8 @@ namespace HTTPlease
 			HttpContent httpContent = bodyContent as HttpContent;
 			if (httpContent == null && bodyContent != null)
 			{
+				httpContent.Headers.ContentType = new MediaTypeHeaderValue(mediaType);
+
 				IFormatterCollection formatters = request.CreateFormatterCollection();
 
 				OutputFormatterContext writeContext = new OutputFormatterContext(bodyContent, bodyContent.GetType(), mediaType, encoding);
