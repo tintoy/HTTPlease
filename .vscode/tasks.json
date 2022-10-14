@@ -1,38 +1,58 @@
 {
-	"version": "0.1.0",
+	"version": "2.0.0",
 	"linux": { "command": "bash", "args": ["-c"] },
 	"osx": { "command": "bash", "args": ["-c"] },
-	"windows": { "command": "powershell", "args": ["-Command"] },
-	"isShellCommand": true,
-	"suppressTaskName": true,
+	"windows": {
+		"command": "powershell",
+		"args": [
+			"-Command"
+		]
+	},
 	"args": [],
 	"tasks": [
 		{
-			"taskName": "build",
-			"args": [ "dotnet build ./src/HTTPlease* ./test/HTTPlease* --version-suffix dev" ],
-			"isBuildCommand": true,
-			"showOutput": "always",
-			"problemMatcher": "$msCompile"
+			"label": "build",
+			"type": "shell",
+			"args": [
+				"dotnet build ./src/HTTPlease* ./test/HTTPlease* --version-suffix dev"
+			],
+			"problemMatcher": "$msCompile",
+			"group": {
+				"_id": "build",
+				"isDefault": false
+			}
 		},
 		{
-			"taskName": "restore",
-			"args": [ "dotnet restore" ],
-			"showOutput": "always"
+			"label": "restore",
+			"type": "shell",
+			"args": [
+				"dotnet restore"
+			],
+			"problemMatcher": []
 		},
 		{
-			"taskName": "test-core",
-			"args": [ "dotnet test ./test/HTTPlease.Core.Tests" ],
-			"showOutput": "always"
+			"label": "test-core",
+			"type": "shell",
+			"args": [
+				"dotnet test ./test/HTTPlease.Core.Tests"
+			],
+			"problemMatcher": []
 		},
 		{
-			"taskName": "test-formatters",
-			"args": [ "dotnet test ./test/HTTPlease.Formatters.Tests" ],
-			"showOutput": "always"
+			"label": "test-formatters",
+			"type": "shell",
+			"args": [
+				"dotnet test ./test/HTTPlease.Formatters.Tests"
+			],
+			"problemMatcher": []
 		},
 		{
-			"taskName": "testfunctional-formatters",
-			"args": [ "dotnet test ./test/HTTPlease.Formatters.FunctionalTests" ],
-			"showOutput": "always"
+			"label": "testfunctional-formatters",
+			"type": "shell",
+			"args": [
+				"dotnet test ./test/HTTPlease.Formatters.FunctionalTests"
+			],
+			"problemMatcher": []
 		}
 	]
 }
