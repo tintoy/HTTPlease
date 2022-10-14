@@ -16,7 +16,7 @@ artifacts:
 - path: src\artifacts\packages\*.nupkg
 
 deploy:
-  # MyGet feed (unstable)
+  # MyGet feed
   - provider: NuGet
     server: https://www.myget.org/F/httplease/api/v2/package
     symbol_server: https://www.myget.org/F/httplease/symbols/api/v2/package
@@ -25,21 +25,8 @@ deploy:
     skip_symbols: false
     artifact: /.*\.nupkg$/
     on:
-      # Development branch or feature branch.
-      branch: /(develop|development|feature)(\/)?.*/
-
-  # MyGet feed (stable)
-  - provider: NuGet
-    server: https://www.myget.org/F/httplease/api/v2/package
-    symbol_server: https://www.myget.org/F/httplease/symbols/api/v2/package
-    api_key:
-      secure: DtmFdBA5x5SeyhHZ/RZhwzc2Y2woTVA4tdABvGt5U9nQSICaZgpy/Jm1BXWlAZ5b
-    skip_symbols: false
-    artifact: /.*\.nupkg$/
-    on:
-      # Release branch or master branch (only if tagged).
-      branch: /(release|master)(\/)?.*/
-      appveyor_repo_tag: true
+      # Any of the main branches.
+      branch: /(develop|development|feature|release|master)(\/)?.*/
 
   # Public feed
   - provider: NuGet
