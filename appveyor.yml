@@ -21,7 +21,7 @@ deploy:
     server: https://www.myget.org/F/httplease/api/v2/package
     symbol_server: https://www.myget.org/F/httplease/symbols/api/v2/package
     api_key:
-      secure: FIA0E1YzvgpRKQTPH+ky8bh2wYBcyHiO/XINMQl8KoXpqpGLTX95bslkR1mspq/I
+      secure: DtmFdBA5x5SeyhHZ/RZhwzc2Y2woTVA4tdABvGt5U9nQSICaZgpy/Jm1BXWlAZ5b
     skip_symbols: false
     artifact: /.*\.nupkg$/
     on:
@@ -33,7 +33,7 @@ deploy:
     server: https://www.myget.org/F/httplease/api/v2/package
     symbol_server: https://www.myget.org/F/httplease/symbols/api/v2/package
     api_key:
-      secure: FIA0E1YzvgpRKQTPH+ky8bh2wYBcyHiO/XINMQl8KoXpqpGLTX95bslkR1mspq/I
+      secure: DtmFdBA5x5SeyhHZ/RZhwzc2Y2woTVA4tdABvGt5U9nQSICaZgpy/Jm1BXWlAZ5b
     skip_symbols: false
     artifact: /.*\.nupkg$/
     on:
@@ -44,7 +44,7 @@ deploy:
   # Public feed
   - provider: NuGet
     api_key:
-      secure: ljl/r7XeQm+KBzR7pm1OOW4+YcDUsYiWlr9jWFztMh/8/orG4V9ylTi+P1jGME7g
+      secure: pbB3WA5Whke+BFf8+lUAqSyBRRUBH6GzEjcvRVMvzeEFwwATDjhH2bQBVLTdO8rY
     skip_symbols: false
     artifact: /.*\.nupkg$/
     on:
