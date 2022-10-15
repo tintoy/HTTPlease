@@ -148,8 +148,6 @@ namespace HTTPlease
 			HttpContent httpContent = bodyContent as HttpContent;
 			if (httpContent == null && bodyContent != null)
 			{
-				httpContent.Headers.ContentType = new MediaTypeHeaderValue(mediaType);
-
 				IFormatterCollection formatters = request.CreateFormatterCollection();
 
 				OutputFormatterContext writeContext = new OutputFormatterContext(bodyContent, bodyContent.GetType(), mediaType, encoding);
@@ -157,7 +155,13 @@ namespace HTTPlease
 				if (writeFormatter == null)
 					throw new HttpRequestException($"None of the supplied formatters can write data of type '{writeContext.DataType.FullName}' to media type '{writeContext.MediaType}'.");
 
-				httpContent = new FormattedObjectContent(writeFormatter, writeContext);
+				httpContent = new FormattedObjectContent(writeFormatter, writeContext)
+				{
+					Headers =
+					{
+						ContentType = new MediaTypeHeaderValue(mediaType)
+					}
+				};
 			}
 
 			return request.BuildRequestMessage(httpMethod, httpContent, baseUri);
