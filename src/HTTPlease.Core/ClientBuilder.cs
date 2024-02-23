@@ -25,6 +25,11 @@ namespace HTTPlease
 		static readonly Func<HttpMessageHandler, HttpMessageHandler> DefaultMessagePipelineTerminus = existingHandler => new HttpClientHandler();
 
 		/// <summary>
+		///		The default list of configurator delegates for message-pipeline terminus handlers.
+		/// </summary>
+		static readonly ImmutableList<Func<HttpMessageHandler, HttpMessageHandler>> DefaultPipelineTerminusConfigurators = ImmutableList.Create(DefaultMessagePipelineTerminus);
+
+		/// <summary>
 		///		Factory delegates used to produce the HTTP message handlers that comprise client pipelines.
 		/// </summary>
 		ImmutableList<Func<DelegatingHandler>> _handlerFactories = ImmutableList<Func<DelegatingHandler>>.Empty;
@@ -37,7 +42,7 @@ namespace HTTPlease
 		/// 
         /// 	Can be overridden by the value passed to CreateClient.
         /// </remarks>
-		ImmutableList<Func<HttpMessageHandler, HttpMessageHandler>> _pipelineTerminusConfigurators = ImmutableList.Create(DefaultMessagePipelineTerminus);
+		ImmutableList<Func<HttpMessageHandler, HttpMessageHandler>> _pipelineTerminusConfigurators = DefaultPipelineTerminusConfigurators;
 
 		/// <summary>
 		///		Create a new HTTP client builder.
@@ -60,6 +65,11 @@ namespace HTTPlease
 			_handlerFactories = copyFrom._handlerFactories;
 			_pipelineTerminusConfigurators = copyFrom._pipelineTerminusConfigurators;
 		}
+
+		/// <summary>
+		///		Does the <see cref="ClientBuilder"/> specify a custom handler for the terminus of the message-hander pipeline.
+		/// </summary>
+		public bool HasCustomPipelineTerminus => _pipelineTerminusConfigurators != DefaultPipelineTerminusConfigurators;
 
 		/// <summary>
 		///		Create an <see cref="HttpClient"/> using the configured message-handler pipeline.

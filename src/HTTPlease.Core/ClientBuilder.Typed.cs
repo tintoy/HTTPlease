@@ -27,19 +27,24 @@ namespace HTTPlease
 		static readonly Func<HttpMessageHandler, TContext, HttpMessageHandler> DefaultMessagePipelineTerminus = (existingHandler, context) => new HttpClientHandler();
 
 		/// <summary>
+		///		The default list of configurator delegates for message-pipeline terminus handlers.
+		/// </summary>
+		static readonly ImmutableList<Func<HttpMessageHandler, TContext, HttpMessageHandler>> DefaultPipelineTerminusConfigurators = ImmutableList.Create(DefaultMessagePipelineTerminus);
+
+		/// <summary>
 		///		Factory delegates used to produce the HTTP message handlers that comprise client pipelines.
 		/// </summary>
 		ImmutableList<Func<TContext, DelegatingHandler>> _handlerFactories = ImmutableList<Func<TContext, DelegatingHandler>>.Empty;
 
 		/// <summary>
-        ///		 Delegates to create or modify the <see cref="HttpMessageHandler"/> that will form the message pipeline terminus.
-        /// </summary>
+		///		 Delegates to create or modify the <see cref="HttpMessageHandler"/> that will form the message pipeline terminus.
+		/// </summary>
 		/// <remarks>
 		/// 	Each delegate is passed the result of the previous delegate (if any).
 		/// 
-        /// 	Can be overridden by the value passed to CreateClient.
-        /// </remarks>
-		ImmutableList<Func<HttpMessageHandler, TContext, HttpMessageHandler>> _pipelineTerminusConfigurators = ImmutableList.Create(DefaultMessagePipelineTerminus);
+		/// 	Can be overridden by the value passed to CreateClient.
+		/// </remarks>
+		ImmutableList<Func<HttpMessageHandler, TContext, HttpMessageHandler>> _pipelineTerminusConfigurators = DefaultPipelineTerminusConfigurators;
 
 		/// <summary>
 		///		Create a new HTTP client builder.
@@ -62,6 +67,11 @@ namespace HTTPlease
 			_handlerFactories = copyFrom._handlerFactories;
 			_pipelineTerminusConfigurators = copyFrom._pipelineTerminusConfigurators;
 		}
+
+		/// <summary>
+		///		Does the <see cref="ClientBuilder{TContext}"/> specify a custom handler for the terminus of the message-hander pipeline.
+		/// </summary>
+		public bool HasCustomPipelineTerminus => _pipelineTerminusConfigurators != DefaultPipelineTerminusConfigurators;
 
 		/// <summary>
 		///		Create an <see cref="HttpClient"/> using the configured message-handler pipeline.
@@ -91,8 +101,8 @@ namespace HTTPlease
 			{
 				pipelineTerminus = messagePipelineTerminus ?? BuildPipelineTerminus(context);
 				pipelineHandlers = CreatePipelineHandlers(context);
-				
-				pipeline = CreatePipeline(pipelineTerminus, pipelineHandlers);
+
+				pipeline = ClientBuilder.CreatePipeline(pipelineTerminus, pipelineHandlers);
 
 				client = new HttpClient(pipeline);
 				if (baseUri != null)
@@ -435,36 +445,6 @@ namespace HTTPlease
 
 				yield return factoryDelegateType.GenericTypeArguments[1];
 			}
-		}
-
-		/// <summary>
-		///		Create an HTTP message-handler pipeline.
-		/// </summary>
-		/// <param name="pipelineTerminus">
-		///		An <see cref="HttpMessageHandler"/> representing the terminus of the pipeline.
-		/// </param>
-		/// <param name="pipelineHandlers">
-		///		A sequence of <see cref="DelegatingHandler"/>s representing additional steps in the pipeline.
-		/// </param>
-		/// <returns>
-		///		An <see cref="HttpMessageHandler"/> representing the head of the pipeline.
-		/// </returns>
-		public static HttpMessageHandler CreatePipeline(HttpMessageHandler pipelineTerminus, IEnumerable<DelegatingHandler> pipelineHandlers)
-		{
-			if (pipelineTerminus == null)
-				throw new ArgumentNullException(nameof(pipelineTerminus));
-
-			if (pipelineHandlers == null)
-				throw new ArgumentNullException(nameof(pipelineHandlers));
-
-			HttpMessageHandler pipeline = pipelineTerminus;
-			foreach (DelegatingHandler pipelineHandler in pipelineHandlers.Reverse())
-			{
-				pipelineHandler.InnerHandler = pipeline;
-				pipeline = pipelineHandler;
-			}
-
-			return pipeline;
 		}
 	}
 }
