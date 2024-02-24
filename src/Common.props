@@ -3,6 +3,8 @@
     <PropertyGroup>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
 				<LangVersion>latest</LangVersion>
+
+			<NoWarn>$(NoWarn);NU1903</NoWarn>
     </PropertyGroup>
 
     <!-- Common package properties -->

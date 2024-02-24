@@ -7,18 +7,61 @@ using System.Security.Cryptography.X509Certificates;
 namespace HTTPlease
 {
 	/// <summary>
-	///		General-purpose extensions for <see cref="ClientBuilder"/> and <see cref="ClientBuilder{TContext}"/>.
+	///		General-purpose extensions for <see cref="ClientBuilder{TContext}"/> and <see cref="ClientBuilder{TContext}"/>.
 	/// </summary>
 	public static partial class ClientBuilderExtensions
 	{
 		/// <summary>
-		///		The <see cref="DelegatingHandler"/> CLR type.
+		///		Create a new <see cref="HttpClient"/> with the specified credentials.
 		/// </summary>
-		static readonly Type DelegatingHandlerType = typeof(DelegatingHandler);
+		/// <typeparam name="TContext">
+		///		The type that contains contextual information used when creating the client.
+		/// </typeparam>
+		/// <param name="context">
+		///		The <typeparamref name="TContext"/> that contains contextual information used when creating the client.
+		/// </param>
+		/// <param name="clientBuilder">
+		///		The HTTP client builder.
+		/// </param>
+		/// <param name="baseUri">
+		///		The base URI for the HTTP client.
+		/// </param>
+		/// <param name="credentials">
+		///		The client credentials used for authentication.
+		/// </param>
+		/// <returns>
+		///		The new <see cref="HttpClient"/>.
+		/// </returns>
+		public static HttpClient CreateClient<TContext>(this ClientBuilder<TContext> clientBuilder, TContext context, Uri baseUri, ICredentials credentials)
+		{
+			HttpClientHandler clientHandler = null;
+			try
+			{
+				clientHandler = new HttpClientHandler
+				{
+					Credentials = credentials
+				};
+
+				return clientBuilder.CreateClient(context, baseUri, clientHandler);
+			}
+			catch (Exception)
+			{
+				using (clientHandler)
+				{
+					throw;
+				}
+			}
+		}
 
 		/// <summary>
 		///		Create a new <see cref="HttpClient"/> with the specified credentials.
 		/// </summary>
+		/// <typeparam name="TContext">
+		///		The type that contains contextual information used when creating the client.
+		/// </typeparam>
+		/// <param name="context">
+		///		The <typeparamref name="TContext"/> that contains contextual information used when creating the client.
+		/// </param>
 		/// <param name="clientBuilder">
 		///		The HTTP client builder.
 		/// </param>
@@ -31,7 +74,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The new <see cref="HttpClient"/>.
 		/// </returns>
-		public static HttpClient CreateClient(this ClientBuilder clientBuilder, Uri baseUri, ICredentials credentials)
+		public static HttpClient CreateClient<TContext>(this ClientBuilder<TContext> clientBuilder, TContext context, string baseUri, ICredentials credentials)
 		{
 			HttpClientHandler clientHandler = null;
 			try
@@ -41,7 +84,7 @@ namespace HTTPlease
 					Credentials = credentials
 				};
 
-				return clientBuilder.CreateClient(baseUri, clientHandler);
+				return clientBuilder.CreateClient(context, baseUri, clientHandler);
 			}
 			catch (Exception)
 			{
@@ -55,42 +98,12 @@ namespace HTTPlease
 		/// <summary>
 		///		Create a new <see cref="HttpClient"/>.
 		/// </summary>
-		/// <param name="clientBuilder">
-		///		The HTTP client builder.
+		/// <typeparam name="TContext">
+		///		The type that contains contextual information used when creating the client.
+		/// </typeparam>
+		/// <param name="context">
+		///		The <typeparamref name="TContext"/> that contains contextual information used when creating the client.
 		/// </param>
-		/// <param name="baseUri">
-		///		The base URI for the HTTP client.
-		/// </param>
-		/// <param name="credentials">
-		///		The client credentials used for authentication.
-		/// </param>
-		/// <returns>
-		///		The new <see cref="HttpClient"/>.
-		/// </returns>
-		public static HttpClient CreateClient(this ClientBuilder clientBuilder, string baseUri, ICredentials credentials)
-		{
-			HttpClientHandler clientHandler = null;
-			try
-			{
-				clientHandler = new HttpClientHandler
-				{
-					Credentials = credentials
-				};
-
-				return clientBuilder.CreateClient(baseUri, clientHandler);
-			}
-			catch (Exception)
-			{
-				using (clientHandler)
-				{
-					throw;
-				}
-			}
-		}
-
-		/// <summary>
-		///		Create a new <see cref="HttpClient"/>.
-		/// </summary>
 		/// <param name="clientBuilder">
 		///		The HTTP client builder.
 		/// </param>
@@ -105,7 +118,7 @@ namespace HTTPlease
 		/// <returns>
 		///		The new <see cref="HttpClient"/>.
 		/// </returns>
-		public static HttpClient CreateClient(this ClientBuilder clientBuilder, string baseUri, HttpMessageHandler messagePipelineTerminus = null)
+		public static HttpClient CreateClient<TContext>(this ClientBuilder<TContext> clientBuilder, TContext context, string baseUri, HttpMessageHandler messagePipelineTerminus = null)
 		{
 			if (clientBuilder == null)
 				throw new ArgumentNullException(nameof(clientBuilder));
@@ -114,6 +127,7 @@ namespace HTTPlease
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'baseUri'.", nameof(baseUri));
 
 			return clientBuilder.CreateClient(
+				context,
 				new Uri(baseUri, UriKind.Absolute),
 				messagePipelineTerminus
 			);
@@ -127,13 +141,16 @@ namespace HTTPlease
 		/// 
 		///		Must be a sub-type of <see cref="DelegatingHandler"/> (not <see cref="DelegatingHandler"/> itself).
 		/// </typeparam>
+		/// <typeparam name="TContext">
+		///		The type that contains contextual information used when creating the handler.
+		/// </typeparam>
 		/// <param name="clientBuilder">
 		///		The HTTP client builder.
 		/// </param>
 		/// <returns>
 		///		The client factory (enables inline use / method chaining).
 		/// </returns>
-		public static ClientBuilder WithMessageHandler<TMessageHandler>(this ClientBuilder clientBuilder)
+		public static ClientBuilder<TContext> WithMessageHandler<TMessageHandler, TContext>(this ClientBuilder<TContext> clientBuilder)
 			where TMessageHandler : DelegatingHandler, new()
 		{
 			if (clientBuilder == null)
@@ -143,14 +160,14 @@ namespace HTTPlease
 				throw new NotSupportedException("TMessageHandler must be a sub-type of DelegatingHandler (it cannot be DelegatingHandler).");
 
 			clientBuilder.AddHandler(
-				() => new TMessageHandler()
+				context => new TMessageHandler()
 			);
 
 			return clientBuilder;
 		}
 
 		/// <summary>
-        ///		Create a copy of the <see cref="ClientBuilder"/>, but with the specified configuration action for its <see cref="HttpClientHandler"/> (message pipeline terminus).
+        ///		Create a copy of the <see cref="ClientBuilder{TContext}"/>, but with the specified configuration action for its <see cref="HttpClientHandler"/> (message pipeline terminus).
         /// </summary>
 		/// <param name="clientBuilder">
 		///		The HTTP client builder.
@@ -159,44 +176,47 @@ namespace HTTPlease
 		/// 	A delegate that configures the <see cref="HttpClientHandler"/> that will form the message pipeline terminus for each <see cref="HttpClient"/> produced by the builder.
 		/// </param>
         /// <returns>
-		/// 	The configured <see cref="ClientBuilder"/>.
+		/// 	The configured <see cref="ClientBuilder{TContext}"/>.
 		/// </returns>
-		public static ClientBuilder ConfigureHttpClientHandler(this ClientBuilder clientBuilder, Action<HttpClientHandler> clientHandlerConfigurator)
+		public static ClientBuilder<TContext> ConfigureHttpClientHandler<TContext>(this ClientBuilder<TContext> clientBuilder, Action<HttpClientHandler, TContext> clientHandlerConfigurator)
 		{
 			if (clientHandlerConfigurator == null)
 				throw new ArgumentNullException(nameof(clientHandlerConfigurator));
 			
-			return clientBuilder.ConfigureMessagePipelineTerminus<HttpClientHandler>(clientHandlerConfigurator);
+			return clientBuilder.ConfigureMessagePipelineTerminus(clientHandlerConfigurator);
 		}
 
 		/// <summary>
-        ///		Create a copy of the <see cref="ClientBuilder"/>, but with the specified configuration action for its message pipeline terminus.
-        /// </summary>
+		///		Create a copy of the <see cref="ClientBuilder{TContext}"/>, but with the specified configuration action for its message pipeline terminus.
+		/// </summary>
 		/// <typeparam name="TMessageHandler">
 		/// 	The type of message handler to expect / configure.
+		/// </typeparam>
+		/// <typeparam name="TContext">
+		///		The type that contains contextual information used when creating the pipeline terminus.
 		/// </typeparam>
 		/// <param name="clientBuilder">
 		///		The HTTP client builder.
 		/// </param>
-        /// <param name="pipelineTerminusConfigurator">
+		/// <param name="pipelineTerminusConfigurator">
 		/// 	A delegate that configures the <typeparamref name="TMessageHandler"/> that will form the message pipeline terminus for each <see cref="HttpClient"/> produced by the builder.
 		/// </param>
-        /// <returns>
-		/// 	The configured <see cref="ClientBuilder"/>.
+		/// <returns>
+		/// 	The configured <see cref="ClientBuilder{TContext}"/>.
 		/// </returns>
-		public static ClientBuilder ConfigureMessagePipelineTerminus<TMessageHandler>(this ClientBuilder clientBuilder, Action<TMessageHandler> pipelineTerminusConfigurator)
+		public static ClientBuilder<TContext> ConfigureMessagePipelineTerminus<TMessageHandler, TContext>(this ClientBuilder<TContext> clientBuilder, Action<TMessageHandler, TContext> pipelineTerminusConfigurator)
 			where TMessageHandler : HttpMessageHandler
 		{
 			if (pipelineTerminusConfigurator == null)
 				throw new ArgumentNullException(nameof(pipelineTerminusConfigurator));
 			
-			return clientBuilder.WithMessagePipelineTerminus(existingTerminator =>
+			return clientBuilder.WithMessagePipelineTerminus((existingTerminator, context) =>
 			{
 				if (existingTerminator == null)
 					throw new InvalidOperationException($"Cannot configure pipeline terminus (expected a handler of type '{typeof(TMessageHandler).FullName}', but the previous factory function returned null).");
 
 				if (existingTerminator is TMessageHandler typedHandler)
-					pipelineTerminusConfigurator(typedHandler);
+					pipelineTerminusConfigurator(typedHandler, context);
 				else
 					throw new InvalidOperationException($"Cannot configure pipeline terminus (expected a handler of type '{typeof(TMessageHandler).FullName}', but the previous factory function returned a handler of type '{existingTerminator.GetType().FullName}').");
 				
@@ -205,18 +225,21 @@ namespace HTTPlease
 		}
 
 		/// <summary>
-        ///		Create a copy of the <see cref="ClientBuilder"/>, but using the specified X.509 certificate for client authentication.
-        /// </summary>
+		///		Create a copy of the <see cref="ClientBuilder{TContext}"/>, but using the specified X.509 certificate for client authentication.
+		/// </summary>
+		/// <typeparam name="TContext">
+		///		The type that contains contextual information used when creating the client.
+		/// </typeparam>
 		/// <param name="clientBuilder">
 		///		The HTTP client builder.
 		/// </param>
-        /// <param name="clientCertificate">
+		/// <param name="clientCertificate">
 		/// 	The X.509 certificate to use.
 		/// </param>
-        /// <returns>
-		/// 	The configured <see cref="ClientBuilder"/>.
+		/// <returns>
+		/// 	The configured <see cref="ClientBuilder{TContext}"/>.
 		/// </returns>
-		public static ClientBuilder WithClientCertificate(this ClientBuilder clientBuilder, X509Certificate2 clientCertificate)
+		public static ClientBuilder<TContext> WithClientCertificate<TContext>(this ClientBuilder<TContext> clientBuilder, X509Certificate2 clientCertificate)
 		{
 			if (clientBuilder == null)
                 throw new ArgumentNullException(nameof(clientBuilder));
@@ -227,7 +250,7 @@ namespace HTTPlease
             if (!clientCertificate.HasPrivateKey)
                 throw new InvalidOperationException($"Cannot use certificate '{clientCertificate.Subject}' as a client certificate (no private key is not available for it).");
 
-            return clientBuilder.ConfigureHttpClientHandler(clientHandler =>
+            return clientBuilder.ConfigureHttpClientHandler((clientHandler, context) =>
 			{
 				clientHandler.ClientCertificates.Add(clientCertificate);
 				clientHandler.ClientCertificateOptions = ClientCertificateOption.Manual;
@@ -235,7 +258,7 @@ namespace HTTPlease
 		}
 
 		/// <summary>
-        ///		Create a copy of the <see cref="ClientBuilder"/>, but using the specified X.509 certificate for server authentication.
+        ///		Create a copy of the <see cref="ClientBuilder{TContext}"/>, but using the specified X.509 certificate for server authentication.
         /// </summary>
 		/// <param name="clientBuilder">
 		///		The HTTP client builder.
@@ -249,12 +272,12 @@ namespace HTTPlease
 		/// 	Use this delegate to log the error.
 		/// </param>
         /// <returns>
-		/// 	The configured <see cref="ClientBuilder"/>.
+		/// 	The configured <see cref="ClientBuilder{TContext}"/>.
 		/// </returns>
 		/// <remarks>
 		/// 	Will accept the certificate or (if it's a CA certificate) any certificate issued by it.
 		/// </remarks>
-		public static ClientBuilder WithServerCertificate(this ClientBuilder clientBuilder, X509Certificate2 expectServerCertificate, Action<Exception> logError = null)
+		public static ClientBuilder<TContext> WithServerCertificate<TContext>(this ClientBuilder<TContext> clientBuilder, X509Certificate2 expectServerCertificate, Action<Exception> logError = null)
 		{
 			if (clientBuilder == null)
                 throw new ArgumentNullException(nameof(clientBuilder));
@@ -262,7 +285,7 @@ namespace HTTPlease
             if (expectServerCertificate == null)
                 throw new ArgumentNullException(nameof(expectServerCertificate));
 
-            return clientBuilder.ConfigureHttpClientHandler(clientHandler =>
+            return clientBuilder.ConfigureHttpClientHandler((clientHandler, context) =>
 			{
 				clientHandler.ServerCertificateCustomValidationCallback = (request, certificate, chain, sslPolicyErrors) =>
 				{
@@ -292,23 +315,23 @@ namespace HTTPlease
 		}
 
 		/// <summary>
-        ///		Create a copy of the <see cref="ClientBuilder"/>, but with verification of the server's SSL certificate disabled (useful when the server has a self-signed certificate).
+        ///		Create a copy of the <see cref="ClientBuilder{TContext}"/>, but with verification of the server's SSL certificate disabled (useful when the server has a self-signed certificate).
         /// </summary>
 		/// <param name="clientBuilder">
 		///		The HTTP client builder.
 		/// </param>
 		/// <returns>
-		/// 	The configured <see cref="ClientBuilder"/>.
+		/// 	The configured <see cref="ClientBuilder{TContext}"/>.
 		/// </returns>
 		/// <remarks>
 		/// 	Will accept any certificate.
 		/// </remarks>
-		public static ClientBuilder AcceptAnyServerCertificate(this ClientBuilder clientBuilder)
+		public static ClientBuilder<TContext> AcceptAnyServerCertificate<TContext>(this ClientBuilder<TContext> clientBuilder)
 		{
 			if (clientBuilder == null)
                 throw new ArgumentNullException(nameof(clientBuilder));
             
-            return clientBuilder.ConfigureHttpClientHandler(clientHandler =>
+            return clientBuilder.ConfigureHttpClientHandler((clientHandler, context) =>
 			{
 				clientHandler.ServerCertificateCustomValidationCallback = (request, certificate, chain, sslPolicyErrors) =>
 				{
