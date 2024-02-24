@@ -15,7 +15,7 @@ namespace HTTPlease
     ///		Builds <see cref="HttpClient"/>s with pipelines of <see cref="DelegatingHandler">HTTP message handler</see>s.
     /// </summary>
     /// <remarks>
-	///		Unlike <see cref="ClientBuilder"/>, <see cref="ClientBuilder{TContext}"/> provides a <typeparamref name="TContext"/> that can be passed to its configuration delegates.
+	///		Unlike <see cref="ClientBuilder{TContext}"/>, <see cref="ClientBuilder{TContext}"/> provides a <typeparamref name="TContext"/> that can be passed to its configuration delegates.
 	///		
     ///		Be aware that, if you return singleton instances of message handlers from factory delegates, those handlers will be disposed if the factory encounters any exception while creating a client.
     /// </remarks>
@@ -129,7 +129,7 @@ namespace HTTPlease
 		///		The <typeparamref name="TContext"/> that contains contextual information used when creating the handler.
 		/// </param>
 		/// <param name="initialPipelineTerminus">
-		///		The initial <see cref="HttpMessageHandler"/> to use as the pipeline terminus (this is optional, and may ignored by the <see cref="ClientBuilder"/>'s configuration).
+		///		The initial <see cref="HttpMessageHandler"/> to use as the pipeline terminus (this is optional, and may ignored by the <see cref="ClientBuilder{TContext}"/>'s configuration).
 		/// </param>
 		/// <returns>
 		/// 	The configured <see cref="HttpMessageHandler"/>.
@@ -192,7 +192,7 @@ namespace HTTPlease
 		}
 
 		/// <summary>
-        ///		Create a copy of the <see cref="ClientBuilder"/>, but with the specified configuration for its message pipeline terminus.
+        ///		Create a copy of the <see cref="ClientBuilder{TContext}"/>, but with the specified configuration for its message pipeline terminus.
         /// </summary>
         /// <param name="pipelineTerminusConfigurator">
 		/// 	A delegate that creates the <see cref="HttpMessageHandler"/> for each <see cref="HttpClient"/> that will form its message pipeline terminus.
@@ -200,7 +200,7 @@ namespace HTTPlease
 		/// 	If <c>null</c>, the default message handler pipeline terminus will be used.
 		/// </param>
         /// <returns>
-		/// 	The configured <see cref="ClientBuilder"/>.
+		/// 	The configured <see cref="ClientBuilder{TContext}"/>.
 		/// </returns>
 		public ClientBuilder<TContext> WithMessagePipelineTerminus(Func<HttpMessageHandler, TContext, HttpMessageHandler> pipelineTerminusConfigurator)
 		{
@@ -213,7 +213,7 @@ namespace HTTPlease
 		}
 
 		/// <summary>
-        ///		Create a copy of the <see cref="ClientBuilder"/>, but with the specified message pipeline terminus.
+        ///		Create a copy of the <see cref="ClientBuilder{TContext}"/>, but with the specified message pipeline terminus.
         /// </summary>
         /// <param name="pipelineTerminusFactory">
 		/// 	A delegate that creates the <see cref="HttpMessageHandler"/> for each <see cref="HttpClient"/> that will form its message pipeline terminus.
@@ -221,7 +221,7 @@ namespace HTTPlease
 		/// 	If <c>null</c>, the default message handler pipeline terminus will be used.
 		/// </param>
         /// <returns>
-		/// 	The configured <see cref="ClientBuilder"/>.
+		/// 	The configured <see cref="ClientBuilder{TContext}"/>.
 		/// </returns>
 		public ClientBuilder<TContext> WithMessagePipelineTerminus(Func<TContext, HttpMessageHandler> pipelineTerminusFactory)
 		{
@@ -236,7 +236,21 @@ namespace HTTPlease
 		}
 
 		/// <summary>
-		///		Create a copy of the <see cref="ClientBuilder"/>, adding an HTTP message-handler factory to the end of the pipeline.
+		///		Create a copy of the <see cref="ClientBuilder{TContext}"/>, but with the default message pipeline terminus.
+		/// </summary>
+		/// <returns>
+		/// 	The configured <see cref="ClientBuilder{TContext}"/>.
+		/// </returns>
+		public ClientBuilder<TContext> WithDefaultMessagePipelineTerminus()
+		{
+			return new ClientBuilder<TContext>(this)
+			{
+				_pipelineTerminusConfigurators = DefaultPipelineTerminusConfigurators
+			};
+		}
+
+		/// <summary>
+		///		Create a copy of the <see cref="ClientBuilder{TContext}"/>, adding an HTTP message-handler factory to the end of the pipeline.
 		/// </summary>
 		/// <typeparam name="THandler">
 		///		The handler type.
@@ -245,7 +259,7 @@ namespace HTTPlease
 		///		The message-handler factory.
 		/// </param>
 		/// <returns>
-		///		The <see cref="ClientBuilder"/> (enables method-chaining).
+		///		The <see cref="ClientBuilder{TContext}"/> (enables method-chaining).
 		/// </returns>
 		/// <remarks>
 		///		<typeparamref name="THandler"/> cannot be the <see cref="DelegatingHandler"/> base class.
@@ -276,7 +290,7 @@ namespace HTTPlease
 		}
 
 		/// <summary>
-		///		Create a copy of the <see cref="ClientBuilder"/>, inserting an HTTP message-handler factory to the pipeline before the factory that produces handlers of the specified type.
+		///		Create a copy of the <see cref="ClientBuilder{TContext}"/>, inserting an HTTP message-handler factory to the pipeline before the factory that produces handlers of the specified type.
 		/// </summary>
 		/// <typeparam name="THandler">
 		///		The handler type.
@@ -293,7 +307,7 @@ namespace HTTPlease
 		///		Default is <c>false</c>.
 		/// </param>
 		/// <returns>
-		///		The <see cref="ClientBuilder"/> (enables method-chaining).
+		///		The <see cref="ClientBuilder{TContext}"/> (enables method-chaining).
 		/// </returns>
 		/// <remarks>
 		///		<typeparamref name="THandler"/> and <typeparamref name="TBeforeHandler"/> cannot be the <see cref="DelegatingHandler"/> base class.
@@ -352,7 +366,7 @@ namespace HTTPlease
 		}
 
 		/// <summary>
-		///		Create a copy of the <see cref="ClientBuilder"/>, inserting an HTTP message-handler factory to the pipeline after the factory that produces handlers of the specified type.
+		///		Create a copy of the <see cref="ClientBuilder{TContext}"/>, inserting an HTTP message-handler factory to the pipeline after the factory that produces handlers of the specified type.
 		/// </summary>
 		/// <typeparam name="THandler">
 		///		The handler type.
@@ -369,7 +383,7 @@ namespace HTTPlease
 		///		Default is <c>false</c>.
 		/// </param>
 		/// <returns>
-		///		The <see cref="ClientBuilder"/> (enables method-chaining).
+		///		The <see cref="ClientBuilder{TContext}"/> (enables method-chaining).
 		/// </returns>
 		/// <remarks>
 		///		<typeparamref name="THandler"/> and <typeparamref name="TAfterHandler"/> cannot be the <see cref="DelegatingHandler"/> base class.

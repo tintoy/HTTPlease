@@ -225,6 +225,20 @@ namespace HTTPlease
 		}
 
 		/// <summary>
+		///		Create a copy of the <see cref="ClientBuilder"/>, but with the default message pipeline terminus.
+		/// </summary>
+		/// <returns>
+		/// 	The configured <see cref="ClientBuilder"/>.
+		/// </returns>
+		public ClientBuilder WithDefaultMessagePipelineTerminus()
+		{
+			return new ClientBuilder(this)
+			{
+				_pipelineTerminusConfigurators = DefaultPipelineTerminusConfigurators
+			};
+		}
+
+		/// <summary>
 		///		Create a copy of the <see cref="ClientBuilder"/>, adding an HTTP message-handler factory to the end of the pipeline.
 		/// </summary>
 		/// <typeparam name="THandler">
