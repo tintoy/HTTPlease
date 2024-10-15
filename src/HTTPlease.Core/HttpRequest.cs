@@ -125,25 +125,16 @@ namespace HTTPlease
 		#region Invocation
 
 		/// <summary>
-		///		Build and configure a new HTTP request message.
+		///		Build the request URI represented by the <see cref="HttpRequest"/>.
 		/// </summary>
-		/// <param name="httpMethod">
-		///		The HTTP request method to use.
-		/// </param>
-		/// <param name="body">
-		///		Optional <see cref="HttpContent"/> representing the request body.
-		/// </param>
 		/// <param name="baseUri">
 		///		An optional base URI to use if the request does not already have an absolute request URI.
 		/// </param>
 		/// <returns>
-		///		The configured <see cref="HttpRequestMessage"/>.
+		///		The request URI.
 		/// </returns>
-		public HttpRequestMessage BuildRequestMessage(HttpMethod httpMethod, HttpContent body = null, Uri baseUri = null)
+		public Uri BuildRequestUri(Uri baseUri = null)
 		{
-			if (httpMethod == null)
-				throw new ArgumentNullException(nameof(httpMethod));
-
 			// Ensure we have an absolute URI.
 			Uri requestUri = Uri;
 			if (requestUri == null)
@@ -181,6 +172,31 @@ namespace HTTPlease
 
 			// Merge in any other query parameters defined directly on the request.
 			requestUri = MergeQueryParameters(requestUri);
+
+			return requestUri;
+		}
+
+		/// <summary>
+		///		Build and configure a new HTTP request message.
+		/// </summary>
+		/// <param name="httpMethod">
+		///		The HTTP request method to use.
+		/// </param>
+		/// <param name="body">
+		///		Optional <see cref="HttpContent"/> representing the request body.
+		/// </param>
+		/// <param name="baseUri">
+		///		An optional base URI to use if the request does not already have an absolute request URI.
+		/// </param>
+		/// <returns>
+		///		The configured <see cref="HttpRequestMessage"/>.
+		/// </returns>
+		public HttpRequestMessage BuildRequestMessage(HttpMethod httpMethod, HttpContent body = null, Uri baseUri = null)
+		{
+			if (httpMethod == null)
+				throw new ArgumentNullException(nameof(httpMethod));
+
+			Uri requestUri = BuildRequestUri(baseUri);
 
 			HttpRequestMessage requestMessage = null;
 			try
